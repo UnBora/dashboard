@@ -26,7 +26,6 @@ import java.util.Objects;
 @Slf4j
 public class AuthenticationController{
 
-
     private final AdminUserService adminUserService;
     private final MessageUtilities messageUtilities;
     private final ConfigurationService configurationService;
