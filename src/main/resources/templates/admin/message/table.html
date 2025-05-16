@@ -1,0 +1,32 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <th:block th:replace="~{fragments/ftable_filter :: filter(isNew = false, dialogSize = 'N')}" th:remove="tag"/>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover add-edit-table" id="datatable">
+                <thead>
+                <tr>
+                    <th th:text="#{label.no}">No</th>
+                    <th th:text="#{label.message.key}"></th>
+                    <th th:text="#{label.message.conent}"></th>
+                    <th th:text="#{label.created.date}">Created Date</th>
+                    <th th:text="#{label.status}">Status</th>
+                    <th th:text="#{label.action}">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="d, iter : ${pager.getData()}" th:data-context-menu-target="${'context-menu-' + iter.index}"
+                    th:data-title="#{button.view}"
+                    th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../view/'} + ${d.id}" data-size="W">
+                    <td th:text="${iter.index + 1}"></td>
+                    <td th:text="${d.key}"></td>
+                    <td th:text="${d.content}"></td>
+                    <td th:text="${d.createdAtAsString}"></td>
+                    <th:block th:replace="~{fragments/ftable_data :: status}" th:remove="tag"/>
+                    <th:block th:replace="~{fragments/ftable_data :: action(id=${d.id}, size='W', index=${iter.index})}" th:remove="tag"/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/ftable_pagination}" th:remove="tag"/>
+</div>

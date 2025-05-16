@@ -1,0 +1,25 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="sessionTimeout" th:remove="tag">
+        <style>
+            .no-close .ui-dialog-titlebar-close {
+                display: none;
+            }
+            .ui-dialog {
+                z-index: 1051 !important;
+            }
+            .ui-dialog .ui-dialog-titlebar {
+                border: none;
+            }
+        </style>
+        <div id="dialogSessionWarning" title="Session Timeout Info" style="display:none">
+            <p>
+                Your session will be timeout within <span id="secondCounter"></span> seconds. Do you want to continue session?
+            </p>
+        </div>
+        <div id="dialogSessionExpired" title="Session Expired" style="display:none">
+            <p>
+                Your session has been expired. Please logout, then login again.
+            </p>
+        </div>
+    </th:block>
+</div>

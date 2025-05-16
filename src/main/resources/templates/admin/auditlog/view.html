@@ -1,0 +1,39 @@
+<form th:object="${entity}" id="main-form"
+        xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.log.key}, finputName='logKey',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.log.event}, finputName='logEvent',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-12">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.remark}, finputName='remark',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.timeStamp}, finputName='timeStamp',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.log.user}, finputName='username',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="jsonOldObject" th:text="#{label.old.object}"></label>
+            <pre id="jsonOldObject"></pre>
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="jsonNewObject" th:text="#{label.new.object}"></label>
+            <pre id="jsonNewObject"></pre>
+        </div>
+    </div>
+    <div class="form-group text-right m-b-0">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()"
+                th:text="#{button.cancel}"></button>
+    </div>
+    <script th:inline="javascript" th:if="entity != null">
+        $(document).ready(function () {
+            console.log("data ", [[${entity.logKey}]]);
+            document.getElementById("jsonOldObject").textContent = JSON.stringify(JSON.parse([[${entity.oldObject}]]), null, 2);
+            document.getElementById("jsonNewObject").textContent = JSON.stringify(JSON.parse([[${entity.newObject}]]), null, 2);
+        });
+    </script>
+</form>

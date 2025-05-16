@@ -1,0 +1,225 @@
+<body xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="status">
+  <td th:switch="${d.status.name()}">
+    <span th:case="Disabled" class="badge badge-warning" th:text="${d.status}"></span>
+    <span th:case="Enabled" class="badge badge-primary" th:text="${d.status}"></span>
+    <span th:case="Pending" class="badge badge-orange" th:text="${d.status}"></span>
+    <span th:case="Deleted" class="badge badge-danger" th:text="${d.status}"></span>
+  </td>
+</th:block>
+
+<th:block th:fragment="action(id, size, index)">
+  <td style="width: 10px">
+    <div class="text-center">
+      <div class="btn-group text-left">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle tip" data-toggle="dropdown">
+          <i class="fa fa-list-dots"></i>
+        </button>
+        <ul class="dropdown-menu pull-right" role="menu" th:id="${'context-menu-' + index}">
+          <li>
+            <a href="javascript:void(0);" th:title="#{label.view}" th:data-title="#{label.view}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../view/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">
+              <i class="fa fa-eye m-r-5"></i><span th:text="#{label.view}" th:remove="tag"></span>
+            </a>
+          </li>
+          <li th:if="${d.canUpdate}">
+            <a href="javascript:void(0);" th:title="#{label.update}" th:data-title="#{label.update}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../update/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">
+              <i class="fa fa-pencil m-r-5"></i><span th:text="#{label.update}" th:remove="tag"></span>
+            </a>
+          </li>
+          <li th:if="${d.canUpdate}">
+            <a href="javascript:void(0);" th:title="#{label.change.status}" th:data-title="#{label.change.status}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../status/'} + ${id}" onclick="confirmDialog(this)">
+              <div th:remove="tag" th:if="${d.status.name() == 'Disabled'}"><i class="fa fa-unlock m-r-5"></i><span th:text="#{label.change.status}" th:remove="tag"></span></div>
+              <div th:remove="tag" th:if="${d.status.name() == 'Enabled'}"><i class="fa fa-lock m-r-5"></i><span th:text="#{label.change.status}" th:remove="tag"></span></div>
+            </a>
+          </li>
+          <div th:if="${extraButtons != null}" th:each="button : ${#strings.arraySplit(extraButtons, ',')}" th:remove="tag">
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'ADD_FIELD_VALUE_LIST'}">
+              <a href="javascript:void(0);" th:title="#{button.field.value.list}" data-title="Field Value List" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../add-value-list/'} + ${id}"  th:data-size="W" onclick="openDialog(this)">
+                <div th:remove="tag"><i class="fa fa-list-alt    m-r-5"></i><span th:text="#{button.field.value.list}" th:remove="tag"></span></div>
+              </a>
+            </li>
+          </div>
+
+          <li th:if="${d.canUpdate}">
+
+            <div class="divider"></div>
+
+            <a href="javascript:void(0);" th:title="#{label.delete}" th:data-title="#{label.delete}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../delete/'} + ${id}" onclick="confirmDialog(this)">
+                <i class="fa fa-trash m-r-5" th:if="${d.status.name() != 'Pending'}"></i><span th:text="#{label.delete}" th:remove="tag"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </td>
+<!--  <td style="width: 10px">-->
+<!--    <div class="text-center">-->
+
+<!--      <div class="dropdown">-->
+<!--        <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--          <i class="fa fa-list-dots"></i>-->
+<!--        </button>-->
+<!--        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" th:id="${'context-menu-' + index}">-->
+<!--          <a class="dropdown-item" href="javascript:void(0);" th:title="#{label.view}" th:data-title="#{label.view}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../view/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">-->
+<!--            <i class="fa fa-eye mr-2"></i><span th:text="#{label.view}" th:remove="tag"></span>-->
+<!--          </a>-->
+<!--          <div th:if="${d.canUpdate}" th:remove="tag">-->
+<!--            <a class="dropdown-item" href="javascript:void(0);" th:title="#{label.update}" th:data-title="#{label.update}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../update/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">-->
+<!--              <i class="fa fa-pencil mr-2"></i><span th:text="#{label.update}" th:remove="tag"></span>-->
+<!--            </a>-->
+<!--          </div>-->
+<!--          <div th:if="${d.canUpdate}" th:remove="tag">-->
+<!--            <a class="dropdown-item" href="javascript:void(0);" th:title="#{label.change.status}" th:data-title="#{label.change.status}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../status/'} + ${id}" onclick="confirmDialog(this)">-->
+<!--              <div th:remove="tag" th:if="${d.status.ordinal() == 0}"><i class="fa fa-unlock mr-2"></i><span th:text="#{label.change.status}" th:remove="tag"></span></div>-->
+<!--              <div th:remove="tag" th:if="${d.status.ordinal() == 1}"><i class="fa fa-lock mr-2"></i><span th:text="#{label.change.status}" th:remove="tag"></span></div>-->
+<!--            </a>-->
+<!--          </div>-->
+<!--          <div th:if="${d.canUpdate}" th:remove="tag">-->
+<!--            <div class="dropdown-divider"></div>-->
+<!--            <a class="dropdown-item" href="javascript:void(0);" th:title="#{label.delete}" th:data-title="#{label.delete}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../delete/'} + ${id}" onclick="confirmDialog(this)">-->
+<!--              <i class="fa fa-trash mr-2" th:if="${d.status.ordinal() != 2}"></i><span th:text="#{label.delete}" th:remove="tag"></span>-->
+<!--            </a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--    </div>-->
+<!--  </td>-->
+</th:block>
+
+<th:block th:fragment="action_extra(id, size, extraButtons)">
+  <td style="width: 10px">
+    <div class="text-center">
+      <div class="btn-group text-left">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle tip" data-toggle="dropdown">
+          <i class="fa fa-list-dots"></i>
+        </button>
+        <ul class="dropdown-menu pull-right" role="menu" th:id="${'context-menu-' + index}">
+          <li>
+            <a href="javascript:void(0);" th:title="#{label.view}" th:data-title="#{label.view}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../view/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">
+              <i class="fa fa-eye m-r-5"></i><span th:text="#{label.view}" th:remove="tag"></span>
+            </a>
+          </li>
+          <li th:if="${d.canUpdate and isHideUpdate == null}">
+            <a href="javascript:void(0);" th:title="#{label.update}" th:data-title="#{label.update}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../update/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">
+              <i class="fa fa-pencil m-r-5"></i><span th:text="#{label.update}" th:remove="tag"></span>
+            </a>
+          </li>
+          <li th:if="${d.canUpdate}">
+            <a href="javascript:void(0);" th:title="#{label.change.status}" th:data-title="#{label.change.status}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../status/'} + ${id}" onclick="confirmDialog(this)">
+              <div th:remove="tag" th:if="${d.status.ordinal() == 0}"><i class="fa fa-unlock m-r-5"></i><span th:text="#{label.change.status}" th:remove="tag"></span></div>
+              <div th:remove="tag" th:if="${d.status.ordinal() == 1}"><i class="fa fa-lock m-r-5"></i><span th:text="#{label.change.status}" th:remove="tag"></span></div>
+            </a>
+          </li>
+
+          <div th:if="${extraButtons != null}" th:each="button : ${#strings.arraySplit(extraButtons, ',')}" th:remove="tag">
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'RESET'}">
+              <a href="javascript:void(0);" th:title="#{label.reset.password}" th:data-title="#{label.reset.password}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../reset/'} + ${id}" onclick="confirmDialog(this)">
+                <i class="fa fa-key m-r-5"></i><span th:text="#{label.reset.password}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'DUPLICATE'}">
+              <a href="javascript:void(0);" th:title="#{label.duplicate}" th:data-title="#{label.duplicate}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../duplicate/'} + ${id}" onclick="confirmDialog(this)">
+                <i class="fa fa-clone m-r-5"></i><span th:text="#{label.duplicate}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'PROPERTY'}">
+              <a href="javascript:void(0);" th:title="#{label.property.details}" th:data-title="#{label.property.details}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../property-details/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">
+                <i class="fa fa-tasks m-r-5"></i><span th:text="#{label.property.details}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'FORCE_LOGOUT'}">
+              <a href="javascript:void(0);" th:title="#{label.force.logout}" th:data-title="#{label.force.logout}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../force-logout/'} + ${id}" th:data-size="W" onclick="openDialog(this)">
+                <i class="fa-solid fa-right-from-bracket m-r-5"></i><span th:text="#{label.force.logout}" th:remove="tag"></span>
+              </a>
+            </li>
+          </div>
+
+          <li class="divider" th:if="${d.canUpdate}"></li>
+          <li th:if="${d.canUpdate}">
+            <a href="javascript:void(0);" th:title="#{label.delete}" th:data-title="#{label.delete}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../delete/'} + ${id}" onclick="confirmDialog(this)">
+              <i class="fa fa-trash m-r-5" th:if="${d.status.ordinal() != 2}"></i><span th:text="#{label.delete}" th:remove="tag"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </td>
+</th:block>
+
+<th:block th:fragment="action_extra_hide(id, size, extraButtons, isHideUpdate)">
+  <td style="width: 10px">
+    <div class="text-center">
+      <div class="btn-group text-left">
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle tip" data-toggle="dropdown">
+          <i class="fa fa-list-dots"></i>
+        </button>
+        <ul class="dropdown-menu pull-right" role="menu" th:id="${'context-menu-' + index}">
+          <li>
+            <a href="javascript:void(0);" th:title="#{label.view}" th:data-title="#{label.view}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../view/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">
+              <i class="fa fa-eye m-r-5"></i><span th:text="#{label.view}" th:remove="tag"></span>
+            </a>
+          </li>
+          <li th:if="${d.canUpdate and !isHideUpdate}">
+            <a href="javascript:void(0);" th:title="#{label.update}" th:data-title="#{label.update}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../update/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">
+              <i class="fa fa-pencil m-r-5"></i><span th:text="#{label.update}" th:remove="tag"></span>
+            </a>
+          </li>
+          <li th:if="${d.canUpdate}">
+            <a href="javascript:void(0);" th:title="#{label.change.status}" th:data-title="#{label.change.status}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../status/'} + ${id}" onclick="confirmDialog(this)">
+              <div th:remove="tag" th:if="${d.status.ordinal() == 0}"><i class="fa fa-unlock m-r-5"></i><span th:text="#{label.change.status}" th:remove="tag"></span></div>
+              <div th:remove="tag" th:if="${d.status.ordinal() == 1}"><i class="fa fa-lock m-r-5"></i><span th:text="#{label.change.status}" th:remove="tag"></span></div>
+            </a>
+          </li>
+
+          <div th:if="${extraButtons != null}" th:each="button : ${#strings.arraySplit(extraButtons, ',')}" th:remove="tag">
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'RESET'}">
+              <a href="javascript:void(0);" th:title="#{label.reset.password}" th:data-title="#{label.reset.password}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../reset/'} + ${id}" onclick="confirmDialog(this)">
+                <i class="fa fa-key m-r-5"></i><span th:text="#{label.reset.password}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'DUPLICATE'}">
+              <a href="javascript:void(0);" th:title="#{label.duplicate}" th:data-title="#{label.duplicate}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../duplicate/'} + ${id}" onclick="confirmDialog(this)">
+                <i class="fa fa-clone m-r-5"></i><span th:text="#{label.duplicate}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'PROPERTY'}">
+              <a href="javascript:void(0);" th:title="#{label.property.details}" th:data-title="#{label.property.details}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../property-details/'} + ${id}" th:data-size="${size}" onclick="openDialog(this)">
+                <i class="fa fa-tasks m-r-5"></i><span th:text="#{label.property.details}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'FORCE_LOGOUT'}">
+              <a href="javascript:void(0);" th:title="#{label.force.logout}" th:data-title="#{label.force.logout}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../force-logout/'} + ${id}" th:data-size="W" onclick="confirmDialog(this)">
+                <i class="fa-solid fa-right-from-bracket m-r-5"></i><span th:text="#{label.force.logout}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'RESET_LOGIN_ATTEMPT'}">
+              <a href="javascript:void(0);" th:title="#{label.reset.login.attempt}" th:data-title="#{label.reset.login.attempt}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../reset/login-attempt/'} + ${id}" th:data-size="W" onclick="confirmDialog(this)">
+                <i class="fa-solid fa-arrows-rotate m-r-5"></i><span th:text="#{label.reset.login.attempt}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'RESET_OTP_ATTEMPT'}">
+              <a href="javascript:void(0);" th:title="#{label.reset.otp.attempt}" th:data-title="#{label.reset.otp.attempt}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../reset/otp-attempt/'} + ${id}" th:data-size="W" onclick="confirmDialog(this)">
+                <i class="fa-solid fa-arrows-rotate m-r-5"></i><span th:text="#{label.reset.otp.attempt}" th:remove="tag"></span>
+              </a>
+            </li>
+            <li th:if="${d.canUpdate} and ${#strings.toUpperCase(button) == 'RESET_PASSWORD'}">
+              <a href="javascript:void(0);" th:title="#{label.reset.password}" th:data-title="#{label.reset.password}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../reset-password/'} + ${id}" th:data-size="W" onclick="confirmDialog(this)">
+                <i class="fa-solid fa-key m-r-5"></i><span th:text="#{label.reset.password}" th:remove="tag"></span>
+              </a>
+            </li>
+          </div>
+
+          <li class="divider" th:if="${d.canUpdate}"></li>
+          <li th:if="${d.canUpdate}">
+            <a href="javascript:void(0);" th:title="#{label.delete}" th:data-title="#{label.delete}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../delete/'} + ${id}" onclick="confirmDialog(this)">
+              <i class="fa fa-trash m-r-5" th:if="${d.status.ordinal() != 2}"></i><span th:text="#{label.delete}" th:remove="tag"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </td>
+</th:block>
+
+</body>

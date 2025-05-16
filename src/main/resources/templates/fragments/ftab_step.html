@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="ftab_step(fstepTextInfo, fstepTextAttach, fstepTextPreview)">
+<style>
+    .wizard > .steps {
+        position: relative;
+        display: block;
+        width: 100%
+    }
+
+    .wizard > .steps > ul > li {
+        width: 33.3%
+    }
+
+    .wizard > .steps a {
+        font-size: 16px;
+        text-align: center;
+        margin-bottom: 0.5em;
+    }
+
+    .wizard > .steps .number {
+        font-size: 40px;
+        line-height: 70px;
+        position: absolute;
+        left: 16px;
+        top: -14px;
+        opacity: .1
+    }
+
+    .wizard > .steps a, .wizard > .steps a:active, .wizard > .steps a:hover {
+        display: block;
+        width: auto;
+        padding: 1em 1em;
+        text-decoration: none;
+        border-radius: 2px
+    }
+
+    .wizard > .steps .disabled a {
+        background: #e6e6e6;
+        /*border: 1px solid #f3f3f3;*/
+        border: none;
+        color: #575a65;
+        cursor: default;
+        margin: 2px;
+    }
+
+    .wizard > .steps .disabled a:active, .wizard > .steps .disabled a:hover {
+        background: #e6e6e6;
+        /*border: 1px solid #f3f3f3;*/
+        border: none;
+        margin: 2px;
+    }
+
+    .wizard > .steps .current a, .wizard > .steps .current a:active, .wizard > .steps .current a:hover {
+        background: #188ae2;
+        color: #fff !important;
+        cursor: default
+    }
+
+    .wizard > .steps .current a .number, .wizard > .steps .current a:active .number, .wizard > .steps .current a:hover .number {
+        color: #fff;
+        opacity: .4
+    }
+
+    .wizard > .steps .done a, .wizard > .steps .done a:active, .wizard > .steps .done a:hover {
+        background: #f3f3f3;
+        color: #575a65
+    }
+
+    .wizard > .steps .error a, .wizard > .steps .error a:active, .wizard > .steps .error a:hover {
+        background: #fab8bd;
+        color: #fff;
+        border-color: #f5707a
+    }
+
+    .wizard > .actions > ul > li, .wizard > .steps > ul > li {
+        float: left;
+        position: relative
+    }
+    .wizard {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .wizard a {
+        outline: 0
+    }
+
+    .wizard ul {
+        list-style: none!important;
+        padding: 0;
+        margin: 0
+    }
+
+    .wizard ul>li {
+        display: block;
+        padding: 0
+    }
+
+    .wizard>.steps .current-info {
+        position: absolute;
+        left: -999em
+    }
+
+
+    @media (max-width: 767.98px) {
+        .wizard.vertical>.steps,.wizard>.steps>ul>li {
+            width:100%
+        }
+    }
+
+</style>
+<section th:remove="tag">
+    <div class="wizard clearfix" role="application" >
+        <div class="steps clearfix">
+            <ul role="tablist">
+                <li id="tabInfo" role="tab" class="disabled current" aria-disabled="false" aria-selected="true"><a th:text="${fstepTextInfo}">Information</a></li>
+                <li id="tabAttach" role="tab" class="disabled" aria-disabled="true"><a th:text="${fstepTextAttach}" > Attachment</a></li>
+                <li id="tabPreview" role="tab" class="disabled" aria-disabled="true"><a th:text="${fstepTextPreview}" > Preview</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+</body>
+</html>

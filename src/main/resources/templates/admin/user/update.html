@@ -1,0 +1,46 @@
+<form
+        th:action="${URL}"
+        th:object="${entity}"
+        method="post"
+        id="main-form"
+        th:onsubmit="'return save(this);'"
+        xmlns:th="http://www.thymeleaf.org">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <th:block
+                            th:replace="~{fragments/finput :: finput(finputText= #{label.display.name}, finputName='displayName', finputRequired=true, finputType='text')}"
+                            th:remove="tag"/>
+                </div>
+                <div class="form-group col-sm-6">
+                    <th:block
+                            th:replace="~{fragments/finput :: finput(finputText= #{label.phone.number}, finputName='phoneNumber', finputRequired=true, finputType='text')}"
+                            th:remove="tag"/>
+                </div>
+                <div class="form-group col-sm-6">
+                    <th:block
+                            th:replace="~{fragments/finput :: finput(finputText= #{label.email}, finputName='username', finputRequired=true, finputType='email', finputReadOnly=true)}"
+                            th:remove="tag"/>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label><span th:text="#{label.role.name}"></span> <span class="text-danger">*</span></label>
+                    <select th:field="*{adminRoleEntity}" class="form-control">
+                        <option th:each="d, row: ${roleEntities}" th:value="${d.id}" th:text="${d.roleName}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group text-right m-b-0">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()"
+                th:text="#{button.cancel}">
+            Cancel
+        </button>
+        <button class="btn btn-primary waves-effect waves-light" type="submit" th:text="#{button.submit}">
+            Submit
+        </button>
+    </div>
+</form>

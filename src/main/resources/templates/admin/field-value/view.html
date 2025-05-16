@@ -1,0 +1,56 @@
+<form
+        th:object="${entity}" method="post" id="main-form"
+        xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="form-group col-sm-3">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.field.name}, finputName='fieldName',finputRequired=false, finputType='text', finputReadOnly= true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-3">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.field.code}, finputName='fieldCode',finputRequired=false, finputType='text', finputReadOnly= true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-3">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.field.data.type}, finputName='dataType',finputRequired=false, finputType='text', finputReadOnly= true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-3" >
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.fied.defalt.value}, finputName='defaultValue',finputRequired=false, finputType='text', finputReadOnly= true)}" th:remove="tag"/>
+        </div>
+        <div class="col-sm-12" >
+            <hr style="margin: 0 10px 10px 0;">
+        </div>
+        <div class="col-sm-12" style="margin-bottom: 0 !important;">
+            <h5><label th:text="#{label.field.value.list}"></label></h5>
+        </div>
+        <div class="col-sm-12" style="overflow-x: auto; height: 500px">
+            <table class="table m-0" id="items">
+                <thead>
+                <tr>
+                    <th style="text-align: left" th:text="#{label.field.label.no}">No</th>
+                    <th th:text="#{label.field.english}"></th>
+                    <th th:text="#{label.field.sort}"></th>
+                    <th th:text="#{label.field.value}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="d, iter : *{getValueList()}">
+                    <td style="vertical-align: middle;" th:text="${iter.index + 1}"></td>
+                    <td style="vertical-align: middle;" th:text="${d.english}"></td>
+                    <td style="vertical-align: middle;" th:text="${d.sort}"></td>
+                    <td style="vertical-align: middle;" th:text="${d.value}"></td>
+                </tr>
+
+                </tbody>
+            </table>
+            <div style="height: 80px; text-align: center" th:if=" *{getValueList().size() <= 0}">
+                <br>
+                <br>
+                <label th:text="#{label.field.value.list.isempty}">Field value list empty</label>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <th:block th:replace="~{fragments/view_footer :: view_footer(row=2)}" th:remove="tag"/>
+    <div class="form-group text-right m-b-0">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()" th:text="#{button.cancel}"></button>
+    </div>
+</form>

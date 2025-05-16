@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="magnificGalarySingle">
+<style>
+    div.mfp-bg.mfp-with-zoom.mfp-img-mobile.mfp-ready {
+        z-index: 1051 !important;
+    }
+
+    div.mfp-wrap.mfp-gallery.mfp-auto-cursor.mfp-with-zoom.mfp-img-mobile.mfp-ready {
+        z-index: 1052 !important;
+    }
+</style>
+<section th:remove="tag">
+    <div class="zoom-gallery">
+        <a
+           th:href="${imageUrl}">
+            <img th:src="${imageUrl}" th:height="${height == null ? '50' : height}" >
+        </a>
+    </div>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('.zoom-gallery').magnificPopup({
+                delegate: 'a',
+                type: 'image',
+                closeOnContentClick: false,
+                closeBtnInside: false,
+                mainClass: 'mfp-with-zoom mfp-img-mobile',
+                image: {
+                    verticalFit: true,
+/*                    titleSrc: function (item) {
+                        return item.el.attr('title') + ' &middot; <a class="image-source-link" href="' + item.el.attr('data-source') + '" target="_blank">image source</a>';
+                    }*/
+                },
+                gallery: {
+                    enabled: true
+                },
+                zoom: {
+                    enabled: true,
+                    duration: 300,
+                    opener: function (element) {
+                        return element.find('img');
+                    }
+                }
+            });
+        });
+    </script>
+</section>
+</body>
+</html>

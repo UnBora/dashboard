@@ -1,0 +1,22 @@
+<form
+        th:object="${entity}"
+        id="main-form"
+        xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="form-group col-sm-12">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.configuration.title}, finputName='configurationCode',finputRequired=false, finputReadOnly = true, finputType='text')}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-12">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.configuration.value}, finputName='configurationValue',finputRequired=false, finputReadOnly = true, finputType='text', maxLength=524288)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-12">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.remark}, finputName='remark',finputRequired=false, finputReadOnly = true, finputType='text')}" th:remove="tag"/>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/view_footer :: view_footer(row=2)}" th:remove="tag"/>
+    <div class="form-group text-right m-b-0">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()" th:text="#{button.cancel}">
+            Cancel
+        </button>
+    </div>
+</form>

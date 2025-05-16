@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content">
+    <!-- Start Content-->
+    <div class="container">
+        <th:block th:replace="~{fragments/page_title}" th:remove="tag"/>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box table-responsive">
+                    <section id="table-content"></section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end container-fluid -->
+    <script th:inline="javascript">
+        selectedUrl = /*[[${selectedAdminAuthorityEntity.endPointUrl}]]*/ '';
+        $(document).ready(function () {
+            load(currentPage);
+        });
+        function load(page) {
+            const selectedStatus = $('#fStatus option:selected').map(function () {
+                return $(this).val();
+            }).get();
+
+            loadData(selectedUrl + "/page",
+                {
+                    pageSize: $('#pageSizeSelect option:selected').val()
+                    , page: page
+                    , fStatus: selectedStatus
+                    , fSearch: $('#fSearch').val()
+                }
+            );
+            return false;
+        }
+        function save(form) {
+            return submitForm(form, function () {
+                load(currentPage);
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

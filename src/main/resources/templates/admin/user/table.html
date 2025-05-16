@@ -1,0 +1,107 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <th:block th:replace="~{fragments/ftable_filter :: filter(isNew = true, dialogSize = 'W', filterColumns=true)}" th:remove="tag"/>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover add-edit-table table-column-dynamic" id="datatable">
+                <thead>
+                <tr>
+                    <th data-column-display="true" th:text="#{label.no}">No</th>
+                    <th data-column-display="true" th:text="#{label.display.name}"></th>
+                    <th data-column-display="true" th:text="#{label.role.name}"></th>
+                    <th data-column-display="false" th:text="#{label.username}"></th>
+                    <th data-column-display="false" th:text="#{label.phone.number}"></th>
+                    <th data-column-display="true" th:text="#{label.last.login.at}"></th>
+                    <th data-column-display="true" th:text="#{label.last.login.ip}"></th>
+                    <th data-column-display="true" th:text="#{label.created.date}"></th>
+                    <th data-column-display="true" th:text="#{label.status}">Status</th>
+                    <th data-column-display="true" th:text="#{label.action}">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="d, iter : ${pager.getData()}"
+                    th:data-context-menu-target="${'context-menu-' + iter.index}"
+                    th:data-title="#{button.view}"
+                    th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../view/'} + ${d.id}" data-size="W"
+                >
+                    <td th:text="${iter.index + 1}"></td>
+                    <td th:text="${d.displayName}"></td>
+                    <td th:text="${d.adminRoleEntity.roleName}"></td>
+                    <td th:text="${d.username}"></td>
+                    <td th:text="${d.phoneNumber}"></td>
+                    <td th:text="${d.lastLoginAt == null? 'Never': d.lastLoginAt}"></td>
+                    <td th:text="${d.lastLoginIPAddress}"></td>
+                    <td th:text="${d.createdAtAsString}"></td>
+                    <th:block th:replace="~{fragments/ftable_data :: status}" th:remove="tag"/>
+                    <td width="10px">
+                        <div class="text-center">
+                            <div class="btn-group text-left">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle tip"
+                                        data-toggle="dropdown">
+                                    <i class="fa fa-list-dots"></i>
+                                </button>
+                                <ul class="dropdown-menu pull-right" role="menu"
+                                    th:id="${'context-menu-' + iter.index}">
+                                    <li>
+                                        <a href="javascript:void(0);" th:title="#{label.view}"
+                                           th:data-title="#{label.view}"
+                                           th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../view/'} + ${d.id}"
+                                           data-size="W" onclick="openDialog(this)">
+                                            <i class="fa fa-eye m-r-5"></i><span th:text="#{button.view}"
+                                                                                 th:remove="tag"></span>
+                                        </a>
+                                    </li>
+                                    <li th:if="${d.canUpdate}">
+                                        <a href="javascript:void(0);" th:title="#{button.update}"
+                                           th:data-title="#{button.update}"
+                                           th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../update/'} + ${d.id}"
+                                           th:data-size="W" onclick="openDialog(this)">
+                                            <i class="fa fa-pencil m-r-5"></i><span th:text="#{button.update}"
+                                                                                    th:remove="tag"></span>
+                                        </a>
+                                    </li>
+                                    <li th:if="${d.canUpdate}">
+                                        <a href="javascript:void(0);" th:title="#{button.change.status}"
+                                           th:data-title="#{button.change.status}"
+                                           th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../status/'} + ${d.id}"
+                                           onclick="confirmDialog(this)">
+                                            <div th:remove="tag" th:if="${d.status.name() == 'Disabled'}"><i
+                                                    class="fa fa-unlock m-r-5"></i><span
+                                                    th:text="#{label.change.status}" th:remove="tag"></span></div>
+                                            <div th:remove="tag" th:if="${d.status.name() == 'Enabled'}"><i
+                                                    class="fa fa-lock m-r-5"></i><span th:text="#{label.change.status}"
+                                                                                       th:remove="tag"></span></div>
+                                        </a>
+                                    </li>
+                                    <li th:if="${d.canUpdate}">
+                                        <a href="javascript:void(0);" th:title="#{button.reset.password}"
+                                           th:data-title="#{button.reset.password}"
+                                           th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../reset/password/'} + ${d.id}"
+                                           th:data-size="N" onclick="confirmDialog(this)">
+                                            <i class="fa fa-key m-r-5"></i><span th:text="#{button.reset.password}"
+                                                                                 th:remove="tag"></span>
+                                        </a>
+                                    </li>
+                                    <li class="divider" th:if="${d.canUpdate}"></li>
+
+                                    <li th:if="${d.canUpdate}">
+                                        <a href="javascript:void(0);" th:title="#{button.delete}"
+                                           th:data-title="#{button.delete}"
+                                           th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../delete/'} + ${d.id}"
+                                           onclick="confirmDialog(this)">
+                                            <i class="fa fa-trash m-r-5"
+                                               th:if="${d.status.name() != 'Pending'}"></i><span
+                                                th:text="#{button.delete}" th:remove="tag"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/ftable_filter :: filter_column_display}" th:remove="tag"/>
+    <th:block th:replace="~{fragments/ftable_pagination}" th:remove="tag"/>
+</div>

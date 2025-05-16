@@ -1,0 +1,135 @@
+<section th:remove="tag" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- Navigation Bar-->
+<header id="topnav" th:fragment="header">
+    <div class="topbar-main">
+        <div class="container">
+            <!-- Logo container-->
+            <div class="logo m-r-10">
+                <!-- Text Logo -->
+                <a th:href="@{${configuration.homeUrl}}" class="logo">
+                   <!-- <span th:text="${appName}"></span>-->
+                    <!-- Handle case where 'TRUST' is present -->
+                    <span th:if="${appName.contains('Trust')}"
+                          th:utext="${#strings.replace(appName, 'Trust', '<span style=&quot;color: #f2a61b;&quot;>Trust</span>')}">
+                    </span>
+                    <!-- Handle case where 'TRUST' is not present -->
+                    <span th:unless="${appName.contains('Trust')}" th:text="${appName}">
+                    </span>
+                </a>
+                <!-- Image Logo -->
+<!--                <a th:href="@{/admin#dashboard}" class="logo">-->
+<!--                    <img th:src="@{/assets/images/logo.png}" alt="Logo" height="30">-->
+<!--                </a>-->
+            </div>
+            <!-- End Logo container-->
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li class="d-none d-sm-block">
+                    <form role="search" class="navbar-left app-search pull-left hidden-xs" onsubmit="return searchAuthorityName();">
+                        <input type="text" id="search-bar" th:placeholder="#{input.search} + '...'" class="form-control">
+                        <a href="javascript:void(0)" onclick="searchAuthorityName()" ><i class="fa fa-search"></i></a>
+                    </form>
+                    <script th:inline="javascript" th:if="${session.authorityEntities != null}">
+                        var menus = [[${session.authorityEntities}]];
+                        $(function () {
+                            var subMenus = [];
+                            var index = subMenus.length - 1;
+                            menus.forEach(menu => {
+                                if (menu.parent !== null && menu.menu === true) {
+                                    subMenus[++index] = menu.authorityName;
+                                }
+                            });
+                            $("#search-bar").autocomplete({
+                                source: subMenus
+                            });
+                        });
+                        function searchAuthorityName() {
+                            var searchValue = $("#search-bar").val();
+                            var menu = menus.filter(x => x.authorityName === searchValue)[0];
+                            if (menu !== undefined) {
+                                window.location.href = menu.endPointUrl.replace('/web/admin/', "#");
+                            }
+                            return false;
+                        }
+                    </script>
+
+                </li>
+            </ul>
+            <div class="menu-extras">
+                <ul class="nav navbar-nav navbar-right pull-right">
+
+                    <li class="dropdown navbar-c-items">
+                        <a href="" class="dropdown-toggle waves-effect waves-light profile" data-toggle="dropdown" aria-expanded="true">
+                            <img th:src="${@environment.getRequiredProperty('profile.url') + #authentication.principal.displayName}" alt="user-img" class="img-circle">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
+                            <li class="text-center">
+                                <h5>Hi, <span th:text="${#authentication.principal.displayName}">Bob</span></h5>
+                            </li>
+                            <li>
+                                <a th:href="@{#user/profile}" onclick="return loadPage(this);"><i class="fa fa-user-alt m-r-5"></i> <span th:text="#{label.profile}"></span></a>
+                            </li>
+                            <li>
+                                <a th:href="@{/web/admin/authentication/logout}"><i class="ti-power-off m-r-5"></i> <span th:text="#{label.logout}"></span></a>
+                            </li>
+                        </ul>
+
+                    </li>
+                </ul>
+                <div class="menu-item">
+                    <!-- Mobile menu toggle-->
+                    <a class="navbar-toggle">
+                        <div class="lines">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </a>
+                    <!-- End mobile menu toggle-->
+                </div>
+            </div>
+            <!-- end menu-extras -->
+        </div> <!-- end container -->
+    </div>
+
+    <div class="navbar-custom">
+        <div class="container">
+            <div id="navigation">
+                <!-- Navigation Menu-->
+                <ul class="navigation-menu">
+                    <li th:each="menu, iter: ${session.authorityEntities}"
+                        th:unless="${session.authorityEntities == null}"
+                        th:if="${menu.parent == null}"
+                        th:class="${menu.hasSub == true ? 'has-submenu' : ''}" style="margin-right: -25px;">
+                        <a th:href="${menu.endPointUrl}">
+                            <i th:class="${menu.faIcon}"></i>
+                            <span th:text="${menu.authorityName}"></span>
+                        </a>
+                        <ul th:if="${menu.hasSub}" class="submenu">
+                            <li th:each="subMenu,iterSubMenu : ${session.authorityEntities}"
+                                th:if="${subMenu.parent != null && subMenu.parent.id == menu.id}" onclick="activeNavigation(this)">
+                                <a th:if="${subMenu.menu}"
+                                   th:href="${'#' + #strings.replace(#strings.toLowerCase(subMenu.authorityName),' ','-')}"
+                                   th:data-url="${subMenu.endPointUrl}"
+                                   th:text="${subMenu.authorityName}">
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div> <!-- end #navigation -->
+        </div> <!-- end container -->
+    </div> <!-- end navbar-custom -->
+
+    <script>
+/*        function loadNavigation(a) {
+            loadPageWithUrl($(a).data("url"));
+        }*/
+        function activeNavigation(e) {
+            $('.active').removeClass('active');
+            var A = $(e).parents().eq(1).addClass('active');
+            $(e).addClass('active');
+        }
+    </script>
+</header>
+<!-- End Navigation Bar-->
+</section>

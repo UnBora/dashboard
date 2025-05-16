@@ -1,0 +1,46 @@
+<form
+        th:action="${URL}"
+        th:object="${adminAuthorityOrderModel}"
+        method="post"
+        id="main-form"
+        th:onsubmit="'return save(this, true);'"
+        xmlns:th="http://www.thymeleaf.org">
+    <div class="row form-group m-b-0">
+        <div class="custom-dd dd" id="nestable_list_2">
+            <ol class="dd-list">
+                <li class="dd-item" th:each="d : ${adminAuthorityEntities}" th:if="${d.parent == null}" th:data-id="${d.id}">
+                    <div class="dd-handle" th:text="${d.authorityName + ' (' + d.endPointUrl + ')'}"></div>
+                    <ol class="dd-list" th:if="${d.hasSub}">
+                        <li class="dd-item" th:each="d1 : ${adminAuthorityEntities}" th:if="${d1.parent != null && d1.parent.id == d.id}" th:data-id="${d1.id}">
+                            <div class="dd-handle" th:text="${d1.authorityName + ' (' + d1.endPointUrl + ')'}"></div>
+                            <ol class="dd-list" th:if="${d1.hasSub}">
+                                <li class="dd-item" th:each="d2 : ${adminAuthorityEntities}" th:if="${d2.parent != null && d2.parent.id == d1.id}" th:data-id="${d2.id}">
+                                    <div class="dd-handle" th:text="${d2.authorityName + ' (' + d2.endPointUrl + ')'}"></div>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <input type="hidden" th:field="${adminAuthorityOrderModel.authorityOrderAsString}">
+    <div class="form-group text-right m-b-0">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()" th:text="#{button.cancel}">
+            Cancel
+        </button>
+        <button class="btn btn-primary waves-effect waves-light" id="btn-submit" type="submit" th:text="#{button.submit}">
+            Submit
+        </button>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#nestable_list_2').nestable({
+                maxDepth: 4
+            }).nestable('collapseAll');
+            $('#btn-submit').on('click', function (e) {
+                $('input[name="authorityOrderAsString"]').val(window.JSON.stringify($('.dd').nestable('serialize')));
+            });
+        });
+    </script>
+</form>

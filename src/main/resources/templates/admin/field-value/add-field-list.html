@@ -1,0 +1,164 @@
+<style>
+    hr {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+</style>
+<form
+        th:action="${URL}"
+        th:object="${entity}"
+        method="post"
+        id="main-form"
+        th:onsubmit="'return save(this);'"
+        xmlns:th="http://www.thymeleaf.org">
+
+    <div class="row" >
+        <div class="form-group col-sm-12">
+            <div style="display: flex;">
+                <h5 style="margin-right: 5px; padding: 5px 0" th:text="#{label.head.field.type}"> : </h5>
+                <h5 class="bg-primary" style="padding: 6px 30px 4px 30px; border-radius: 8px; color:white"
+                    th:text="*{fieldCode}"></h5>
+            </div>
+        </div>
+<!--        <div class="form-group col-sm-12">-->
+<!--            <hr>-->
+<!--        </div>-->
+        <!--        <div class="form-group col-sm-2">-->
+        <!--            <label><span th:text="Khmer"></span></label>-->
+        <!--            <input type="text" id="khmerVal" class="form-control" th:placeholder="Khmer">-->
+        <!--        </div>-->
+        <div class="form-group col-sm-3">
+            <label><span th:text="#{label.field.english}"></span><span class="text-danger">*</span></label>
+            <input type="text" id="englishVal" class="form-control" th:placeholder="#{label.field.english}">
+        </div>
+        <!--        <div class="form-group col-sm-2">-->
+        <!--            <label><span th:text="Chinese"></span></label>-->
+        <!--            <input type="text" id="chineseVal" class="form-control" th:placeholder="Chinese">-->
+        <!--        </div>-->
+        <div class="form-group col-sm-3">
+            <label><span th:text="#{label.sort.order}">Sort Order</span></label>
+            <input type="number" id="sortVal" class="form-control" th:placeholder="#{label.sort.order}">
+        </div>
+        <div class="form-group col-sm-3">
+            <label><span th:text="#{label.default.submit.value}"></span></label>
+            <input type="text" id="valueVal" class="form-control" th:placeholder="#{label.default.submit.value}">
+        </div>
+
+        <div class="form-group col-sm-1" style="text-align: center">
+            <label style="height:16px !important"><span th:text="' '"></span></label>
+            <br>
+            <button type="button" class="btn btn-default" onclick="addRow()">
+                <i class="fa fa-plus-circle m-r-5"></i><span th:text="#{label.button.add}">Add</span>
+            </button>
+        </div>
+    </div>
+<!--    <br>-->
+    <hr>
+<!--    <br>-->
+    <div class="row" style="overflow-x: auto; height: 500px">
+        <div class="col-md-12">
+            <table class="table m-0" id="tableData">
+                <thead>
+                <tr>
+                    <!--                    <th th:text="Khmer"></th>-->
+                    <th th:text="#{label.field.english}"></th>
+                    <!--                    <th th:text="Chinese"></th>-->
+                    <th th:text="#{label.field.sort}"></th>
+                    <th th:text="#{label.field.value}"></th>
+                    <th th:text="#{label.action}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="d, iter : *{valueList}">
+                    <td hidden>
+                        <input type="text" th:field="*{valueList[__${iter.index}__].id}" class="form-control">
+                    </td>
+                    <!--                    <td>-->
+                    <!--                        <input type="text" th:field="*{valueList[__${iter.index}__].khmer}" th:value="${'hello'}" class="form-control">-->
+                    <!--                    </td>-->
+                    <td>
+                        <input type="text" th:field="*{valueList[__${iter.index}__].english}" class="form-control">
+                    </td>
+                    <!--                    <td>-->
+                    <!--                        <input type="text" th:field="*{valueList[__${iter.index}__].chinese}" class="form-control">-->
+                    <!--                    </td>-->
+                    <td>
+                        <input type="number" th:field="*{valueList[__${iter.index}__].sort}" class="form-control">
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{valueList[__${iter.index}__].value}" class="form-control">
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-icon waves-effect waves-light btn-default "
+                                onclick="removeRow(this)"><i class="fa fa-remove"></i></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group text-right m-b-0 m-t-20">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()"
+                th:text="#{button.cancel}">
+            Cancel
+        </button>
+        <button class="btn btn-primary waves-effect waves-light" type="submit" th:text="#{button.submit}">
+            Submit
+        </button>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var fieldList = /*[[${entity.valueList}]]*/ [];
+        /*]]>*/
+    </script>
+
+    <script>
+        var index = fieldList.length;
+
+        function addRow() {
+            if ($("#englishVal").val() === "") {
+                $("#englishVal").focus();
+                return swal({
+                    title: "Field Required",
+                    html: "Please enter the value",
+                    type: "warning",
+                    /*  confirmButtonText: "Enter Value"*/
+                }).then(function () {
+                    $('#englishVal').addClass('error-input-form');
+                });
+            }
+            var sort = 1;
+            if ($("#sortVal").val() === "") {
+                sort = 0;
+            } else {
+                sort = $("#sortVal").val();
+            }
+            var appendString =
+                '<tr>' +
+                '<td>' +
+                '<input type="text" name="valueList[' + index + '].english" class="form-control" value="' + $("#englishVal").val() + '" >' +
+                '</td>' +
+                '<td>' +
+                '<input type="number" name="valueList[' + index + '].sort" class="form-control" value="' + sort + '" >' +
+                '</td>' +
+                '<td>' +
+                '<input type="text" name="valueList[' + index + '].value" class="form-control" value="' + $("#valueVal").val() + '" >' +
+                '</td>' +
+                '<td class="text-center">' +
+                '<button type="button" class="btn btn-icon waves-effect waves-light btn-default text-center center" onclick="removeRow(this)"> <i class="fa fa-remove"></i></button>' +
+                '</td>' +
+                '</tr>';
+            $("#tableData").find('tbody').append(appendString);
+            $("#englishVal").val('');
+            $("#englishVal").focus();
+            index++;
+        }
+
+        function removeRow(row) {
+            $(row).parents('tr').remove();
+        }
+    </script>
+</form>

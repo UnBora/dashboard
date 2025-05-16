@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+<!--                    <div class="page-title-right">-->
+<!--                        <ol class="breadcrumb m-0">-->
+<!--                            <li class="breadcrumb-item"><a href="javascript: void(0);">Zircos</a></li>-->
+<!--                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>-->
+<!--                            <li class="breadcrumb-item active">Error</li>-->
+<!--                        </ol>-->
+<!--                    </div>-->
+                    <h4 class="page-title">Error</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row justify-content-center">
+            <div class="col-sm-6 text-center">
+
+                <div class="wrapper-page">
+                    <img src="assets/images/animat-search-color.gif" alt="" height="120">
+                    <h2 class="text-uppercase text-danger">Something Went Wrong</h2>
+                    <p class="text-muted mb-2">There was an unexpected server error. Please contact technical support.</p>
+
+                    <a class="btn btn-success waves-effect waves-light m-t-20" th:href="@{/admin}"> Return Home</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- end container-fluid -->
+</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <th:block th:replace="~{fragments/ftable_filter :: filter(isNavigationOrder=false, isNew = false, dialogSize = 'W', filterColumns=true, filterDateRange = true, fStatus = false)}" th:remove="tag"/>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover add-edit-table table-column-dynamic"
+                   id="datatable">
+                <thead>
+                <tr>
+                    <th data-column-display="true" th:text="#{label.no}">No</th>
+                    <th data-column-display="true" th:text="#{label.timestamp}"></th>
+                    <th data-column-display="true" th:text="#{label.log.event}"></th>
+                    <th data-column-display="true" th:text="#{label.new.object}"></th>
+                    <th data-column-display="true" th:text="#{label.remark}"></th>
+                    <th data-column-display="true" th:text="#{label.action}">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="d, iter : ${pager.getData()}" th:data-context-menu-target="${'context-menu-' + iter.index}"
+                    th:data-title="#{button.view}"
+                    th:data-url="${'/web/admin/audit-log/view/'} + ${d.auditLogId}" data-size="W">
+                    <td th:text="${iter.index + 1}"></td>
+                    <td th:text="${d.timeStamp}"></td>
+                    <td th:text="${d.logEvent}"></td>
+                    <td class="display-limit-length" th:text="${d.newObject}"></td>
+                    <td th:text="${d.remark}"></td>
+                    <td class="text-center">
+                        <a href="javascript:void(0);" th:title="#{button.view}" th:data-title="#{button.view}"
+                           th:data-url="${'/web/admin/audit-log/view/'} + ${d.auditLogId}"
+                           data-size="W" onclick="openDialog(this)"><i class="fa fa-eye"></i></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/ftable_filter :: filter_column_display}" th:remove="tag"/>
+    <th:block th:replace="~{fragments/ftable_pagination}" th:remove="tag"/>
+    <script type="text/javascript" charset="utf-8">
+        $(function () {
+            $(".display-limit-length").each(function (i) {
+                len = $(this).text().length;
+                if (len > 80) {
+                    $(this).text($(this).text().substr(0, 80) + '...');
+                }
+            });
+            $('#fDateRange span').html(moment().subtract(29, 'days').format('DD-MM-YYYY') + ' to ' + moment().format('DD-MM-YYYY'));
+            $('#fDateRange').daterangepicker({
+                format: 'DD-MM-YYYY',
+                startDate: moment().subtract(29, 'days'),
+                endDate: moment(),
+                dateLimit: {
+                    days: 60
+                },
+                showDropdowns: false,
+                showWeekNumbers: true,
+                timePicker: false,
+                timePickerIncrement: 1,
+                timePicker12Hour: true,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'right',
+                drops: 'down',
+                buttonClasses: ['btn', 'btn-sm'],
+                applyClass: 'btn-success',
+                cancelClass: 'btn-default',
+                separator: ' to ',
+                locale: {
+                    applyLabel: 'Submit',
+                    cancelLabel: 'Cancel',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                }
+            }, function (start, end, label) {
+                $('#fDateRange span').html(start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
+            });
+        });
+    </script>
+</div>

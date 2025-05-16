@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<div class="content">
+
+    <!-- Start Content-->
+    <div class="container">
+
+        <th:block th:replace="~{fragments/page_title}" th:remove="tag"/>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text-center card-box">
+                            <div class="member-card">
+                                <div class="thumb-xl member-thumb m-b-10 center-block">
+                                    <img th:src="${#strings.concat('https://ui-avatars.com/api/?name=', entity.displayName, '&size=128')}"
+                                         class="img-circle img-thumbnail" alt="profile-image">
+                                </div>
+                                <div class="">
+                                    <h4 class="m-b-5" th:text="${entity.displayName}"></h4>
+                                    <p class="text-muted" th:text="${entity.username}"></p>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm w-sm waves-effect m-t-10 waves-light" th:title="#{edit.profile}" th:data-title="#{edit.profile}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/update'}" data-size="N" onclick="openDialog(this)">[[#{edit.profile}]]</button>
+                                <button type="button" class="btn btn-default btn-sm w-sm waves-effect m-t-10 waves-light" th:title="#{label.change.password}" th:data-title="#{label.change.password}" th:data-url="${#strings.concat(selectedAdminAuthorityEntity.endPointUrl, '/change-password/', entity.id)}" data-size="N" onclick="openDialog(this)">[[#{label.change.password}]]</button>
+                                <hr/>
+
+                                <div class="text-left">
+                                    <p class="text-muted font-13"><strong th:text="#{label.user.display.name} + ' :'">Display Name :</strong> <span class="m-l-10" th:text="${entity.displayName}"></span></p>
+                                    <p class="text-muted font-13"><strong th:text="#{label.user.role.name} + ' :'">Role Name :</strong> <span class="m-l-10" th:text="${entity.adminRoleEntity.roleName}"></span></p>
+                                    <p class="text-muted font-13"><strong th:text="#{label.user.phone} + ' :'">Mobile :</strong><span class="m-l-10" th:text="${entity.phoneNumber == null ? 'N/A' : entity.phoneNumber}"></span></p>
+                                    <p class="text-muted font-13"><strong th:text="#{label.user.email} + ' :'">Email :</strong> <span class="m-l-10" th:text="${entity.username == null ? 'N/A' : entity.username}"></span></p>
+                                    <p class="text-muted font-13"><strong th:text="#{label.created.date} + ' :'">Create At :</strong> <span class="m-l-10" th:text="${entity.createdAtAsString}"></span></p>
+                                    <p class="text-muted font-13"><strong th:text="#{label.last.update.date} + ' :'">Create At :</strong> <span class="m-l-10" th:text="${entity.updatedAtAsString}"></span></p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-9">
+                        <h4 th:text="#{label.logged.in.browser.history}">You have logged in with these browsers</h4>
+                        <div class="row m-t-20">
+                            <section id="table-content"></section>
+                        </div> <!-- end row -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end container-fluid -->
+    <script th:inline="javascript">
+        selectedUrl = /*[[${selectedAdminAuthorityEntity.endPointUrl}]]*/ '';
+
+        $(document).ready(function () {
+            load(currentPage);
+        });
+
+        function load(page) {
+            var selectedStatus = $('#fStatus option:selected').map(function () {
+                return $(this).val();
+            }).get();
+
+            loadData("/web/admin/user/profile/browser-history",
+                {
+                    pageSize: $('#pageSizeSelect option:selected').val()
+                    , page: page
+                    , fStatus: selectedStatus
+                }
+            );
+        }
+
+        function save(form) {
+            return submitForm(form, function () {
+                loadPageWithUrl('/admin/user/profile');
+            });
+        }
+    </script>
+</div>
+
+</body>
+</html>

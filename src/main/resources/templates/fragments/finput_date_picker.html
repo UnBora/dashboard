@@ -1,0 +1,52 @@
+
+<!--  using=>
+        <th:block th:replace="~{fragments/finput_date_picker :: finput_date_picker(finputText=#{label.date}, finputName='datepicker',finputRequired=true, showCurrentDate=true, finputReadOnly=false)}" th:remove="tag"/>
+-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="finput_date_picker(finputText, finputName, finputRequired, showCurrentDate, finputReadOnly)">
+<style>
+
+</style>
+<section th:remove="tag">
+
+    <label th:for="${finputName}" th:utext="${finputText + (finputRequired==true ? '<span id=datePickerSpan class=text-danger>*</span>':'')}">Label Name
+        <span class="text-danger">*</span>
+    </label>
+    <div>
+        <div class="input-group">
+            <input
+                    th:name="${finputName}"
+                    th:id="${finputName} +'-datepicker'"
+                    th:placeholder="'Enter ' + ${finputText}"
+                    th:required="${finputRequired==true}"
+                    th:readonly="${finputReadOnly==true}"
+                    th:class="form-control"
+                    th:type="text"
+                    th:field="*{__${finputName}__}"
+                    autocomplete="off"
+            />
+            <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            let inputName = [[${finputName}]];
+            let showCurrentDate = [[${showCurrentDate}]];
+            $( '#' + inputName + '-datepicker' ).datetimepicker({
+                "allowInputToggle": true,
+                "showClose": true,
+                "showClear": true,
+                "showTodayButton": true,
+                "format": "DD/MM/YYYY"
+            });
+            if (showCurrentDate === true) {
+                $( '#' + inputName + '-datepicker' ).datetimepicker("defaultDate", new Date());
+            }
+        });
+    </script>
+</section>
+</body>
+</html>

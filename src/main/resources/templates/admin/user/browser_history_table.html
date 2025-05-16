@@ -1,0 +1,46 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover add-edit-table" id="datatable">
+                <thead>
+                    <tr>
+                        <th th:text="#{label.no}">No</th>
+                        <th th:text="#{label.browser}"></th>
+                        <th th:text="#{label.ip.address}"></th>
+                        <th th:text="#{label.created.date}"></th>
+                        <th th:text="#{label.status}">Status</th>
+                        <th th:text="#{label.action}"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d, iter : ${pager.getData()}" th:data-context-menu-target="${'context-menu-' + iter.index}"
+                        th:data-title="#{button.view}"
+                        th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../browser-history/'} + ${d.id}" data-size="F">
+                        <td th:text="${iter.index + 1}"></td>
+                        <td th:text="${#strings.abbreviate(d.browserAgent,60)}"></td>
+                        <td th:text="${d.clientIPAddress}"></td>
+                        <td th:text="${d.createdAtAsString}"></td>
+                        <th:block th:replace="~{fragments/ftable_data :: status}" th:remove="tag"/>
+                        <td style="width: 10px">
+                            <div class="text-center">
+                                <div class="btn-group text-left">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle tip" data-toggle="dropdown">
+                                        <i class="fa fa-list-dots"></i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right" role="menu" th:id="${'context-menu-' + index}">
+                                        <li>
+                                            <a href="javascript:void(0);" th:title="#{label.view}" th:data-title="#{label.view}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../browser-history/'} + ${d.id}" th:data-size="F" onclick="openDialog(this)">
+                                                <i class="fa fa-eye m-r-5"></i><span th:text="#{label.view}" th:remove="tag"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/ftable_pagination}" th:remove="tag"/>
+</div>

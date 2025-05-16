@@ -1,0 +1,74 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <div class="row">
+    <div class="col-md-12 center-page">
+      <table class="table table-striped table-bordered table-hover add-edit-table" id="dataViewTable">
+        <thead>
+          <tr>
+            <th th:text="#{label.no}">No</th>
+            <th th:text="#{label.session.id}"></th>
+            <th th:text="#{label.client.ip}"></th>
+            <th th:text="#{label.created.date}"> Date</th>
+            <th th:text="#{label.updated.date}"> Date</th>
+            <th th:text="#{label.status}">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="d, iter : ${entity.getData()}" th:data-context-menu-target="${'context-menu-' + iter.index}">
+            <td th:text="${iter.index + 1}"></td>
+            <td th:text="${d.sessionId}"></td>
+            <td th:text="${d.clientIPAddress}"></td>
+            <td th:text="${d.createdAt}"></td>
+            <td th:text="${d.updatedAt}"></td>
+            <th:block th:replace="~{fragments/ftable_data :: status}" th:remove="tag"/>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="form-group text-right m-b-0">
+    <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()" th:text="#{button.cancel}"></button>
+  </div>
+<!--  <div class="row">-->
+<!--    <div class="col-sm-3">-->
+<!--      <div class="dataTables_length" id="datatable_length">-->
+<!--        <select class="form-control input-sm" id="pageViewSizeSelect" th:onchange="'javascript:loadView(' + ${1} + ', false' +');'">-->
+<!--          <option th:each="pageSize : ${pager.getAvailablePageSizes()}"-->
+<!--                  th:text="${pageSize}"-->
+<!--                  th:value="${pageSize}"-->
+<!--                  th:selected="${pageSize} == ${pager.getCurrentPageSize()}">-->
+<!--          </option>-->
+<!--        </select>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div th:if="${pager.getData().totalPages > 1}" class="col-sm-9">-->
+<!--      <div class="pull-right">-->
+<!--        <ul class="pagination">-->
+<!--          <li th:class="${pager.getData().number == 0} ? disabled">-->
+<!--            <a href="javascript:void(0);" th:onclick="'javascript:loadView(' + ${1} + ', false' +');'">-->
+<!--              <i class="fa fa-angles-left"></i>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li th:class="${pager.getData().number == 0} ? disabled">-->
+<!--            <a href="javascript:void(0);" th:onclick="'javascript:loadView(' + ${pager.getData().number} + ', false' +');'">-->
+<!--              <i class="fa fa-angle-left"></i>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}" th:class="${pager.getData().number == (page - 1)} ? 'active' : ''">-->
+<!--            <a href="javascript:void(0);" th:onclick="'javascript:loadView(' + ${page} + ', false' +');'" th:text="${page}"></a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a href="javascript:void(0);" th:onclick="'javascript:loadView('+ ${pager.getData().number + 2} + ', false' +');'">-->
+<!--              <i class="fa fa-angle-right"></i>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a href="javascript:void(0);" th:onclick="'javascript:loadView('+ ${pager.getData().totalPages} + ', false' +');'">-->
+<!--              <i class="fa fa-angles-right"></i>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+</div>

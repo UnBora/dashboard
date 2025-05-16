@@ -1,0 +1,11 @@
+<form
+        th:action="${URL}"
+        th:object="${entity}"
+        method="post"
+        id="main-form"
+        th:onsubmit="'return save(this);'"
+        xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <p>Would you like to delete this selected ?</p>
+    </div>
+</form>

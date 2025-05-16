@@ -1,0 +1,21 @@
+<div th:remove="tag" xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="page_title">
+        <!-- Page-Title -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title-box">
+                    <div class="btn-group pull-right">
+                        <ol class="breadcrumb hide-phone p-0 m-0">
+                            <li>
+                                <a href="javascript: void(0);" th:text="${selectedAdminAuthorityEntity.parent.authorityName}"></a>
+                            </li>
+                            <li class="active" th:text="${selectedAdminAuthorityEntity.authorityName}"></li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title page-title-custom" th:text="${selectedAdminAuthorityEntity.authorityName}"></h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title end breadcrumb -->
+    </th:block>
+</div>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content">
+
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <section id="table-view-content"></section>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        browserId = /*[[${browserId}]]*/ 0;
+        $(document).ready(function () {
+            loadView(currentPage, true);
+        });
+
+        function loadView(page, isFirst) {
+            var selectedStatus = $('#fStatus option:selected').map(function () {
+                return $(this).val();
+            }).get();
+
+            loadViewData("/admin/user/profile/login-history/" + browserId,
+                {
+                    pageSize: $('#pageViewSizeSelect option:selected').val()
+                    , page: page
+                    , fStatus: selectedStatus
+                }, '#table-view-content', '#dataViewTable', isFirst
+            );
+        }
+    </script>
+</div>
+
+</body>
+</html>

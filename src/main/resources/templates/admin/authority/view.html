@@ -1,0 +1,37 @@
+<form
+        th:object="${entity}"
+        id="main-form"
+        xmlns:th="http://www.thymeleaf.org">
+
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.parent}, finputName='parent.authorityName',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.authority.name}, finputName='authorityName',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.icon}, finputName='faIcon',finputRequired=false, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-3">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.order}, finputName='authorityOrder',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-3">
+            <th:block th:replace="~{fragments/finput_checkbox :: finput_checkbox(finputText= #{label.is.menu}, finputName='menu', finputDisable=true, finputValue=${entity.isMenu()})}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-12">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.end.point.url}, finputName='endPointUrl',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-12">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.authority}, finputName='authorityName',finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>
+        </div>
+    </div>
+
+    <th:block th:replace="~{fragments/view_footer :: view_footer(row=2)}" th:remove="tag"/>
+
+    <div class="form-group text-right m-b-0">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()" th:text="#{button.cancel}">
+            Cancel
+        </button>
+    </div>
+</form>

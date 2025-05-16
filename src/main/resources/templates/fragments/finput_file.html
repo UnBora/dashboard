@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--<body th:fragment="finput_file(finputName, finputRequired, finputText, fattachmentList, fisView, fisRemove)">-->
+<body th:fragment="finput_file">
+<style>
+    .pointer-cursor {
+        cursor: pointer;
+    }
+
+    .documentTitle {
+        background-color: transparent !important;
+        border: 0 !important;
+    }
+</style>
+<section th:remove="tag">
+    <div class="col-sm-12 " th:id="${ftableFile != null ? 'inputImgHeading_'+ ftableFile : 'inputImgHeading'}">
+        <label th:for="${finputName}"
+               th:utext="${finputText + (finputTitleRequired==true ? '<span id=datePickerSpan class=text-danger>*</span>':'')}">Label
+            Name<span class="text-danger">*</span></label>
+        <div class="hidden" id="fileInputPanel">
+            <input type="file" onchange="viewFileNameAfterChoose()" id="fileInput" tabIndex="-1"
+                   accept=".jpg, .jpeg, .png, .pdf"
+                   style="display: none;"/>
+        </div>
+        <div class="row m-b-5">
+            <div class="col-sm-6">
+                <input type="text"
+                       th:required="${finputRequired==true}"
+                       th:placeholder="'Enter ' + ${finputText}"
+                       class="form-control col-sm-5"
+                       id="documentTitle"
+                       style="border-radius: 0.25rem;"/>
+            </div>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <input class="form-control" readonly id="fileNameTemp" style="border-radius: 0.25rem;"/>
+                    <span class="input-group-btn" tabindex="0">
+                        <label id="chooseFile" for="fileInput" style="margin-bottom: 0;"
+                               class="btn btn-default m-l-5">
+                            <span th:text="#{label.button.choose.file}">Choose file</span>
+                        </label>
+                        <label id="uploadIndex" style="margin-bottom: 0;" class="btn btn-primary m-l-5"
+                               onclick="addFileToTable()">
+                            <span th:text="#{label.button.upload}">+ Upload</span>
+                        </label>
+                    </span>
+                </div>
+                <i style="font-size: 12px" th:text="#{label.document.upload.detail}"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <table class="table table-striped table-bordered table-hover add-edit-table table-column-dynamic"
+               th:id="${ftableFile != null ? ftableFile : 'tableFile'}">
+            <thead>
+            <tr>
+                <th th:text="#{label.no}">No</th>
+                <th th:text="#{label.document.title}">Document Title</th>
+                <th th:text="#{label.filename}">File Name</th>
+                <th th:text="#{label.action}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script th:inline="javascript">
+        var indexInputFile = 0;
+
+        /*<![CDATA[*/
+        var fisView =  /*[[${fisView}]]*/ true;
+        var fisRemove =  /*[[${fisRemove}]]*/ true;
+        var finputRequired =  /*[[${finputRequired}]]*/ true;
+        var finputName =  /*[[${finputName}]]*/ 'file';
+        var fattachList =  /*[[${fattachmentList}]]*/ null;
+        var ftableFile =  /*[[${ftableFile}]]*/ '';
+        ftableFile = ftableFile || 'tableFile';
+        var labelRemoveFile = /*[[#{label.remove.file}]]*/ '';
+        var labelViewFile = /*[[#{label.view.file}]]*/ '';
+        /*]]>*/
+        $(document).ready(() => {
+            if (fattachList !== null && fattachList.length > 0) {
+                for (let i = 0; i < fattachList.length; i++) {
+                    indexInputFile = indexInputFile + 1;
+                    displayFile(i + 1, fattachList[i].remark, fattachList[i].originalFileName, null, fattachList[i].id, fattachList[i].fullUrl);
+                }
+            }
+        });
+
+        function addFileToTable() {
+            let documentId = $("#documentTitle").val();
+            if (documentId !== "") {
+                indexInputFile = indexInputFile + 1;
+                let fileInput = document.getElementById('fileInput');
+                const file = fileInput.files[0];
+
+                const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+                if (file && !allowedTypes.includes(file.type)) {
+                    return swal({
+                        /* position: 'top',*/
+                        title: "Incorrect file type.",
+                        html: "Please choose a document file with one of the following formats: .jpg, .jpeg, .png, or .pdf.",
+                        type: "warning",
+                        /*confirmButtonText: "Enter Value"*/
+                    }).then(function () {
+                        $('#chooseFile').addClass('error-btn-form');
+                    });
+                }
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function (e) {
+                        displayFile(indexInputFile, documentId, file.name, reader.result, null, null);
+
+                        let files = fileInput.files;
+                        let dt = new DataTransfer();
+                        for (let i = 0; i < files.length; i++) {
+                            let f = files[i];
+                            dt.items.add(
+                                new File(
+                                    [f.slice(0, f.size, f.type)],
+                                    f.name
+                                ));
+                        }
+                        let backupFile = document.getElementById("backupFile_" + indexInputFile);
+                        backupFile.files = dt.files;
+
+                        fileInput = null;
+                        $('#chooseFile').removeClass('error-btn-form');
+                    };
+
+                } else {
+                    indexInputFile = indexInputFile - 1;
+                    swal({
+                        /*position: 'top',*/
+                        title: "File Required",
+                        html: "Please choose the file",
+                        type: "warning",
+                        /*  confirmButtonText: "Enter Value"*/
+                    }).then(function () {
+                        $('#chooseFile').addClass('error-btn-form');
+                    });
+                }
+            } else {
+
+                if ($('#documentTitle').val() === "") {
+                    $('#documentTitle').addClass('error-input-form');
+                } else {
+                    $('#documentTitle').removeClass('error-input-form');
+                }
+            }
+        }
+
+        function displayFile(no, documentTitle, fileName, base64File, attachmentId, fileUrl) {
+            $("#documentTitle").val("");
+            $("#fileNameTemp").val("");
+
+            let contentFile = base64File != null ? base64File : fileUrl;
+
+            let isViewPdf = fisView ? `<a href="javascript:void(0);" onclick="openFile('${fileName}', '${contentFile}')">
+                                        <i class="glyphicon glyphicon-eye-open pointer-cursor m-r-5"></i><span>${labelViewFile}</span>
+                                        </a>` : '';
+
+            let isViewImg = fisView ? `<a href="${contentFile}" onclick="openFile('${fileName}', '${contentFile}')">
+                                        <i class="glyphicon glyphicon-eye-open pointer-cursor m-r-5"></i><span>${labelViewFile}</span>
+                                        <img class="hidden" src="${contentFile}" height="50">
+                                        </a>` : '';
+
+
+            let isRemove = fisRemove ? `<a href="javascript:void(0);"  onclick="removeRow(this)">
+                                            <i class="glyphicon glyphicon-trash pointer-cursor m-r-5"></i><span>${labelRemoveFile}</span>
+                                        </a>` : '';
+
+            let fragment = fileName.endsWith(".pdf") ? `${isViewPdf}` : `${isViewImg}`;
+
+            let body = `
+                <tr>
+                    <td>${no}</td>
+                    <td><input class="form-control documentTitle" readonly name="documentTitle" value="${documentTitle}"></td>
+                    <td>${fileName}</td>
+                    <td style="width: 10px">
+                        <div class="text-center">
+                          <div class="btn-group text-left">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle tip" data-toggle="dropdown">
+                              <i class="fa fa-list-dots"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                              <li class="zoom-gallery">
+                                    ${fragment}
+                              </li>
+                              <li >
+                                ${isRemove}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                    </td>
+                    <td class="hidden">
+                        <input type="file" name="${finputName}" id="backupFile_${no}"/>
+                    </td>
+                    <td class="hidden">
+                        <input type="text" name="attachmentId" value="${attachmentId}"/>
+                    </td>
+                </tr>`;
+
+            $(`#${ftableFile}`).find('tbody').append(body);
+
+        }
+
+        function viewFileNameAfterChoose() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                $("#fileNameTemp").val(file.name);
+            } else {
+                $("#fileNameTemp").val('No file selected.');
+            }
+
+        }
+
+        function openFile(name, contFile) {
+            if (getFileExtension(name) !== "pdf") {
+                $('.zoom-gallery').magnificPopup({
+                    delegate: 'a',
+                    type: 'image',
+                    closeOnContentClick: false,
+                    closeBtnInside: false,
+                    mainClass: 'mfp-with-zoom mfp-img-mobile',
+                    image: {
+                        verticalFit: true
+                    },
+                    gallery: {
+                        enabled: true
+                    },
+                    zoom: {
+                        enabled: true,
+                        duration: 300,
+                        opener: function (element) {
+                            return element.find('img');
+                        }
+                    }
+                });
+            } else {
+                if (contFile.endsWith(".pdf")) {
+                    window.open(contFile, '_blank');
+                } else {
+                    const arrayBuffer = base64ToArrayBuffer(contFile.replaceAll("data:application/pdf;base64,", ""));
+
+                    const blob = new Blob([arrayBuffer], {type: 'application/pdf'});
+
+                    const blobURL = URL.createObjectURL(blob);
+
+                    window.open(blobURL, '_blank');
+
+                    URL.revokeObjectURL(blobURL);
+                }
+
+            }
+
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function removeRow(row) {
+            $(row).parents('tr').remove();
+            indexInputFile = indexInputFile - 1;
+        }
+
+        function getFileExtension(filename) {
+            const parts = filename.split('.');
+            if (parts.length === 1) return '';
+            return parts.pop();
+        }
+
+    </script>
+    </div>
+
+</section>
+</body>
+</html>

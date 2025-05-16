@@ -1,0 +1,23 @@
+<div th:remove="tag" xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="finput_select_option_field_value">
+
+        <section th:remove="tag">
+            <label th:if="${finputType} != 'hidden'" th:for="${finputName}"
+                   th:utext="${finputText + (finputRequired==true ? '<span class=text-danger>*</span>':'')}">Label Name
+                <span class="text-danger">*</span>
+            </label>
+            <select th:field="*{__${finputName}__}" th:id="${finputName}" th:name="${finputName}" class="selectpicker show-tick" th:data-live-search="${fSearchOpt == true}">
+                <option th:if="${fOptionHint == true}" th:selected="${fselected == '' }" th:value="${fselected}"
+                        th:text="${finputLabelOption}"></option>
+                <option th:each="d, row: ${foptionData}" th:selected="${fselected == d.getEnglish()}"
+                        th:value="${d.getEnglish()}" th:text="${d.getEnglish()}"></option>
+            </select>
+        </section>
+        <script type="text/javascript">
+            $(document).ready(() => {
+                $('.selectpicker').selectpicker({showIcon: false});
+            })
+        </script>
+    </th:block>
+</div>
+

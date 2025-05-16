@@ -1,0 +1,41 @@
+<form
+        th:action="${URL}"
+        th:object="${entity}"
+        method="post"
+        id="main-form"
+        th:onsubmit="'return save(this);'"
+        xmlns:th="http://www.thymeleaf.org">
+
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText=#{label.authority.name}, finputName='authorityName', finputRequired=true, finputType='text')}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-6">
+            <label><span th:text="#{label.parent}"></span><span class="text-danger">*</span></label>
+            <select th:field="*{parent}" class="form-control">
+                <option value="">None</option>
+                <option th:each="d, row: ${entities}" th:value="${d.id}" th:text="${d.authorityName}"></option>
+            </select>
+        </div>
+        <div class="form-group col-sm-6">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.icon}, finputName='faIcon',finputRequired=false, finputType='text')}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-3">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.order}, finputName='authorityOrder',finputRequired=true, finputType='text')}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-3">
+            <th:block th:replace="~{fragments/finput_checkbox :: finput_checkbox(finputText= #{label.is.menu}, finputName='menu', finputValue=${entity.isMenu()})}" th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-12">
+            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.end.point.url}, finputName='endPointUrl',finputRequired=true, finputType='text')}" th:remove="tag"/>
+        </div>
+    </div>
+    <div class="form-group text-right m-b-0">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()" th:text="#{button.cancel}">
+            Cancel
+        </button>
+        <button class="btn btn-primary waves-effect waves-light" type="submit" th:text="#{button.submit}">
+            Submit
+        </button>
+    </div>
+</form>

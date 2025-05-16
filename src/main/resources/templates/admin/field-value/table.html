@@ -1,0 +1,36 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <th:block th:replace="~{fragments/ftable_filter :: filter(isNew = true, dialogSize = 'N')}" th:remove="tag"/>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped table-bordered table-hover add-edit-table" id="datatable">
+                <thead>
+                <tr>
+                    <th th:text="#{label.no}">No</th>
+                    <th th:text="#{label.field.name}"></th>
+                    <th th:text="#{label.field.code}"></th>
+                    <th th:text="#{label.field.data.type}"></th>
+                    <th th:text="#{label.field.data.default.value}"></th>
+                    <th th:text="#{label.created.date}"></th>
+                    <th th:text="#{label.status}">Status</th>
+                    <th th:text="#{label.action}">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="d, iter : ${pager.getData()}" th:data-context-menu-target="${'context-menu-' + iter.index}"
+                    th:data-title="#{button.view}"
+                    th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/../view/'} + ${d.id}" data-size="N">
+                    <td th:text="${iter.index + 1}"></td>
+                    <td th:text="${d.fieldName}"></td>
+                    <td th:text="${d.fieldCode}"></td>
+                    <td th:text="${d.dataType}"></td>
+                    <td th:text="${d.defaultValue}"></td>
+                    <td th:text="${d.createdAtAsString}"></td>
+                    <th:block th:replace="~{fragments/ftable_data :: status}" th:remove="tag"/>
+                    <th:block th:replace="~{fragments/ftable_data :: action(id=${d.id}, size='W', index=${iter.index}, extraButtons='ADD_FIELD_VALUE_LIST')}" th:remove="tag"/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/ftable_pagination}" th:remove="tag"/>
+</div>

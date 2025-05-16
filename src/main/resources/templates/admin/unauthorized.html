@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Unauthorized - ' + #{system.name}">User</title>
+
+    <!-- Jquery filer css -->
+    <link th:href="@{/assets/libs/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+    <!-- App css -->
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/core.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/components.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/icons.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/6.1.0/css/all.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/pages.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/menu.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/responsive.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/custom-style.css}"/>
+
+</head>
+<body class="bg-transparent widescreen" style="background: url(/assets/images/dust.png);">
+<!-- HOME -->
+<section>
+    <div class="container-alt">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+
+                <div class="wrapper-page">
+                    <img th:src="@{/assets/images/animat-customize-color.gif}" alt="" height="120">
+                    <h1 style="font-size: 78px;">403</h1>
+                    <h1 class="text-uppercase text-danger">Unauthorized Access</h1>
+                    <p class="text-muted">Page, you are trying to access, is not authorized for you.</p>
+                    <a class="btn btn-success waves-effect waves-light m-t-20" th:href="@{/web/admin}"> Return Home</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- END HOME -->
+
+<!-- jQuery  -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/jquery-migrate/3.3.2/jquery-migrate.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.4.1/js/bootstrap.min.js}"></script>
+</body>
+</html>

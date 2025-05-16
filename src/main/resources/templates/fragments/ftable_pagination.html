@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="table_pagination">
+    <div class="row" style="margin-bottom: 150px;">
+        <div th:if="${pager.getData().totalPages > 1}" class="col-sm-12">
+            <div class="pull-right">
+                <ul class="pagination">
+                    <li th:class="${pager.getData().number == 0} ? disabled">
+                        <a href="javascript:void(0);" th:onclick="'javascript:load(\''+ ${1} +'\');'">
+                            <i class="fa fa-angles-left"></i>
+                        </a>
+                    </li>
+                    <li th:class="${pager.getData().number == 0} ? disabled">
+                        <a href="javascript:void(0);" th:onclick="'javascript:load(\''+ ${pager.getData().number} +'\');'">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </li>
+                    <li th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}" th:class="${pager.getData().number == (page - 1)} ? 'active' : ''">
+                        <a href="javascript:void(0);" th:onclick="'javascript:load(\''+ ${page} +'\');'" th:text="${page}"></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" th:onclick="'javascript:load(\''+ ${pager.getData().number + 2} +'\');'">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" th:onclick="'javascript:load(\''+ ${pager.getData().totalPages} +'\');'">
+                            <i class="fa fa-angles-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

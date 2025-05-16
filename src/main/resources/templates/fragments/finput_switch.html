@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="finput_switch">
+    <label th:utext="${finputText}"><span class="text-danger">*</span></label>
+    <div>
+        <input
+                th:name="${finputName}"
+                th:id="${finputName}"
+                th:disabled="${finputDisable == true}"
+                th:checked="${finputValue}"
+                type="checkbox" switch="none">
+        <label th:for="${finputName}" data-on-label="On" data-off-label="Off"></label>
+        </label>
+    </div>
+</th:block>
+</html>
