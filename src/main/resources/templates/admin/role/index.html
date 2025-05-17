@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <!-- Font Awesome via CDN -->
-    <link rel="stylesheet" th:href="@{/webjars/fortawesome__fontawesome-free/6.1.1/css/all.min.css}" />
-
 </head>
 <body>
 <div class="content">
@@ -28,17 +25,19 @@
     <script th:inline="javascript">
         selectedUrl = /*[[${selectedAdminAuthorityEntity.endPointUrl}]]*/ '';
         $(document).ready(function () {
-            console.log(selectedUrl);
-            load(1);
+            load(currentPage);
         });
 
         function load(page) {
+            const selectedStatus = $('#fStatus option:selected').map(function () {
+                return $(this).val();
+            }).get();
 
             loadData(selectedUrl + "/page",
                 {
                     pageSize: $('#pageSizeSelect option:selected').val()
                     , page: page
-                    , fromDateToDate: $('#fDateRange span').html()
+                    , fStatus: selectedStatus
                     , fSearch: $('#fSearch').val()
                 }
             );

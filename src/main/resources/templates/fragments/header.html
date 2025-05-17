@@ -59,17 +59,17 @@
 
                     <li class="dropdown navbar-c-items">
                         <a href="" class="dropdown-toggle waves-effect waves-light profile" data-toggle="dropdown" aria-expanded="true">
-                            <img th:src="${@environment.getRequiredProperty('profile.url') + #authentication.principal.displayName}" alt="user-img" class="img-circle">
+                            <img th:src="${@environment.getRequiredProperty('profile.url') + 'Bo+Raa'}" alt="user-img" class="img-circle">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
                             <li class="text-center">
-                                <h5>Hi, <span th:text="${#authentication.principal.displayName}">Bob</span></h5>
+                                <h5>Hi, <span text="Bora Un">Bob</span></h5>
                             </li>
                             <li>
                                 <a th:href="@{#user/profile}" onclick="return loadPage(this);"><i class="fa fa-user-alt m-r-5"></i> <span th:text="#{label.profile}"></span></a>
                             </li>
                             <li>
-                                <a th:href="@{/web/admin/authentication/logout}"><i class="ti-power-off m-r-5"></i> <span th:text="#{label.logout}"></span></a>
+                                <a th:href="@{/admin/authentication/logout}"><i class="ti-power-off m-r-5"></i> <span th:text="#{label.logout}"></span></a>
                             </li>
                         </ul>
 

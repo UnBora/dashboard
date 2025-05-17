@@ -109,14 +109,14 @@ public class AdminAuthorityService extends WebAdminBaseService<AdminAuthorityEnt
         try {
             String[] beanNames = context.getBeanDefinitionNames();
             List<String> excludedEndpoints = Arrays.asList(
-                    "/web/admin/authentication",
+                    "/admin/authentication",
                     "${server.error.path:${error.path:/error}}",
-                    "/web/permit",
-                    "/web/admin/unauthorized",
+                    "/permit",
+                    "/admin/unauthorized",
                     "/resources",
-                    "/web/admin/request-object",
-                    "/web/admin/language",
-                    "/web/permit/email"
+                    "/admin/request-object",
+                    "/admin/language",
+                    "/permit/email"
             );
             List<AdminAuthorityEntity> authorityEntities = new ArrayList<>();
             AdminAuthorityEntity rootAuthority = null, authority = null, subAuthority = null;

@@ -28,7 +28,7 @@ import java.util.Map;
 
 @Controller
 @RootAuthority(name = "Administrator", icon = "glyphicon glyphicon-user")
-@RequestMapping(value = "/web/admin/authority", name = "Authority")
+@RequestMapping(value = "/admin/authority", name = "Authority")
 @Slf4j
 public class AdminAuthorityController extends WebAdminBaseController<AdminAuthorityEntity, Long> {
     private final AdminAuthorityService adminAuthorityService;
@@ -48,7 +48,7 @@ public class AdminAuthorityController extends WebAdminBaseController<AdminAuthor
             if (!Utils.isAjaxRequest(httpServletRequest)) {
                 return new ModelAndView("redirect:" + rootURL);
             } else {
-                modelAndView.setViewName("web/admin/authority/order");
+                modelAndView.setViewName("admin/authority/order");
                 List<AdminAuthorityEntity> adminAuthorityEntities = adminAuthorityService.findAllByStatus(CoreConstants.Status.Enabled, Comparator.comparing(AdminAuthorityEntity::getAuthorityOrder));
                 modelAndView.addObject("adminAuthorityEntities", adminAuthorityEntities);
                 modelAndView.addObject("URL", rootURL + "/order");

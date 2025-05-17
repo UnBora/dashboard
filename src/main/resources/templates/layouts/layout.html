@@ -2,39 +2,46 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
+    <meta name="theme-color" content="#000000">
+
     <title>Admin System</title>
-    <!-- Jquery filer css -->
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
+    <link rel="icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
+
+    <!-- jQuery Filer CSS -->
     <link th:href="@{/assets/libs/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
     <link th:href="@{/assets/libs/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
 
-    <!-- App css -->
-    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/core.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/components.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/icons.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/6.1.0/css/all.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/pages.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/menu.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/responsive.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/custom-style.css}"/>
+    <!-- Bootstrap & App CSS -->
+    <link th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/core.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/components.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/icons.css}" rel="stylesheet"/>
+    <link th:href="@{/webjars/font-awesome/6.1.0/css/all.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/pages.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/menu.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/responsive.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/custom-style.css}" rel="stylesheet"/>
 
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/datatables/dataTables.bootstrap.min.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/bootstrap3-dialog/bootstrap-dialog.min.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/sweetalert2/sweetalert2.min.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/toastr/toastr.min.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/bootstrap-select/css/bootstrap-select.min.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/summernote/summernote.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/select2/css/select2.min.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/magnific-popup/css/magnific-popup.css}">
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/nestable/jquery.nestable.css}"/>
+    <!-- Additional Libraries CSS -->
+    <link th:href="@{/assets/libs/datatables/dataTables.bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/bootstrap3-dialog/bootstrap-dialog.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/sweetalert2/sweetalert2.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/toastr/toastr.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/bootstrap-select/css/bootstrap-select.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/summernote/summernote.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/select2/css/select2.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/magnific-popup/css/magnific-popup.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/nestable/jquery.nestable.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/libs/jquery-ui/jquery-ui.min.css}" rel="stylesheet"/>
 
-    <link th:rel="stylesheet" type="text/css"
-          th:href="@{/assets/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.css}"/>
-    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/jquery-ui/jquery-ui.min.css}"/>
-
+    <!-- Inline Thymeleaf Variables -->
     <script th:inline="javascript">
         /*<![CDATA[*/
         var maximumSessionTimeout = /*[[${configuration.maximumSessionTimeout}]]*/ '1800';
@@ -53,45 +60,10 @@
         var internalServerErrorTitle = /*[[#{message.internal.error}]]*/ '';
         var somethingWentWrongTitle = /*[[#{message.something.went.wrong}]]*/ '';
 
-        var utextBenefic = /*[[#{#{label.beneficiary}}]]*/ '';
-        var utextBenType = /*[[#{label.beneficiary.type}]]*/ '';
-        var utextDocNo = /*[[#{label.document.no}]]*/ '';
-        var utextFullName = /*[[#{label.full.name}]]*/ '';
-        var utextExpireDate = /*[[#{label.expiry.date}]]*/ '';
-        var utextDocType = /*[[#{label.document.type}]]*/ '';
-        var utextDob = /*[[#{label.date.of.birth}]]*/ '';
-        var utextIssueDate = /*[[#{label.issued.date}]]*/ '';
-        var utextGender = /*[[#{label.gender}]]*/ '';
-        var utextNation = /*[[#{label.nationality}]]*/ '';
-        var utextCompany = /*[[#{label.company.name}]]*/ '';
-        var utextMaritalStatus = /*[[#{label.marital.status}]]*/ '';
-        var utextTelephone = /*[[#{label.telephone.no}]]*/ '';
-        var utextOccupation = /*[[#{label.occupation}]]*/ '';
-        var utextEmail = /*[[#{label.email.address}]]*/ '';
-        var utextRemark = /*[[#{label.remark}]]*/ '';
-        var utextBenTitle = /*[[#{label.beneficiary.information.preview}]]*/ '';
-        var utextNob = /*[[#{label.nature.of.business}]]*/ '';
-        var utextIssueBy = /*[[#{label.issued.by}]]*/ '';
-        var utextBrNo = /*[[#{label.business.registration.no}]]*/ '';
-        var utextRepresentive = /*[[#{label.name.of.legal.representative}]]*/ '';
-        var utextBusinessAddr = /*[[#{label.business.address}]]*/ '';
-        var utextDesigner = /*[[#{label.designation}]]*/ '';
-        var utextCurrentAddr = /*[[#{label.current.address}]]*/ '';
-        var utextInd = /*[[#{label.type.ind}]]*/ '';
-        var utextLegal = /*[[#{label.type.Legal}]]*/ '';
         var listEmpty = /*[[#{label.your.download.list.is.currently.empty}]]*/ '';
         /*]]>*/
         var currentPage = 1;
         var dialog = null;
-
-        var fundManagerName = /*[[#{label.fund.manager.name}]]*/ '';
-        var cisName = /*[[#{label.cis.name}]]*/ '';
-        var investmentType = /*[[#{label.investment.type}]]*/ '';
-        var fundDistributor = /*[[#{label.fund.distributor}]]*/ '';
-        var fundAdministrator = /*[[#{label.fund.administrator}]]*/ '';
-        var custodianInformation = /*[[#{label.custodian.information}]]*/ '';
-        var currentNav = /*[[#{label.current.net.asset.value}]]*/ '';
-        var fundManager = /*[[#{label.fund.manager}]]*/ '';
     </script>
 
     <style>
@@ -102,65 +74,76 @@
 </head>
 
 <body>
+<noscript>
+    <div class="alert alert-danger text-center">JavaScript is required to use this application.</div>
+</noscript>
 
-<!-- Global table menu, right click-->
+<!-- Context menu -->
 <ul id="context-menu-holder" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
     style="display: block; position:static; top: 0;"></ul>
 
+<!-- Header Fragment -->
 <div th:remove="tag" sec:authorize="isAuthenticated()" th:replace="~{fragments/header :: header}"></div>
 
+<!-- Main Content -->
 <div class="wrapper">
     <div id="content"></div>
 </div>
 
+<!-- Optional Footer -->
+<!-- <div th:replace="~{fragments/footer :: footer}"></div> -->
+
+<!-- Session Timeout Fragment -->
 <th:block th:replace="~{fragments/session_timeout :: sessionTimeout}"/>
 
-<!-- jQuery  -->
+<!-- JavaScript Libraries -->
 <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
 <script th:src="@{/webjars/jquery-migrate/3.3.2/jquery-migrate.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/3.4.1/js/bootstrap.min.js}"></script>
-<script th:src="@{/assets/js/detect.js}"></script>
-<script th:src="@{/assets/js/fastclick.js}"></script>
-<script th:src="@{/assets/js/jquery.blockUI.js}"></script>
-<script th:src="@{/assets/js/waves.js}"></script>
-<script th:src="@{/assets/js/jquery.slimscroll.js}"></script>
-<script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.4.1/js/bootstrap.min.js}" defer></script>
+<script th:src="@{/assets/js/detect.js}" defer></script>
+<script th:src="@{/assets/js/fastclick.js}" defer></script>
+<script th:src="@{/assets/js/jquery.blockUI.js}" defer></script>
+<script th:src="@{/assets/js/waves.js}" defer></script>
+<script th:src="@{/assets/js/jquery.slimscroll.js}" defer></script>
+<script th:src="@{/assets/js/jquery.scrollTo.min.js}" defer></script>
 
-<script th:src="@{/assets/libs/datatables/jquery.dataTables.min.js}"></script>
-<script th:src="@{/assets/libs/datatables/dataTables.bootstrap.js}"></script>
-<script th:src="@{/assets/libs/bootstrap3-dialog/bootstrap-dialog.min.js}"></script>
-<script th:src="@{/assets/libs/bootstrap-waitingfor/bootstrap-waitingfor.min.js}"></script>
-<script th:src="@{/assets/libs/sweetalert2/sweetalert2.min.js}"></script>
-<script th:src="@{/assets/libs/toastr/toastr.min.js}"></script>
-<script th:src="@{/assets/libs/bootstrap-select/js/bootstrap-select.js}"></script>
-<script th:src="@{/assets/libs/autoNumeric/autoNumeric.js}"></script>
-<script th:src="@{/assets/libs/summernote/summernote.min.js}"></script>
-<script th:src="@{/assets/libs/select2/js/select2.min.js}"></script>
-<script th:src="@{/assets/libs/magnific-popup/js/jquery.magnific-popup.min.js}"></script>
-<script th:src="@{/assets/libs/nestable/jquery.nestable.js}"></script>
+<!-- Plugins -->
+<script th:src="@{/assets/libs/datatables/jquery.dataTables.min.js}" defer></script>
+<script th:src="@{/assets/libs/datatables/dataTables.bootstrap.js}" defer></script>
+<script th:src="@{/assets/libs/bootstrap3-dialog/bootstrap-dialog.min.js}" defer></script>
+<script th:src="@{/assets/libs/bootstrap-waitingfor/bootstrap-waitingfor.min.js}" defer></script>
+<script th:src="@{/assets/libs/sweetalert2/sweetalert2.min.js}" defer></script>
+<script th:src="@{/assets/libs/toastr/toastr.min.js}" defer></script>
+<script th:src="@{/assets/libs/bootstrap-select/js/bootstrap-select.js}" defer></script>
+<script th:src="@{/assets/libs/autoNumeric/autoNumeric.js}" defer></script>
+<script th:src="@{/assets/libs/summernote/summernote.min.js}" defer></script>
+<script th:src="@{/assets/libs/select2/js/select2.min.js}" defer></script>
+<script th:src="@{/assets/libs/magnific-popup/js/jquery.magnific-popup.min.js}" defer></script>
+<script th:src="@{/assets/libs/nestable/jquery.nestable.js}" defer></script>
+<script th:src="@{/assets/libs/jquery.filer/js/jquery.filer.min.js}" defer></script>
+<script th:src="@{/assets/libs/bootstrap-datetimepicker/moment-with-locales.min.js}" defer></script>
+<script th:src="@{/assets/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}" defer></script>
+<script th:src="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.js}" defer></script>
+<script th:src="@{/assets/libs/moment/moment.js}" defer></script>
+<script th:src="@{/assets/libs/jquery-ui/jquery-ui.min.js}" defer></script>
 
-<script th:src="@{/assets/libs/jquery.filer/js/jquery.filer.min.js}"></script>
-<script th:src="@{/assets/libs/bootstrap-datetimepicker/moment-with-locales.min.js}"></script>
-<script th:src="@{/assets/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
-<script th:src="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.js}"></script>
-<script th:src="@{/assets/libs/moment/moment.js}"></script>
-<script th:src="@{/assets/libs/jquery-ui/jquery-ui.min.js}"></script>
+<!-- App Core Scripts -->
+<script th:src="@{/assets/js/jquery.core.js}" defer></script>
+<script th:src="@{/assets/js/jquery.app.js}" defer></script>
+<script th:src="@{/assets/js/app.js}" defer></script>
+<script th:src="@{/assets/js/appEdition.js}" defer></script>
+<script th:src="@{/assets/js/sessionTimeout.js}" defer></script>
 
-<!-- App js -->
-<script th:src="@{/assets/js/jquery.core.js}"></script>
-<script th:src="@{/assets/js/jquery.app.js}"></script>
-<script th:src="@{/assets/js/app.js}"></script>
-<script th:src="@{/assets/js/appEdition.js}"></script>
-<script th:src="@{/assets/js/sessionTimeout.js}"></script>
-
+<!-- Custom Script -->
 <script>
     $(document).click(function () {
         if ($("#context-menu-holder").css('display') === 'block') {
-            $(" #context-menu-holder").hide();
+            $("#context-menu-holder").hide();
         }
     });
+
     $(document).ready(function () {
-        var url = window.location.href.toString();
+        const url = window.location.href.toString();
         if (!url.endsWith('#')) {
             loadingPage(url);
         } else {
@@ -168,8 +151,8 @@
         }
     });
 
-    window.addEventListener('popstate', function (event) {
-        var pageUrl = window.location.href.toString();
+    window.addEventListener('popstate', function () {
+        let pageUrl = window.location.href.toString();
         if (pageUrl.endsWith('#')) {
             pageUrl = homeUrl + "?dashboard";
         }
@@ -178,23 +161,18 @@
 
     function loadingPage(pageUrl) {
         if (pageUrl.includes("#")) {
-            pageUrl = pageUrl.replace("#", "/")
+            pageUrl = pageUrl.replace("#", "/");
         } else {
             pageUrl = homeUrl + "?dashboard";
         }
         if (pageUrl.endsWith('/')) {
             pageUrl = pageUrl.slice(0, -1);
         }
-        if (pageUrl.includes("/investor")){
-            pageUrl = pageUrl.replace("/investor", "/trustor")
-        }
-        if (pageUrl.includes("/investor-report")){
-            pageUrl = pageUrl.replace("/investor-report", "/trustor-report")
-        }
         loadPageWithUrl(pageUrl);
     }
 </script>
 
+<!-- Notification from Result -->
 <script th:inline="javascript" th:if="${result != null}">
     /*<![CDATA[*/
     var isSuccess = /*[[${result.success}]]*/ '';
@@ -207,8 +185,9 @@
             title: messageExecutedSuccessfully,
             html: message,
             type: 'success'
-        })
+        });
     }
 </script>
+
 </body>
 </html>

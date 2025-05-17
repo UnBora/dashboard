@@ -20,7 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/web/admin", name = "Dashboard")
+@RequestMapping(value = "/admin", name = "Dashboard")
 @AllArgsConstructor
 public class DashboardController {
     private final AdminUserService adminUserService;
@@ -34,9 +34,9 @@ public class DashboardController {
             List<AdminAuthorityEntity> authorityEntities = adminUserService.findAdminUserLoggedAuthority(userEntity, Comparator.comparing(AdminAuthorityEntity::getAuthorityOrder));
             httpSession.setAttribute("authorityEntities", authorityEntities);
             if (Utils.isAjaxRequest(httpServletRequest)) {
-                modelAndView.setViewName("web/admin/dashboard");
+                modelAndView.setViewName("admin/dashboard");
             } else {
-                modelAndView.setViewName("web/admin/index");
+                modelAndView.setViewName("admin/index");
             }
         }
         return modelAndView;

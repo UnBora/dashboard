@@ -23,7 +23,7 @@ public class WebAdminExceptionController {
         String requestUrl = url + (Utils.nonNull(queryString) ? "?" + queryString : "");
         log.error("Error in handlingNoSuchElementException accessing " + requestUrl + " with message " + e.getMessage());
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("web/admin/error");
+        modelAndView.setViewName("admin/error");
         modelAndView.addObject("message", e.getMessage());
         return modelAndView;
     }
@@ -36,7 +36,7 @@ public class WebAdminExceptionController {
         String requestUrl = url + (Utils.nonNull(queryString) ? "?" + queryString : "");
         log.error("Error in handlingNullPointerException accessing " + requestUrl + " with message " + e.getMessage());
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("web/admin/error");
+        modelAndView.setViewName("admin/error");
         modelAndView.addObject("message", e.getMessage());
         return modelAndView;
     }

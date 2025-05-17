@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Objects;
 
 @Controller
-@RequestMapping(value = "/web/admin/authentication")
+@RequestMapping(value = "/admin/authentication")
 @Slf4j
 public class AuthenticationController{
 
@@ -39,20 +39,20 @@ public class AuthenticationController{
 
     @RequestMapping(value = "/login")
     public ModelAndView login(ModelAndView modelAndView, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        modelAndView.setViewName("web/admin/authentication/login");
+        modelAndView.setViewName("admin/authentication/login");
         modelAndView.addObject("siteKey", configurationService.getGoogleRecaptchaSiteKey());
-        modelAndView.addObject("URL", "/web/admin/authentication/login");
+        modelAndView.addObject("URL", "/admin/authentication/login");
         return modelAndView;
     }
     @RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
     public ModelAndView forgotPasswordForm(ModelAndView modelAndView) {
-        modelAndView.setViewName("web/admin/authentication/forgot_password");
+        modelAndView.setViewName("admin/authentication/forgot_password");
         return modelAndView;
     }
 
     @RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
     public ModelAndView forgotPasswordSubmit(@ModelAttribute("email") String email, ModelAndView modelAndView, HttpServletRequest httpServletRequest) throws MessagingException {
-        modelAndView.setViewName("web/admin/authentication/forgot_password");
+        modelAndView.setViewName("admin/authentication/forgot_password");
         if (StringUtils.isBlank(email)) {
             modelAndView.addObject("msgError", messageUtilities.getString("email.required"));
         } else {
@@ -68,7 +68,7 @@ public class AuthenticationController{
 
     @RequestMapping(value = "/forgot-password/reset", method = RequestMethod.GET)
     public ModelAndView resetPasswordForm(@RequestParam("key") String token, ModelAndView modelAndView) {
-        modelAndView.setViewName("web/admin/authentication/reset_password");
+        modelAndView.setViewName("admin/authentication/reset_password");
         EmailResetEntity entity = adminUserService.findEmailResetByToken(token);
         modelAndView.addObject("reset", entity);
         return modelAndView;
@@ -79,7 +79,7 @@ public class AuthenticationController{
                                             @ModelAttribute("newPwd") String newPwd,
                                             @ModelAttribute("confirmPwd") String confirmPwd,
                                             ModelAndView modelAndView) {
-        modelAndView.setViewName("web/admin/authentication/reset_password");
+        modelAndView.setViewName("admin/authentication/reset_password");
         EmailResetEntity entity = adminUserService.findEmailResetByToken(token);
         modelAndView.addObject("reset", entity);
         if (StringUtils.isBlank(newPwd) || StringUtils.isBlank(confirmPwd)) {

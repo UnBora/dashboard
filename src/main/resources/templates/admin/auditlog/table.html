@@ -17,7 +17,7 @@
                 <tbody>
                 <tr th:each="d, iter : ${pager.getData()}" th:data-context-menu-target="${'context-menu-' + iter.index}"
                     th:data-title="#{button.view}"
-                    th:data-url="${'/web/admin/audit-log/view/'} + ${d.auditLogId}" data-size="W">
+                    th:data-url="${'/admin/audit-log/view/'} + ${d.auditLogId}" data-size="W">
                     <td th:text="${iter.index + 1}"></td>
                     <td th:text="${d.timeStamp}"></td>
                     <td th:text="${d.logEvent}"></td>
@@ -25,7 +25,7 @@
                     <td th:text="${d.remark}"></td>
                     <td class="text-center">
                         <a href="javascript:void(0);" th:title="#{button.view}" th:data-title="#{button.view}"
-                           th:data-url="${'/web/admin/audit-log/view/'} + ${d.auditLogId}"
+                           th:data-url="${'/admin/audit-log/view/'} + ${d.auditLogId}"
                            data-size="W" onclick="openDialog(this)"><i class="fa fa-eye"></i></a>
                     </td>
                 </tr>

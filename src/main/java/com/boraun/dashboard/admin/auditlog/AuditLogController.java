@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Controller
 @RootAuthority(name = "Administrator", icon = "glyphicon glyphicon-user")
-@RequestMapping(value = "/web/admin/audit-log", name = "Audit Log")
+@RequestMapping(value = "/admin/audit-log", name = "Audit Log")
 public class AuditLogController {
 
     private String rootURL = "";
@@ -48,14 +48,14 @@ public class AuditLogController {
         List<AdminAuthorityEntity> navigationEntities = (List<AdminAuthorityEntity>) httpServletRequest.getSession().getAttribute("authorityEntities");
         if (navigationEntities == null) {
             try {
-                httpServletResponse.sendRedirect("/web/admin/authentication/login?expired");
+                httpServletResponse.sendRedirect("/admin/authentication/login?expired");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         try {
 //            modelAndView.setViewName(indexUrl.replace("-", "").concat("/index"));
-            modelAndView.setViewName("web/admin/auditlog/index");
+            modelAndView.setViewName("admin/auditlog/index");
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new WebAdminException(HttpStatus.INTERNAL_SERVER_ERROR, messageUtilities.getString("something.went.wrong"));
@@ -68,7 +68,7 @@ public class AuditLogController {
         try {
             if (Utils.isAjaxRequest(request)) {
 //                modelAndView.setViewName(indexUrl.replace("-", "").concat("/table"));
-                modelAndView.setViewName("web/admin/auditlog/table");
+                modelAndView.setViewName("admin/auditlog/table");
                 modelAndView.addObject("pager", auditLogService.findAll(page, pageSize, fSearch, fromDateToDate));
                 return modelAndView;
             } else {
@@ -87,7 +87,7 @@ public class AuditLogController {
                 return new ModelAndView("redirect:" + rootURL);
             } else {
 //                modelAndView.setViewName(indexUrl.replace("-", "").concat("/view"));
-                modelAndView.setViewName("web/admin/auditlog/view");
+                modelAndView.setViewName("admin/auditlog/view");
                 AuditLogEntity entity = auditLogService.findById(id);
                 modelAndView.addObject("entity", entity);
                 return modelAndView;

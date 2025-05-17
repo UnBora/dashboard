@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RootAuthority(name = "Administrator", icon = "glyphicon glyphicon-user")
-@RequestMapping(value = "/web/admin/language", name = "Language")
+@RequestMapping(value = "/admin/language", name = "Language")
 public class LanguageController extends WebAdminBaseController<LanguageEntity, Long> {
     public LanguageController(WebAdminBaseService<LanguageEntity, Long> baseService, MessageUtilities messageUtilities, AdminAuthorityService adminAuthorityService, ConfigurationService configurationService) {
         super(baseService, messageUtilities, adminAuthorityService, configurationService);

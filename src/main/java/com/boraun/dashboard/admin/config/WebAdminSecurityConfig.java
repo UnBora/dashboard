@@ -68,19 +68,20 @@ public class WebAdminSecurityConfig {
                     // 1. Publicly accessible paths
                     authReq.requestMatchers(
                             "/health",
-                            "/web/admin/authentication/**",
-                            "/web/admin/unauthorized",
+                            "admin/authentication/**",
+                            "admin/unauthorized",
                             "/assets/**",
                             "/webjars/**",
                             "/error/**",
                             "/css/**",
                             "/fonts/**",
                             "/js/**",
-                            "/images/**"
+                            "/images/**",
+                            "/favicon.ico", "/.well-known/**"
                     ).permitAll();
 
                     // 2. Authenticated paths that do not require specific roles
-                    authReq.requestMatchers("/web/admin", "/web/permit/**", "/resources/attachment/**").authenticated();
+                    authReq.requestMatchers("/admin", "/permit/**", "/resources/attachment/**").authenticated();
 
                     // 3. Paths requiring specific authorities
                     authorityEntities.forEach(authorityEntity -> {
@@ -134,17 +135,4 @@ public class WebAdminSecurityConfig {
             }
         };
     }
-
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("*"));
-//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-//        configuration.setAllowedHeaders(List.of("*"));
-//        configuration.setAllowCredentials(true);
-//        configuration.setMaxAge(3600L);
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
 }

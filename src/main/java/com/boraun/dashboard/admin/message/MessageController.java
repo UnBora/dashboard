@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RootAuthority(name = "Administrator", icon = "glyphicon glyphicon-user")
-@RequestMapping(value = "/web/admin/message", name = "Message")
+@RequestMapping(value = "/admin/message", name = "Message")
 @Slf4j
 public class MessageController extends WebAdminBaseController<MessageEntity, Long> {
 

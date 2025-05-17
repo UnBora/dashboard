@@ -21,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RootAuthority(name = "Administrator", icon = "glyphicon glyphicon-user")
-@RequestMapping(value = "/web/admin/login-history", name = "Login History")
+@RequestMapping(value = "/admin/login-history", name = "Login History")
 public class AdminLoginController extends WebAdminBaseController<AdminLoginEntity, Long> {
     private final AdminLoginService adminLoginService;
 

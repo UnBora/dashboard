@@ -6,12 +6,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CoreConstants {
-    public final static String WEB_ADMIN_HOME = "/web/admin";
-    public final static String WEB_ADMIN_LOGIN = "/web/admin/authentication/login";
-    public final static String WEB_ADMIN_LOGOUT = "/web/admin/authentication/logout";
+    public final static String WEB_ADMIN_HOME = "/admin";
+    public final static String WEB_ADMIN_LOGIN = "/admin/authentication/login";
+    public final static String WEB_ADMIN_LOGOUT = "/admin/authentication/logout";
     public final static String WEB_ADMIN_LOGOUT_SUCCESS = WEB_ADMIN_LOGIN + "?logout";
     public final static String WEB_ADMIN_SESSION_EXPIRED = WEB_ADMIN_LOGIN + "?expired";
-    public final static String WEB_ADMIN_UNAUTHORIZED_ACCESS = "/web/admin/unauthorized";
+    public final static String WEB_ADMIN_UNAUTHORIZED_ACCESS = "/admin/unauthorized";
     public static final int BUTTONS_TO_SHOW = 15;
     public static final int INITIAL_PAGE = 0;
     public static final int INITIAL_PAGE_SIZE = 10;
@@ -57,10 +57,7 @@ public class CoreConstants {
         List
     }
 
-    public enum TrustorType {
-        Individual,
-        LegalEntity
-    }
+
 
     public enum BeneficiaryType {
         Individual,
@@ -72,16 +69,5 @@ public class CoreConstants {
         Female
     }
 
-    public enum EngagementStatus {
-        Pending,
-        Approved,
-        Rejected,
-        Amendment;
 
-        public static List<EngagementStatus> getStatusesFromValues(String[] values) {
-            return Arrays.stream(values)
-                    .map(value -> EngagementStatus.values()[Integer.parseInt(value)])
-                    .collect(Collectors.toList());
-        }
-    }
 }

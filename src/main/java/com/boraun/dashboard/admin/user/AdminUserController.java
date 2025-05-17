@@ -36,7 +36,7 @@ import java.util.Optional;
 
 @Controller
 @RootAuthority(name = "Administrator", icon = "glyphicon glyphicon-user")
-@RequestMapping(value = "/web/admin/user", name = "User")
+@RequestMapping(value = "/admin/user", name = "User")
 @Slf4j
 public class AdminUserController extends WebAdminBaseController<AdminUserEntity, Long> {
 
@@ -146,7 +146,7 @@ public class AdminUserController extends WebAdminBaseController<AdminUserEntity,
             if (!Utils.isAjaxRequest(httpServletRequest)) {
                 return new ModelAndView("redirect:" + rootURL);
             }
-            modelAndView.setViewName("web/admin/user/profile-change-password");
+            modelAndView.setViewName("admin/user/profile-change-password");
             ChangePasswordModel entity = new ChangePasswordModel();
             modelAndView.addObject("URL", rootURL + "/profile/change-password/" + id);
             modelAndView.addObject("entity", entity);
@@ -196,7 +196,7 @@ public class AdminUserController extends WebAdminBaseController<AdminUserEntity,
             if (!Utils.isAjaxRequest(httpServletRequest)) {
                 return new ModelAndView("redirect:" + rootURL);
             }
-            modelAndView.setViewName("web/admin/user/login-history-table");
+            modelAndView.setViewName("admin/user/login-history-table");
             modelAndView.addObject("entity", adminLoginService.findAllHistoryById(page, pageSize, id));
             return modelAndView;
 
@@ -212,7 +212,7 @@ public class AdminUserController extends WebAdminBaseController<AdminUserEntity,
             if (!Utils.isAjaxRequest(httpServletRequest)) {
                 return new ModelAndView("redirect:" + rootURL);
             }
-            modelAndView.setViewName("web/admin/user/reset");
+            modelAndView.setViewName("admin/user/reset");
             AdminUserEntity entity = adminUserService.findOne(id);
             modelAndView.addObject("URL", rootURL + "/reset/password/" + id);
             modelAndView.addObject("entity", entity);

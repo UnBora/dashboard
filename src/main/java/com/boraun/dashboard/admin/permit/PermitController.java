@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-@RequestMapping(value = "/web/permit", name = "Permit")
+@RequestMapping(value = "/permit", name = "Permit")
 @Slf4j
 public class PermitController {
 

@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Controller
 @RootAuthority(name = "Administrator", icon = "glyphicon glyphicon-user")
-@RequestMapping(value = "/web/admin/role", name = "Role")
+@RequestMapping(value = "/admin/role", name = "Role")
 @Slf4j
 public class AdminRoleController extends WebAdminBaseController<AdminRoleEntity, Long> {
 

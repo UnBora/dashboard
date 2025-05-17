@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(value = "/web/admin/unauthorized", name = "Unauthorized")
+@RequestMapping(value = "/admin/unauthorized", name = "Unauthorized")
 public class WebAdminForbiddenController {
     @GetMapping(value = "")
     public ModelAndView unauthorized(ModelAndView modelAndView) {
-        modelAndView.setViewName("web/admin/unauthorized");
+        modelAndView.setViewName("admin/unauthorized");
         return modelAndView;
     }
 }

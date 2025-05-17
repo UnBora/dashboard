@@ -284,7 +284,7 @@ public class AdminUserService extends WebAdminBaseService<AdminUserEntity, Long>
         AdminUserEntity userEntity = this.findByAdminUserName(toEmail, CoreConstants.Status.Enabled);
         if (Objects.nonNull(userEntity)) {
             String token = Utils.toBase64(Utils.getRandomSecuredStringForMail(100));
-            String restUrlToken = systemUrl.concat("/web/admin/authentication/forgot-password/reset?key=").concat(token);
+            String restUrlToken = systemUrl.concat("/admin/authentication/forgot-password/reset?key=").concat(token);
             log.info("Sending forget password to: " + toEmail);
             NotificationTemplateModel templateEntity = notificationService.forgetPasswordTemplate(userEntity.getDisplayName(), restUrlToken);
             if (Objects.nonNull(templateEntity)) {

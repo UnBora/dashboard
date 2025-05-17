@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RootAuthority(name = "Administrator", icon = "glyphicon glyphicon-user")
-@RequestMapping(value = "/web/admin/configuration", name = "Configuration")
+@RequestMapping(value = "/admin/configuration", name = "Configuration")
 @Slf4j
 public class ConfigurationController extends WebAdminBaseController<ConfigurationEntity, Long> {
     private ConfigurationController(WebAdminBaseService<ConfigurationEntity, Long> baseService, MessageUtilities messageUtilities, AdminAuthorityService adminAuthorityService, ConfigurationService configurationService) {
