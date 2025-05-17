@@ -3,80 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Admin Panel</title>
+    <title>Developer Portal | Login</title>
 
     <link rel="shortcut icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
-    <link th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <!-- Modern Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/google-fonts/1.0.0/roboto.css">
+    <!-- Custom styles -->
     <link th:href="@{/assets/css/core.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/components.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/icons.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/pages.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/menu.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/responsive.css}" rel="stylesheet"/>
 
     <style>
+        :root {
+            --primary-color: #3f51b5;
+            --primary-dark: #2c3e8e;
+            --secondary-color: #00bcd4;
+            --text-color: #333;
+            --bg-color: #f8f9fd;
+            --card-bg: #ffffff;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
         body {
-            background: #f3f5f9;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background: var(--bg-color);
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .login-container {
-            max-width: 400px;
-            margin: 80px auto;
-            padding: 30px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
         }
 
         .login-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
         }
 
         .login-header img {
-            height: 50px;
-            margin-bottom: 10px;
+            height: 80px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
         }
 
-        .login-header h4 {
-            font-weight: bold;
+        .login-header h2 {
+            font-weight: 600;
+            color: var(--primary-color);
             margin: 0;
+            font-size: 1.75rem;
         }
 
-        .form-control {
-            height: 45px;
-            font-size: 14px;
+        .login-header p {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-floating .form-control {
+            height: calc(3.5rem + 2px);
+            padding: 1rem 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #e1e5ef;
+            transition: all 0.2s;
+        }
+
+        .form-floating .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(63, 81, 181, 0.25);
+        }
+
+        .form-floating label {
+            padding: 1rem 0.75rem;
         }
 
         .btn-login {
             width: 100%;
-            background-color: #e74c3c;
+            padding: 0.8rem;
+            background: var(--primary-color);
             border: none;
+            border-radius: 8px;
             color: white;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
         }
 
         .btn-login:hover {
-            background-color: #c0392b;
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
         }
 
-        .text-muted a {
-            color: #888;
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+            text-decoration: none;
+            transition: color 0.2s;
         }
 
-        .text-muted a:hover {
-            text-decoration: underline;
+        .forgot-password:hover {
+            color: var(--primary-color);
+        }
+
+        .form-check {
+            margin-bottom: 1.25rem;
+        }
+
+        .recaptcha-container {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
         }
 
         .footer-text {
             text-align: center;
-            margin-top: 40px;
-            font-size: 12px;
+            margin-top: 2.5rem;
+            font-size: 0.8rem;
             color: #aaa;
+        }
+
+        .alert {
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: none;
+        }
+
+        /* Dark mode toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.2s;
+        }
+
+        .theme-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        /* Developer-specific touches */
+        .code-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.05);
+            color: #666;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .code-badge i {
+            font-size: 0.8rem;
         }
     </style>
 
@@ -84,11 +195,20 @@
 </head>
 
 <body>
+<div class="code-badge">
+    <i class="fas fa-code"></i>
+    <span>Developer Portal</span>
+</div>
+
+<button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+</button>
 
 <div class="login-container">
     <div class="login-header">
-        <img th:src="@{/assets/images/logo.png}" alt="Logo">
-        <h4 class="text-uppercase">Log In</h4>
+        <img th:src="@{/assets/images/logo.png}" alt="Developer Portal Logo">
+        <h2>Welcome Back</h2>
+        <p>Sign in to continue to your workspace</p>
     </div>
 
     <!-- Alerts -->
@@ -100,41 +220,139 @@
 
     <!-- Login Form -->
     <form th:action="@{/admin/authentication/login}" method="post">
-        <div class="form-group">
-            <label for="username" hidden>Username</label>
-            <input type="text" name="username" id="username" class="form-control" placeholder="Username" required>
+        <div class="form-floating">
+            <input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus>
+            <label for="username">Username</label>
         </div>
 
-        <div class="form-group">
-            <label for="password" hidden>Password</label>
+        <div class="form-floating">
             <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+            <label for="password">Password</label>
         </div>
 
-        <div class="form-group" th:if="${siteKey != null}">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="remember-me" id="remember-me" name="remember-me">
+            <label class="form-check-label" for="remember-me">
+                Remember me
+            </label>
+        </div>
+
+        <div class="recaptcha-container" th:if="${siteKey != null}">
             <div class="g-recaptcha" th:data-sitekey="${siteKey}" data-callback="recaptchaCallback"></div>
             <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
         </div>
 
-        <button type="submit" class="btn btn-login">Log In</button>
+        <button type="submit" class="btn btn-login">
+            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+        </button>
     </form>
 
-    <div class="text-center m-t-20">
-        <a th:href="@{/admin/authentication/forgot-password}" class="text-muted">
-            <i class="fa fa-lock"></i> Forgot your password?
-        </a>
-    </div>
+    <a th:href="@{/admin/authentication/forgot-password}" class="forgot-password">
+        <i class="fas fa-lock-open me-1"></i> Forgot your password?
+    </a>
 </div>
 
 <div class="footer-text">
     <p th:text="#{footer.text.1}"></p>
-    <p th:text="#{footer.text.2} + ' | Version: ' + ${@environment.getProperty('app.version')}"></p>
+    <p>
+        <span th:text="#{footer.text.2}"></span>
+        <span> | Version: </span>
+        <span th:text="${@environment.getProperty('app.version')}" class="fw-bold"></span>
+    </p>
 </div>
 
 <script>
     function recaptchaCallback(token) {
         document.getElementById("g-recaptcha-response").value = token;
     }
+
+    // Dark mode toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Check for saved theme preference or use the system preference
+        const currentTheme = localStorage.getItem('theme') ||
+            (prefersDarkScheme.matches ? 'dark' : 'light');
+
+        // Initial theme setup
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        // Toggle theme
+        themeToggle.addEventListener('click', function() {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            themeToggle.innerHTML = isDarkMode ?
+                '<i class="fas fa-sun"></i>' :
+                '<i class="fas fa-moon"></i>';
+        });
+    });
+
+    // Password visibility toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+
+        // Create toggle button
+        const toggleButton = document.createElement('button');
+        toggleButton.type = 'button';
+        toggleButton.className = 'btn position-absolute end-0 top-50 translate-middle-y bg-transparent border-0';
+        toggleButton.innerHTML = '<i class="far fa-eye"></i>';
+        toggleButton.style.zIndex = '5';
+        toggleButton.style.right = '10px';
+
+        // Insert button into DOM
+        passwordInput.parentElement.style.position = 'relative';
+        passwordInput.parentElement.appendChild(toggleButton);
+
+        // Toggle password visibility
+        toggleButton.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            toggleButton.innerHTML = type === 'password' ?
+                '<i class="far fa-eye"></i>' :
+                '<i class="far fa-eye-slash"></i>';
+        });
+    });
 </script>
 
+<!-- Dark mode styles -->
+<style>
+    body.dark-mode {
+        --bg-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-color: #e0e0e0;
+        --primary-color: #7986cb;
+        --primary-dark: #5c6bc0;
+        --box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    body.dark-mode .form-floating .form-control {
+        background-color: #2d2d2d;
+        border-color: #3d3d3d;
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .form-floating label {
+        color: #aaa;
+    }
+
+    body.dark-mode .alert-danger {
+        background-color: rgba(220, 53, 69, 0.2);
+        color: #f8d7da;
+    }
+
+    body.dark-mode .alert-success {
+        background-color: rgba(40, 167, 69, 0.2);
+        color: #d4edda;
+    }
+
+    body.dark-mode .code-badge {
+        background: rgba(255,255,255,0.1);
+        color: #aaa;
+    }
+</style>
 </body>
 </html>
