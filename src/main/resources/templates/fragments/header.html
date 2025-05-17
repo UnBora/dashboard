@@ -9,11 +9,11 @@
                 <a th:href="@{${configuration.homeUrl}}" class="logo">
                    <!-- <span th:text="${appName}"></span>-->
                     <!-- Handle case where 'TRUST' is present -->
-                    <span th:if="${appName.contains('Trust')}"
-                          th:utext="${#strings.replace(appName, 'Trust', '<span style=&quot;color: #f2a61b;&quot;>Trust</span>')}">
-                    </span>
+                    <span th:if="${appName.contains('Bora')}"
+                          th:utext="${#strings.replace(appName, 'Bora', '<span style=&quot;color: var(--accent-color);&quot;>Trust</span>')}"></span>
+
                     <!-- Handle case where 'TRUST' is not present -->
-                    <span th:unless="${appName.contains('Trust')}" th:text="${appName}">
+                    <span th:unless="${appName.contains('BORA')}" th:text="${appName}">
                     </span>
                 </a>
                 <!-- Image Logo -->
@@ -130,6 +130,108 @@
             $(e).addClass('active');
         }
     </script>
+    <style>
+        :root {
+            --main-bg: #f8fafc;
+            --secondary-bg: #9ec3fb;
+            --accent-color: #f97316; /* orange-500 */
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        .topbar-main {
+            background-color: var(--main-bg);
+            padding: 10px 0;
+        }
+
+        .logo a.logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .logo a.logo span {
+            color: var(--text-light);
+        }
+
+        .logo a.logo span span {
+            color: var(--accent-color);
+        }
+
+        .topnav-menu-left input.form-control {
+            background-color: var(--secondary-bg);
+            border: 1px solid #475569;
+            color: var(--text-light);
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        .topnav-menu-left i.fa-search {
+            color: var(--accent-color);
+            padding-left: 8px;
+        }
+
+        .navbar-c-items .dropdown-toggle img {
+            border: 2px solid var(--accent-color);
+            width: 32px;
+            height: 32px;
+        }
+
+        .dropdown-menu {
+            background-color: var(--secondary-bg);
+            border: none;
+            border-radius: 8px;
+        }
+
+        .dropdown-menu a {
+            color: var(--text-light);
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--main-bg);
+            color: var(--accent-color);
+        }
+
+        .navbar-custom {
+            background-color: var(--main-bg);
+            border-top: 1px solid #334155;
+        }
+
+        .navigation-menu > li > a {
+            color: var(--text-light);
+            padding: 12px 16px;
+            font-weight: 500;
+        }
+
+        .navigation-menu > li > a:hover,
+        .navigation-menu li.active > a {
+            background-color: var(--secondary-bg);
+            color: var(--accent-color);
+        }
+
+        .submenu {
+            background-color: var(--secondary-bg);
+            border-radius: 6px;
+            padding: 8px 0;
+        }
+
+        .submenu li a {
+            padding: 8px 16px;
+            display: block;
+            color: var(--text-light);
+        }
+
+        .submenu li a:hover {
+            background-color: var(--main-bg);
+            color: var(--accent-color);
+        }
+
+        .menu-item .navbar-toggle .lines span {
+            background-color: var(--text-light);
+        }
+
+    </style>
 </header>
 <!-- End Navigation Bar-->
 </section>

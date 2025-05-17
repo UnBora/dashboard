@@ -2,33 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
-    <!-- Bootstrap 3.4.1 CSS CDN -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <style>
-        .info-box {
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .info-box h3 {
-            margin: 10px 0;
-            font-size: 28px;
-        }
-        .info-box p {
-            margin: 0;
-            font-size: 16px;
-            color: #777;
-        }
-    </style>
+    <title>Title</title>
 </head>
-<body>
 <div class="container-fluid">
     <div class="container">
-        <!-- Page Title -->
+        <!-- Page-Title -->
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-title-box">
@@ -36,39 +14,171 @@
                 </div>
             </div>
         </div>
-
-        <!-- Static Info Boxes -->
+        <!-- Dashboard Page Details-->
         <div class="row">
-            <div class="col-sm-6 col-md-3">
-                <div class="info-box">
-                    <h3>120</h3>
-                    <p>Users</p>
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-two widget-two-primary">
+                    <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
+                    <div class="wigdet-two-content">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Trustor" th:text="#{label.tolal.trustor}">Total
+                            Trustor</p>
+                        <h2><span data-plugin="counterup" id="trustor-count"></span> <small><i
+                                class="mdi mdi-arrow-up text-success"></i></small></h2>
+                        <p class="text-muted m-0" id="trustor-count-view"><b>Last:</b></p>
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-two widget-two-warning">
+                    <i class="mdi mdi-layers widget-two-icon"></i>
+                    <div class="wigdet-two-content">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Beneficiary" th:text="#{label.tolal.beneficiary}">Total
+                            Beneficiary</p>
+                        <h2><span data-plugin="counterup" id="beneficiary-count"> </span> <small><i
+                                class="mdi mdi-arrow-up text-success"></i></small></h2>
+                        <p class="text-muted m-0" id="beneficiary-count-view"><b>Last:</b></p>
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-two widget-two-danger">
+                    <i class="mdi mdi-access-point-network widget-two-icon"></i>
+                    <div class="wigdet-two-content">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Portfolio" th:text="#{label.tolal.portfolio}">Total
+                            Portfolio</p>
+                        <h2><span data-plugin="counterup" id="portfolio-count"></span> <small><i
+                                class="mdi mdi-arrow-up text-success"></i></small></h2>
+                        <p class="text-muted m-0" id="portfolio-count-view"><b>Last:</b></p>
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-two widget-two-success">
+                    <i class="mdi mdi-account-convert widget-two-icon"></i>
+                    <div class="wigdet-two-content">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Engagement" th:text="#{label.tolal.engagement}">Total
+                            Engagement</p>
+                        <h2><span data-plugin="counterup" id="engagement-count">-</span> <small><i
+                                class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                        <p class="text-muted m-0" id="engagement-count-view"><b>Last:</b> - </p>
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+        </div>
+        <!-- end row -->
+        <!-- Engagement Records -->
+        <div class="row" th:if="${isApproveAllow}">
+            <div class="col-sm-12">
+                <div class="page-title-box">
+                    <h4 class="page-title" th:text="#{label.engagement.records}">Engagement Records</h4>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3">
-                <div class="info-box">
-                    <h3>45</h3>
-                    <p>Projects</p>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
-                <div class="info-box">
-                    <h3>$7,500</h3>
-                    <p>Revenue</p>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
-                <div class="info-box">
-                    <h3>8</h3>
-                    <p>Admins</p>
-                </div>
+            <div class="col-sm-6">
+                <table class="table table-striped table-bordered table-hover add-edit-table" id="datatable">
+                    <thead>
+                    <tr>
+                        <th th:text="#{label.no}">No</th>
+                        <th th:text="#{label.engagement.no}"></th>
+                        <th th:text="#{label.trustor.name}"></th>
+                        <th th:text="#{label.status}">Status</th>
+                        <!--                            <th th:text="#{label.action}">Action</th>-->
+                    </tr>
+                    </thead>
+                    <tbody id="engagement-records-body">
+                    <!-- data -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Bootstrap 3.4.1 JS CDN -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</body>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            loadTotalTrustor();
+            loadTotalBeneficiary();
+            loadTotalPortfolio();
+            loadEngagement();
+            loadEngagementRecords();
+        });
+
+        function loadTotalTrustor() {
+            loadByPath("/trustor", function (d) {
+                $('#trustor-count').text(d.total);
+                $('#trustor-count-view').text('Last: ' + d.totalView);
+            });
+        }
+
+        function loadTotalBeneficiary() {
+            loadByPath("/beneficiary", function (d) {
+                $('#beneficiary-count').text(d.total);
+                $('#beneficiary-count-view').text('Last: ' + d.totalView);
+            });
+        }
+
+        function loadTotalPortfolio() {
+            loadByPath("/portfolio", function (d) {
+                $('#portfolio-count').text(d.total);
+                $('#portfolio-count-view').text('Last: ' + d.totalView);
+            });
+        }
+
+        function loadEngagement() {
+            loadByPath("/engagement", function (d) {
+                $('#engagement-count').text(d.total);
+                $('#engagement-count-view').text('Last: ' + d.totalView);
+            });
+        }
+
+        function loadEngagementRecords() {
+            $.ajax({
+                type: 'GET',
+                url: "/web/permit/engagement-records",
+                dataType: "json",
+                success: function (data) {
+                    var recordsBody = $('#engagement-records-body');
+                    recordsBody.empty();
+                    if (data.length > 0) {
+                        for (var i = 0; i < data.length; i++) {
+                            var record = data[i];
+                            var row = '<tr>' +
+                                '<td>' + (i + 1) + '</td>' +
+                                '<td>' + record.engagementNumber + '</td>' +
+                                '<td>' + (record.trustorEntity.fullName == null ? record.trustorEntity.representativeName : record.trustorEntity.fullName) + '</td>' +
+                                '<td> <span class="badge badge-orange">' + record.engagementStatus + ' </span></td>' +
+                                // '<td>  <a href="http://localhost:9090/web/admin/engagement/view/12?_=1727423417484">View</a></td>'
+                                '</tr>';
+                            recordsBody.append(row);
+
+                        }
+                    } else {
+                        recordsBody.append('<tr><td colspan="5">No records found</td></tr>');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error('Error loading engagement records: ', errorThrown);
+                }
+            });
+        }
+
+        function loadByPath(path, success) {
+            $.ajax({
+                type: 'GET',
+                url: "/web/permit" + path,
+                dataType: "json",
+                success: function (d) {
+                    if (success !== undefined) success(d);
+                    /*  // $('#trustor').text(d.total);*/
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // console.log('loadPageWithUrl error: ' + xhr + ' ' + textStatus + ' ' + errorThrown);
+                }
+            });
+        }
+    </script>
+
+</div>
 </html>
