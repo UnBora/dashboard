@@ -31,6 +31,7 @@ public class DashboardController {
         AdminUserEntity userEntity = adminUserService.findByAdminUserName(SecurityContextHolder.getContext().getAuthentication().getName(), CoreConstants.Status.Enabled);
         HttpSession httpSession = httpServletRequest.getSession();
         if (Utils.isUserAuthenticated()) {
+            modelAndView.addObject("user", userEntity);
             List<AdminAuthorityEntity> authorityEntities = adminUserService.findAdminUserLoggedAuthority(userEntity, Comparator.comparing(AdminAuthorityEntity::getAuthorityOrder));
             httpSession.setAttribute("authorityEntities", authorityEntities);
             if (Utils.isAjaxRequest(httpServletRequest)) {

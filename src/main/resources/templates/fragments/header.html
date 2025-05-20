@@ -59,7 +59,7 @@
 
                     <li class="dropdown navbar-c-items">
                         <a href="" class="dropdown-toggle waves-effect waves-light profile" data-toggle="dropdown" aria-expanded="true">
-                            <img th:src="${@environment.getRequiredProperty('profile.url') + 'Bo+Raa'}" alt="user-img" class="img-circle">
+                            <img th:src="@{${@environment.getRequiredProperty('profile.url') + user.displayName}}" alt="Profile Avatar">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
                             <li class="text-center">
