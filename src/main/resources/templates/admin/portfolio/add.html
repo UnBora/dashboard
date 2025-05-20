@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="form-group col-sm-6">
                     <th:block
-                            th:replace="~{fragments/finput :: finput(finputText= #{label.firstname}, finputName='firstname', finputRequired=true, finputType='text')}"
+                            th:replace="~{fragments/finputv5 :: finput(finputText= #{label.firstname}, finputName='firstname', finputRequired=true, finputType='text')}"
                             th:remove="tag"/>
                 </div>
                 <div class="form-group col-sm-6">
@@ -25,20 +25,19 @@
                 </div>
                 <div class="form-group col-sm-6">
                     <th:block
-                            th:replace="~{fragments/finput :: finput(finputText= #{label.description}, finputName='description', finputRequired=true, finputType='text')}"
-                            th:remove="tag"/>
-                </div>
-                <div class="form-group col-sm-6">
-                    <th:block
                             th:replace="~{fragments/finput :: finput(finputText= #{label.phone.number}, finputName='phoneNumber', finputRequired=true, finputType='text')}"
                             th:remove="tag"/>
                 </div>
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-12">
                     <th:block
                             th:replace="~{fragments/finput :: finput(finputText= #{label.address}, finputName='address', finputRequired=true, finputType='text')}"
                             th:remove="tag"/>
                 </div>
-
+                <div class="form-group col-sm-12">
+                    <th:block
+                            th:replace="~{fragments/finput_textareav5 :: finput_textarea(finputText= #{label.description}, finputName='description', finputRequired=true, finputType='text')}"
+                            th:remove="tag"/>
+                </div>
 
             </div>
         </div>

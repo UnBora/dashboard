@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="finput_textarea">
+<style>
+  .modern-textarea-wrapper {
+    margin-bottom: 1.5rem;
+  }
+  .modern-form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #212529;
+    font-size: 0.95rem;
+  }
+  .modern-textarea {
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    resize: vertical;
+    min-height: 100px;
+  }
+  .modern-textarea:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    outline: none;
+  }
+  .floating-textarea {
+    position: relative;
+  }
+  .floating-textarea .form-control {
+    height: auto;
+    min-height: 120px;
+    padding: 1rem 0.75rem;
+  }
+  .floating-textarea label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1rem 0.75rem;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transition: opacity .1s ease-in-out, transform .1s ease-in-out;
+  }
+  .floating-textarea .form-control::-webkit-input-placeholder {
+    color: transparent;
+  }
+  .floating-textarea .form-control:focus,
+  .floating-textarea .form-control:not(:placeholder-shown) {
+    padding-top: 1.625rem;
+    padding-bottom: 0.625rem;
+  }
+  .floating-textarea .form-control:focus ~ label,
+  .floating-textarea .form-control:not(:placeholder-shown) ~ label {
+    opacity: .65;
+    transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
+  }
+  .input-icon-wrapper {
+    position: relative;
+  }
+  .input-icon-wrapper i {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: #6c757d;
+  }
+  .input-icon-wrapper textarea {
+    padding-left: 2.5rem;
+  }
+  .character-counter {
+    position: absolute;
+    right: 10px;
+    bottom: -22px;
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+  .readonly-field {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+  }
+  .textarea-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+  }
+  .textarea-counter {
+    text-align: right;
+  }
+  .resizable-vertical {
+    resize: vertical;
+  }
+  .resizable-both {
+    resize: both;
+  }
+  .resizable-horizontal {
+    resize: horizontal;
+  }
+  .resizable-none {
+    resize: none;
+  }
+</style>
+
+<div class="modern-textarea-wrapper" th:remove="tag">
+  <!-- Regular label style for non-floating labels -->
+  <label th:if="${finputType} != 'hidden' and ${floating != true}"
+         th:for="${finputName}"
+         class="modern-form-label"
+         th:utext="${finputText + (finputRequired==true ? ' <span class=&quot;text-danger&quot;>*</span>':'')}">
+    Label Name
+    <span class="text-danger">*</span>
+  </label>
+
+  <!-- Textarea with icon - modern design -->
+  <div th:if="${finputIcon != null}" class="input-icon-wrapper position-relative">
+    <i th:class="${finputIcon}"></i>
+    <textarea
+            th:name="${finputName}"
+            th:id="${finputId != null ? finputId : finputName}"
+            th:placeholder="'Enter ' + ${finputText}"
+            th:required="${finputRequired==true}"
+            th:class="'form-control modern-textarea' +
+                    ${(finputReadOnly==true ? ' readonly-field' : '')} +
+                    ${(finputClass==null ? '' : ' ' + finputClass)} +
+                    ${(resizable == null ? ' resizable-vertical' : ' resizable-' + resizable)}"
+            th:field="*{__${finputName}__}"
+            th:readonly="${finputReadOnly==true}"
+            th:maxlength="${maxLength == null ? '255' : maxLength}"
+            th:rows="${finputRow == null ? '3' : finputRow}"
+            autocomplete="off"
+    ></textarea>
+    <div class="textarea-footer" th:if="${finputReadOnly==false}">
+      <div class="textarea-hint" th:if="${textareaHint != null}" th:text="${textareaHint}">
+        Hint text
+      </div>
+      <div class="textarea-counter">
+        <span class="current-count">0</span>/<span class="max-count" th:text="${maxLength == null ? '255' : maxLength}">255</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating label textarea style -->
+  <div th:if="${finputIcon == null and floating == true}" class="form-floating mb-3 position-relative">
+            <textarea
+                    th:name="${finputName}"
+                    th:id="${finputId != null ? finputId : finputName}"
+                    th:placeholder="${finputText}"
+                    th:required="${finputRequired==true}"
+                    th:class="'form-control modern-textarea' +
+                    ${(finputReadOnly==true ? ' readonly-field' : '')} +
+                    ${(finputClass==null ? '' : ' ' + finputClass)} +
+                    ${(resizable == null ? ' resizable-vertical' : ' resizable-' + resizable)}"
+                    th:field="*{__${finputName}__}"
+                    th:readonly="${finputReadOnly==true}"
+                    th:maxlength="${maxLength == null ? '255' : maxLength}"
+                    th:rows="${finputRow == null ? '3' : finputRow}"
+                    autocomplete="off"
+            ></textarea>
+    <label th:for="${finputName}" th:text="${finputText}">Label Name</label>
+    <div class="textarea-footer" th:if="${finputReadOnly==false}">
+      <div class="textarea-hint" th:if="${textareaHint != null}" th:text="${textareaHint}">
+        Hint text
+      </div>
+      <div class="textarea-counter">
+        <span class="current-count">0</span>/<span class="max-count" th:text="${maxLength == null ? '255' : maxLength}">255</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Standard textarea without icon and without floating label -->
+  <div th:if="${finputIcon == null and floating != true}" class="position-relative">
+            <textarea
+                    th:name="${finputName}"
+                    th:id="${finputId != null ? finputId : finputName}"
+                    th:placeholder="'Enter ' + ${finputText}"
+                    th:required="${finputRequired==true}"
+                    th:class="'form-control modern-textarea' +
+                    ${(finputReadOnly==true ? ' readonly-field' : '')} +
+                    ${(finputClass==null ? '' : ' ' + finputClass)} +
+                    ${(resizable == null ? ' resizable-vertical' : ' resizable-' + resizable)}"
+                    th:field="*{__${finputName}__}"
+                    th:readonly="${finputReadOnly==true}"
+                    th:maxlength="${maxLength == null ? '255' : maxLength}"
+                    th:rows="${finputRow == null ? '3' : finputRow}"
+                    autocomplete="off"
+            ></textarea>
+    <div class="textarea-footer" th:if="${finputReadOnly==false}">
+      <div class="textarea-hint" th:if="${textareaHint != null}" th:text="${textareaHint}">
+        Hint text
+      </div>
+      <div class="textarea-counter">
+        <span class="current-count">0</span>/<span class="max-count" th:text="${maxLength == null ? '255' : maxLength}">255</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Validation errors display with improved styling -->
+  <div th:if="${#fields.hasErrors(finputName)}" class="invalid-feedback d-block mt-1">
+    <i class="bi bi-exclamation-circle me-1"></i>
+    <span th:errors="*{__${finputName}__}"></span>
+  </div>
+
+  <!-- JavaScript for enhanced functionality -->
+  <script th:inline="javascript" th:if="${finputReadOnly==false}">
+    document.addEventListener('DOMContentLoaded', function() {
+      const textareaId = [[${finputName}]];
+      const textarea = document.getElementById(textareaId);
+
+      if (textarea) {
+        // Get parent wrapper to find counter
+        const wrapper = textarea.closest('.position-relative') ||
+                textarea.closest('.form-floating') ||
+                textarea.closest('.input-icon-wrapper');
+
+        if (wrapper) {
+          const counterWrapper = wrapper.querySelector('.textarea-counter');
+          if (counterWrapper) {
+            const currentCount = counterWrapper.querySelector('.current-count');
+            const maxCount = parseInt(counterWrapper.querySelector('.max-count').textContent);
+
+            // Update initial count
+            currentCount.textContent = textarea.value.length;
+
+            // Update count on input
+            textarea.addEventListener('input', function() {
+              currentCount.textContent = this.value.length;
+
+              // Color warning when approaching limit
+              if (this.value.length > maxCount * 0.8) {
+                counterWrapper.style.color = '#fd7e14'; // Warning orange
+              } else {
+                counterWrapper.style.color = '#6c757d'; // Default gray
+              }
+
+              // Color danger when at limit
+              if (this.value.length >= maxCount) {
+                counterWrapper.style.color = '#dc3545'; // Danger red
+              }
+            });
+
+            // Auto-resize functionality
+            const setAutoHeight = function() {
+              textarea.style.height = 'auto';
+              textarea.style.height = (textarea.scrollHeight) + 'px';
+            }
+
+            // If auto-resize is enabled
+            if ([[${autoResize == true}]]) {
+              textarea.addEventListener('input', setAutoHeight);
+              // Initial height adjustment
+              setAutoHeight();
+            }
+          }
+        }
+      }
+    });
+  </script>
+</div>
+</body>
+</html>
