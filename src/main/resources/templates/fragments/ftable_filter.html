@@ -1,71 +1,93 @@
 <!-- Usage:
-Add fragments filter, filter_column_display in table.html
+Add these fragments filter and filter_column_display in your table.html
 
-    <th:block th:replace="~{fragments/ftable_filter :: filter(filterColumns=true)}" th:remove="tag"/> //required filterColumn=true
+    <th:block th:replace="~{fragments/ftable_filter :: filter(filterColumns=true)}" th:remove="tag"/>
     [Table body]
-        <table class="table-column-dynamic"> //required class name.
-        <th data-column-display="true"></th> //required data attribute true/false
+        <table class="table-column-dynamic"> <!-- required class name -->
+<th data-column-display="true"></th> <!-- required data attribute true/false -->
 
-    <th:block th:replace="~{fragments/ftable_filter :: filter_column_display}" th:remove="tag"/>
-
+<th:block th:replace="~{fragments/ftable_filter :: filter_column_display}" th:remove="tag"/>
 -->
 
 <div th:remove="tag" xmlns:th="http://www.thymeleaf.org">
+    <!-- Filter and Column Display Fragment -->
     <th:block th:fragment="filter">
         <div class="m-b-10" style="display: flex; justify-content: space-between;">
 
             <form class="form-inline" onsubmit="return load(1)">
                 <div class="form-group">
                     <label class="sr-only" for="fSearch" th:text="#{label.search}"></label>
-                    <input type="text" class="form-control" id="fSearch" th:placeholder="#{label.search}" autocomplete="off">
+                    <input type="text" class="form-control" id="fSearch" th:placeholder="#{label.search}" autocomplete="off"/>
                 </div>
+
                 <div class="form-group ml-2" th:if="${fStatus == '' || fStatus == null}">
-                    <label class="sr-only" for="fStatus" th:text="#{label.status}" ></label>
+                    <label class="sr-only" for="fStatus" th:text="#{label.status}"></label>
                     <select id="fStatus" name="fStatus" class="selectpicker" multiple data-selected-text-format="count > 5">
-                        <option th:selected="${d.ordinal()==1}" th:each="d,iter : ${status}" th:value="${d.ordinal()}" th:text="${d.name()}"></option>
+                        <option th:each="d : ${status}" th:value="${d.ordinal()}" th:text="${d.name()}" th:selected="${d.ordinal() == 1}"></option>
                     </select>
                 </div>
+
                 <div class="form-group ml-2" th:if="${enStatus == true}">
                     <label class="sr-only" for="fEnStatus" th:text="#{label.engagement.status}"></label>
                     <select id="fEnStatus" name="fEnStatus" class="selectpicker" multiple data-selected-text-format="count > 5">
-                        <option th:selected="${d.ordinal()== 0}" th:each="d,iter : ${engagementStatus}" th:value="${d.ordinal()}" th:text="${d.name()}"></option>
+                        <option th:each="d : ${engagementStatus}" th:value="${d.ordinal()}" th:text="${d.name()}" th:selected="${d.ordinal() == 0}"></option>
                     </select>
                 </div>
+
                 <div class="form-group ml-2" th:if="${filterDateRange == true}">
                     <label class="sr-only" for="fDateRange" th:text="#{label.from.to.date}"></label>
-                    <div id="fDateRange" class="form-control ">
-                        <span></span>
-                    </div>
+                    <div id="fDateRange" class="form-control"><span></span></div>
                 </div>
+
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-search"></i> <span th:text="#{label.search}">Search</span>
                 </button>
             </form>
 
             <div class="btn-group">
-                <button th:if="${isNew==true}" type="button" th:title="#{label.add.new}" class="btn btn-primary" th:data-title="#{label.new}" th:data-url="${#strings.replace(selectedAdminAuthorityEntity.endPointUrl,'/page','/add')} " th:data-size="${dialogSize == null ? 'W': dialogSize}" th:data-closable="${dialogClosable == null ? true : dialogClosable}" onclick="openDialog(this)">
+                <button th:if="${isNew == true}" type="button" th:title="#{label.add.new}"
+                        class="btn btn-primary"
+                        th:data-title="#{label.new}"
+                        th:data-url="${#strings.replace(selectedAdminAuthorityEntity.endPointUrl,'/page','/add')}"
+                        th:data-size="${dialogSize == null ? 'W' : dialogSize}"
+                        th:data-closable="${dialogClosable == null ? true : dialogClosable}"
+                        onclick="openDialog(this)">
                     <i class="fa fa-save m-r-5"></i>
                     <span th:utext="#{label.add.new}"></span>
                 </button>
-                <button th:if="${isNavigationOrder == true}" type="button" th:title="#{label.order}" th:data-title="#{label.order}" th:data-url="${#strings.replace(selectedAdminAuthorityEntity.endPointUrl + '/order', '/page/order', '/order')}" data-size="N" onclick="openDialog(this)" class="btn btn-default waves-effect waves-light">
+
+                <button th:if="${isNavigationOrder == true}" type="button" th:title="#{label.order}"
+                        th:data-title="#{label.order}"
+                        th:data-url="${#strings.replace(selectedAdminAuthorityEntity.endPointUrl + '/order', '/page/order', '/order')}"
+                        data-size="N"
+                        onclick="openDialog(this)"
+                        class="btn btn-default waves-effect waves-light">
                     <i class="fa fa-align-left m-r-5"></i>
                     <span th:text="#{label.order}"></span>
                 </button>
-                <button th:if="${isForceLogout==true}" type="button" th:title="#{label.force.logout.all}" class="btn btn-danger m-r-5" th:data-title="#{label.force.logout.all}" th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/force/logout'}" th:data-size="${dialogSize == null ? 'W': dialogSize}" onclick="confirmDialog(this)">
+
+                <button th:if="${isForceLogout == true}" type="button" th:title="#{label.force.logout.all}"
+                        class="btn btn-danger m-r-5"
+                        th:data-title="#{label.force.logout.all}"
+                        th:data-url="${selectedAdminAuthorityEntity.endPointUrl + '/force/logout'}"
+                        th:data-size="${dialogSize == null ? 'W' : dialogSize}"
+                        onclick="confirmDialog(this)">
                     <i class="fa-solid fa-right-from-bracket m-r-5"></i>
                     <span th:utext="#{label.force.logout.all}"></span>
                 </button>
+
                 <button type="button" class="btn btn-default" th:title="#{label.refresh}" onclick="refreshPage(currentPage)">
                     <i class="fa fa-refresh"></i>
                 </button>
-                <div class="btn-group" th:if="${filterColumns==true}">
+
+                <div class="btn-group" th:if="${filterColumns == true}">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-list"></i> <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-right dropdown-column-dynamic">
-                    </ul>
+                    <ul class="dropdown-menu dropdown-menu-right dropdown-column-dynamic"></ul>
                 </div>
-                <select class="form-control" style="display: inline-block; width: auto; height: 34px; border-radius: 0;" id="pageSizeSelect" th:onchange="'javascript:load(\''+ ${1} +'\');'">
+
+                <select class="form-control" style="display: inline-block; width: auto; height: 34px; border-radius: 0;" id="pageSizeSelect" th:onchange="'javascript:load(1);'">
                     <option th:each="pageSize : ${pager.getAvailablePageSizes()}"
                             th:text="${pageSize}"
                             th:value="${pageSize}"
@@ -76,126 +98,6 @@ Add fragments filter, filter_column_display in table.html
         </div>
 
         <script type="text/javascript">
-
-            $(function () {
-                $('.selectpicker').selectpicker({showIcon: false});
-            });
-
-            $(function () {
-                let $dropdownMenu = $('.dropdown-column-dynamic');
-                $dropdownMenu.empty();
-                
-                let uniquePage = $(location).attr("href").split('#').pop();
-                let list = getListFromLocalStorage("filter_col_" + uniquePage);
-                if (list.length !== 0) {
-                    displayFilterColumn(list);
-                } else {
-                    let $table = $('.table-column-dynamic');
-                    let list = [];
-                    $table.find('thead th').each(function(index) {
-                        let thColumnIndex = index + 1;
-                        let thColumnDisplay = $(this).data('column-display');
-                        let thColumnText = $(this).text();
-                        let filterColumn = {
-                            "colIndex": thColumnIndex,
-                            "colDisplay": thColumnDisplay,
-                            "colText": thColumnText
-                        }
-                        list.push(filterColumn);
-                        setListToLocalStorage("filter_col_" + uniquePage, filterColumn);
-                    });
-                    displayFilterColumn(list);
-                }
-
-                function displayFilterColumn(list) {
-                    list.forEach(function(col) {
-                        $dropdownMenu.append(
-                            '<li>' +
-                            '   <div class="checkbox checkbox-default">' +
-                            '       <input id="checkbox-' + col.colIndex + '" type="checkbox" class="toggle-column" data-column=" ' + col.colIndex + '">' +
-                            '       <label for="checkbox-' + col.colIndex + '">' + col.colText + '</label>' +
-                            '   </div>' +
-                            '</li>');
-                        if (col.colDisplay === true) {
-                            $('#checkbox-' + col.colIndex).prop('checked', true);
-                        } else {
-                            $('#checkbox-' + col.colIndex).prop('checked', false);
-                            let column = "table tr > *:nth-child(" + col.colIndex + ")";
-                            $(column).hide();
-                        }
-                    });
-                }
-            });
-
-            function refreshPage(page) {
-                load(page);
-
-                let uniquePage = $(location).attr("href").split('#').pop();
-                removeFromLocalStorage("filter_col_" + uniquePage)
-            }
-        </script>
-    </th:block>
-
-    <th:block th:fragment="filter_report">
-        <div class="m-b-10" style="display: flex; justify-content: space-between;">
-
-            <form class="form-inline" onsubmit="return load(1)">
-                <div class="form-group">
-                    <label class="sr-only" for="fSearch" th:text="#{label.search}"></label>
-                    <input type="text" class="form-control" id="fSearch" th:placeholder="#{label.search}" autocomplete="off">
-                </div>
-                <div class="form-group ml-2" th:if="${fStatus == '' || fStatus == null}">
-                    <label class="sr-only" for="fStatus" th:text="#{label.status}" ></label>
-                    <select id="fStatus" name="fStatus" class="selectpicker" multiple data-selected-text-format="count > 5">
-                        <option th:selected="${d.ordinal()==1}" th:each="d,iter : ${status}" th:value="${d.ordinal()}" th:text="${d.name()}"></option>
-                    </select>
-                </div>
-                <div class="form-group ml-2" th:if="${enStatus == true}">
-                    <label class="sr-only" for="fParam1" th:text="#{label.engagement.status}"></label>
-                    <select id="fParam1" name="fParam1" class="selectpicker" multiple data-selected-text-format="count > 5">
-                        <option th:selected="${d.ordinal()== 0}" th:each="d,iter : ${engagementStatus}" th:value="${d.ordinal()}" th:text="${d.name()}"></option>
-                    </select>
-                </div>
-                <div class="form-group ml-2" th:if="${filterDateRange == true}">
-                    <label class="sr-only" for="fDateRange" th:text="#{label.from.to.date}"></label>
-                    <div id="fDateRange" class="form-control ">
-                        <span></span>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-search"></i> <span th:text="#{label.search}">Search</span>
-                </button>
-            </form>
-
-            <div class="btn-group">
-                <button type="submit" th:title="#{label.excel}" th:data-title="#{label.excel}"
-                        th:data-url="${#strings.replace(selectedAdminAuthorityEntity.endPointUrl + '/excel','/page/excel','/excel')}" data-size="N"
-                        onclick="toExcel(this)" class="btn btn-success">
-                    <i class="fa fa-file-excel m-r-5"></i>
-                    <span th:text="#{label.excel}"></span>
-                </button>
-                <button type="button" class="btn btn-default" th:title="#{label.refresh}" onclick="refreshPage(currentPage)">
-                    <i class="fa fa-refresh"></i>
-                </button>
-                <div class="btn-group" th:if="${filterColumns==true}">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-list"></i> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right dropdown-column-dynamic">
-                    </ul>
-                </div>
-                <select class="form-control" style="display: inline-block; width: auto; height: 34px; border-radius: 0;" id="pageSizeSelect" th:onchange="'javascript:load(\''+ ${1} +'\');'">
-                    <option th:each="pageSize : ${pager.getAvailablePageSizes()}"
-                            th:text="${pageSize}"
-                            th:value="${pageSize}"
-                            th:selected="${pageSize} == ${pager.getCurrentPageSize()}">
-                    </option>
-                </select>
-            </div>
-        </div>
-
-        <script type="text/javascript">
-
             $(function () {
                 $('.selectpicker').selectpicker({showIcon: false});
             });
@@ -204,128 +106,79 @@ Add fragments filter, filter_column_display in table.html
                 let $dropdownMenu = $('.dropdown-column-dynamic');
                 $dropdownMenu.empty();
 
-                let uniquePage = $(location).attr("href").split('#').pop();
-                let list = getListFromLocalStorage("filter_col_" + uniquePage);
-                if (list.length !== 0) {
-                    displayFilterColumn(list);
-                } else {
-                    let $table = $('.table-column-dynamic');
-                    let list = [];
-                    $table.find('thead th').each(function(index) {
-                        let thColumnIndex = index + 1;
-                        let thColumnDisplay = $(this).data('column-display');
-                        let thColumnText = $(this).text();
-                        let filterColumn = {
-                            "colIndex": thColumnIndex,
-                            "colDisplay": thColumnDisplay,
-                            "colText": thColumnText
-                        }
-                        list.push(filterColumn);
-                        setListToLocalStorage("filter_col_" + uniquePage, filterColumn);
-                    });
-                    displayFilterColumn(list);
-                }
+                let uniquePage = window.location.pathname.split('/').pop() || 'defaultPage';
+                let storedList = localStorage.getItem("filter_col_" + uniquePage);
+                let list = storedList ? JSON.parse(storedList) : [];
 
-                function displayFilterColumn(list) {
-                    list.forEach(function(col) {
-                        $dropdownMenu.append(
-                            '<li>' +
-                            '   <div class="checkbox checkbox-default">' +
-                            '       <input id="checkbox-' + col.colIndex + '" type="checkbox" class="toggle-column" data-column=" ' + col.colIndex + '">' +
-                            '       <label for="checkbox-' + col.colIndex + '">' + col.colText + '</label>' +
-                            '   </div>' +
-                            '</li>');
-                        if (col.colDisplay === true) {
-                            $('#checkbox-' + col.colIndex).prop('checked', true);
-                        } else {
-                            $('#checkbox-' + col.colIndex).prop('checked', false);
-                            let column = "table tr > *:nth-child(" + col.colIndex + ")";
-                            $(column).hide();
-                        }
-                    });
-                }
-            });
-
-            function refreshPage(page) {
-                load(page);
-
-                let uniquePage = $(location).attr("href").split('#').pop();
-                removeFromLocalStorage("filter_col_" + uniquePage)
-            }
-
-            function toExcel(a) {
-                var url = $(a).attr("data-url");
-                var fStatus = $('#fStatus').val();
-                console.log()
-                var fParam1 = $('#fParam1').val();
-                var params = [];
-                var reportStatus = getListFromLocalStorage('report_status');
-                if ((fStatus && fStatus.length > 0)) {
-                    // params.push('fStatus=' + fStatus.join(','));
-                    if (reportStatus != null){
-                        params.push('fStatus=' + reportStatus.join(','));
-                    }else {
-                        params.push('fStatus=' + fStatus.join(','));
-                    }
-                    //console.log('Using stored report status:', reportStatus);
-                }
-
-                var engagementReportStatus = getListFromLocalStorage('engagement_report_enStatus');
-                if (fParam1 && fParam1.length > 0) {
-                    if (engagementReportStatus != null){
-                        params.push('fParam1=' + engagementReportStatus.join(','));
-                    }else {
-                        params.push('fParam1=' + fParam1.join(','));
-                    }
-                    // console.log('Using stored engagement report status:', engagementReportStatus);
-                }
-
-                if (params.length > 0) {
-                    url += '?' + params.join('&');
-                }
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function(response) {
-                        window.open(url, '_blank');
-                    },
-                    error: function(xhr, status, error) {
-                        // alert('Excel file is empty.');
-                        swal(somethingWentWrongTitle, listEmpty , "error");
-
-                    }
-                });
-                return false;
-            }
-
-        </script>
-    </th:block>
-
-    <th:block th:fragment="filter_column_display">
-        <script>
-            $(function() {
-                $('.toggle-column').change(function() {
-                    let columnIndex = $(this).data('column');
-                    let column = "table tr > *:nth-child(" + columnIndex + ")";
-                    $(column).toggle();
-
-                    let uniquePage = $(location).attr("href").split('#').pop();
-                    let list = getListFromLocalStorage("filter_col_" + uniquePage);
-                    if (list.length !== 0) {
-                        list.forEach(function(obj, index) {
-                            if (obj.colIndex === Number(columnIndex)) {
-                                obj.colDisplay = (obj.colDisplay !== true);
-                                return false;
-                            }
+                if (list.length === 0) {
+                    // Initialize column list from table header
+                    list = [];
+                    $('.table-column-dynamic thead th').each(function(index) {
+                        let colIndex = index + 1;
+                        let colDisplay = $(this).data('column-display') === true || $(this).data('column-display') === 'true';
+                        let colText = $(this).text().trim();
+                        list.push({
+                            colIndex: colIndex,
+                            colDisplay: colDisplay,
+                            colText: colText
                         });
-                    }
-                    removeFromLocalStorage("filter_col_" + uniquePage);
-                    list.forEach(function (obj) {
-                        setListToLocalStorage("filter_col_" + uniquePage, obj);
                     });
+                    localStorage.setItem("filter_col_" + uniquePage, JSON.stringify(list));
+                }
+
+                // Populate dropdown with checkboxes
+                list.forEach(function(col) {
+                    let checkbox = $('<input>', {
+                        type: 'checkbox',
+                        class: 'toggle-column',
+                        id: 'checkbox-' + col.colIndex,
+                        'data-column': col.colIndex,
+                        checked: col.colDisplay
+                    });
+                    let label = $('<label>', { for: 'checkbox-' + col.colIndex }).text(col.colText);
+                    let div = $('<div>', { class: 'checkbox checkbox-default' }).append(checkbox).append(label);
+                    let li = $('<li>').append(div);
+                    $dropdownMenu.append(li);
+
+                    // Show/hide columns based on saved settings
+                    let selector = "table.table-column-dynamic tr > *:nth-child(" + col.colIndex + ")";
+                    if (!col.colDisplay) {
+                        $(selector).hide();
+                    }
+                });
+
+                // Event handler for toggle checkbox changes
+                $dropdownMenu.on('change', '.toggle-column', function() {
+                    let colIndex = $(this).data('column');
+                    let isChecked = $(this).is(':checked');
+                    let selector = "table.table-column-dynamic tr > *:nth-child(" + colIndex + ")";
+                    if (isChecked) {
+                        $(selector).show();
+                    } else {
+                        $(selector).hide();
+                    }
+
+                    // Update localStorage
+                    list = list.map(function(col) {
+                        if (col.colIndex === colIndex) {
+                            col.colDisplay = isChecked;
+                        }
+                        return col;
+                    });
+                    localStorage.setItem("filter_col_" + uniquePage, JSON.stringify(list));
                 });
             });
+
+            function refreshPage(page) {
+                load(page);
+                let uniquePage = window.location.pathname.split('/').pop() || 'defaultPage';
+                localStorage.removeItem("filter_col_" + uniquePage);
+            }
         </script>
+    </th:block>
+
+    <!-- Separate fragment for filter_column_display if needed -->
+    <th:block th:fragment="filter_column_display">
+        <!-- Could be used to add additional UI or scripts for column display if required -->
     </th:block>
 </div>

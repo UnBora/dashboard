@@ -2,46 +2,35 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#000000">
-
+    <link rel="shortcut icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
     <title>Admin System</title>
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
-    <link rel="icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
+    <!-- Bootstrap 5 CSS -->
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.3.6/dist/css/bootstrap.min.css}"/>
 
-    <!-- jQuery Filer CSS -->
+    <!-- Font Awesome -->
+    <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}"/>
+
+    <!-- Custom CSS -->
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/css/custom-style.css}"/>
+
+    <!-- Third-party CSS -->
     <link th:href="@{/assets/libs/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
     <link th:href="@{/assets/libs/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/datatables/datatables.min.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/sweetalert2/sweetalert2.min.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/toastr/toastr.min.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/bootstrap-select/css/bootstrap-select.min.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/summernote/summernote.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/summernote/summernote.min.js}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/select2/css/select2.min.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/magnific-popup/css/magnific-popup.css}">
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/nestable/jquery.nestable.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.css}"/>
+    <link th:rel="stylesheet" type="text/css" th:href="@{/assets/libs/jquery-ui/jquery-ui.min.css}"/>
 
-    <!-- Bootstrap & App CSS -->
-    <link th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/core.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/components.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/icons.css}" rel="stylesheet"/>
-    <link th:href="@{/webjars/font-awesome/6.1.0/css/all.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/pages.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/menu.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/responsive.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/css/custom-style.css}" rel="stylesheet"/>
-
-    <!-- Additional Libraries CSS -->
-    <link th:href="@{/assets/libs/datatables/dataTables.bootstrap.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/bootstrap3-dialog/bootstrap-dialog.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/sweetalert2/sweetalert2.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/toastr/toastr.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/bootstrap-select/css/bootstrap-select.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/summernote/summernote.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/select2/css/select2.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/magnific-popup/css/magnific-popup.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/nestable/jquery.nestable.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet"/>
-    <link th:href="@{/assets/libs/jquery-ui/jquery-ui.min.css}" rel="stylesheet"/>
-
-    <!-- Inline Thymeleaf Variables -->
     <script th:inline="javascript">
         /*<![CDATA[*/
         var maximumSessionTimeout = /*[[${configuration.maximumSessionTimeout}]]*/ '1800';
@@ -59,91 +48,105 @@
         var sessionExpiredMessage = /*[[#{message.session.expired.message}]]*/ '';
         var internalServerErrorTitle = /*[[#{message.internal.error}]]*/ '';
         var somethingWentWrongTitle = /*[[#{message.something.went.wrong}]]*/ '';
-
-        var listEmpty = /*[[#{label.your.download.list.is.currently.empty}]]*/ '';
-        /*]]>*/
-        var currentPage = 1;
-        var dialog = null;
     </script>
 
     <style>
+        :root {
+            --bs-primary: #3498db;
+            --bs-secondary: #2c3e50;
+            --bs-success: #2ecc71;
+            --bs-info: #3498db;
+            --bs-warning: #f39c12;
+            --bs-danger: #e74c3c;
+            --bs-light: #ecf0f1;
+            --bs-dark: #2c3e50;
+        }
+
         .swal2-popup {
             font-size: 1.5rem;
+        }
+
+        /* Custom styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .wrapper {
+            min-height: calc(100vh - 60px);
+            padding-top: 1rem;
+        }
+
+        /* Context menu styles */
+        #context-menu-holder {
+            position: absolute;
+            z-index: 1050;
+            display: none;
         }
     </style>
 </head>
 
 <body>
-<noscript>
-    <div class="alert alert-danger text-center">JavaScript is required to use this application.</div>
-</noscript>
+<!-- Global table menu, right click-->
+<ul id="context-menu-holder" class="dropdown-menu shadow-sm" role="menu">
+    <!-- Content will be loaded dynamically -->
+</ul>
 
-<!-- Context menu -->
-<ul id="context-menu-holder" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
-    style="display: block; position:static; top: 0;"></ul>
-
-<!-- Header Fragment -->
+<!-- Header section -->
 <div th:remove="tag" sec:authorize="isAuthenticated()" th:replace="~{fragments/header :: header}"></div>
 
-<!-- Main Content -->
-<div class="wrapper">
-    <div id="content"></div>
+<!-- Main content wrapper -->
+<div class="wrapper container-fluid">
+    <div id="content" class="mt-3"></div>
 </div>
 
-<!-- Optional Footer -->
-<!-- <div th:replace="~{fragments/footer :: footer}"></div> -->
-
-<!-- Session Timeout Fragment -->
+<!-- Session timeout component -->
 <th:block th:replace="~{fragments/session_timeout :: sessionTimeout}"/>
 
-<!-- JavaScript Libraries -->
-<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<!-- jQuery and core JS libraries -->
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/jquery-migrate/3.3.2/jquery-migrate.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/3.4.1/js/bootstrap.min.js}" defer></script>
-<script th:src="@{/assets/js/detect.js}" defer></script>
-<script th:src="@{/assets/js/fastclick.js}" defer></script>
-<script th:src="@{/assets/js/jquery.blockUI.js}" defer></script>
-<script th:src="@{/assets/js/waves.js}" defer></script>
-<script th:src="@{/assets/js/jquery.slimscroll.js}" defer></script>
-<script th:src="@{/assets/js/jquery.scrollTo.min.js}" defer></script>
 
-<!-- Plugins -->
-<script th:src="@{/assets/libs/datatables/jquery.dataTables.min.js}" defer></script>
-<script th:src="@{/assets/libs/datatables/dataTables.bootstrap.js}" defer></script>
-<script th:src="@{/assets/libs/bootstrap3-dialog/bootstrap-dialog.min.js}" defer></script>
-<script th:src="@{/assets/libs/bootstrap-waitingfor/bootstrap-waitingfor.min.js}" defer></script>
-<script th:src="@{/assets/libs/sweetalert2/sweetalert2.min.js}" defer></script>
-<script th:src="@{/assets/libs/toastr/toastr.min.js}" defer></script>
-<script th:src="@{/assets/libs/bootstrap-select/js/bootstrap-select.js}" defer></script>
-<script th:src="@{/assets/libs/autoNumeric/autoNumeric.js}" defer></script>
-<script th:src="@{/assets/libs/summernote/summernote.min.js}" defer></script>
-<script th:src="@{/assets/libs/select2/js/select2.min.js}" defer></script>
-<script th:src="@{/assets/libs/magnific-popup/js/jquery.magnific-popup.min.js}" defer></script>
-<script th:src="@{/assets/libs/nestable/jquery.nestable.js}" defer></script>
-<script th:src="@{/assets/libs/jquery.filer/js/jquery.filer.min.js}" defer></script>
-<script th:src="@{/assets/libs/bootstrap-datetimepicker/moment-with-locales.min.js}" defer></script>
-<script th:src="@{/assets/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}" defer></script>
-<script th:src="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.js}" defer></script>
-<script th:src="@{/assets/libs/moment/moment.js}" defer></script>
-<script th:src="@{/assets/libs/jquery-ui/jquery-ui.min.js}" defer></script>
+<!-- Bootstrap 5 Bundle JS (includes Popper) -->
+<script th:src="@{/webjars/bootstrap/5.3.6/dist/js/bootstrap.bundle.min.js}"></script>
 
-<!-- App Core Scripts -->
-<script th:src="@{/assets/js/jquery.core.js}" defer></script>
-<script th:src="@{/assets/js/jquery.app.js}" defer></script>
-<script th:src="@{/assets/js/app.js}" defer></script>
-<script th:src="@{/assets/js/appEdition.js}" defer></script>
-<script th:src="@{/assets/js/sessionTimeout.js}" defer></script>
+<!-- Core utility scripts -->
+<script th:src="@{/assets/js/jquery.blockUI.js}"></script>
+<script th:src="@{/assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollTo.min.js}"></script>
 
-<!-- Custom Script -->
+<!-- Third-party plugins -->
+<script th:src="@{/assets/libs/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/libs/datatables/dataTables.bootstrap5.min.js}"></script>
+<script th:src="@{/assets/libs/sweetalert2/sweetalert2.min.js}"></script>
+<script th:src="@{/assets/libs/toastr/toastr.min.js}"></script>
+<script th:src="@{/assets/libs/bootstrap-select/js/bootstrap-select.min.js}"></script>
+<script th:src="@{/assets/libs/autoNumeric/autoNumeric.min.js}"></script>
+<script th:src="@{/assets/libs/summernote/summernote-bs5.min.js}"></script>
+<script th:src="@{/assets/libs/select2/js/select2.min.js}"></script>
+<script th:src="@{/assets/libs/magnific-popup/js/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{/assets/libs/nestable/jquery.nestable.js}"></script>
+<script th:src="@{/assets/libs/jquery.filer/js/jquery.filer.min.js}"></script>
+<script th:src="@{/assets/libs/bootstrap-datetimepicker/moment-with-locales.min.js}"></script>
+<script th:src="@{/assets/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+<script th:src="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/assets/libs/moment/moment.js}"></script>
+<script th:src="@{/assets/libs/jquery-ui/jquery-ui.min.js}"></script>
+
+<!-- App specific JS -->
+<script th:src="@{/assets/js/app.js}"></script>
+<script th:src="@{/assets/js/appEdition.js}"></script>
+<script th:src="@{/assets/js/sessionTimeout.js}"></script>
+
 <script>
-    $(document).click(function () {
+    $(document).click(function() {
         if ($("#context-menu-holder").css('display') === 'block') {
             $("#context-menu-holder").hide();
         }
     });
 
-    $(document).ready(function () {
-        const url = window.location.href.toString();
+    $(document).ready(function() {
+        var url = window.location.href.toString();
         if (!url.endsWith('#')) {
             loadingPage(url);
         } else {
@@ -151,8 +154,8 @@
         }
     });
 
-    window.addEventListener('popstate', function () {
-        let pageUrl = window.location.href.toString();
+    window.addEventListener('popstate', function(event) {
+        var pageUrl = window.location.href.toString();
         if (pageUrl.endsWith('#')) {
             pageUrl = homeUrl + "?dashboard";
         }
@@ -161,7 +164,7 @@
 
     function loadingPage(pageUrl) {
         if (pageUrl.includes("#")) {
-            pageUrl = pageUrl.replace("#", "/");
+            pageUrl = pageUrl.replace("#", "/")
         } else {
             pageUrl = homeUrl + "?dashboard";
         }
@@ -172,7 +175,6 @@
     }
 </script>
 
-<!-- Notification from Result -->
 <script th:inline="javascript" th:if="${result != null}">
     /*<![CDATA[*/
     var isSuccess = /*[[${result.success}]]*/ '';
@@ -181,13 +183,12 @@
     if (isSuccess === false) {
         toast(message);
     } else {
-        swal({
+        Swal.fire({
             title: messageExecutedSuccessfully,
             html: message,
-            type: 'success'
-        });
+            icon: 'success'
+        })
     }
 </script>
-
 </body>
 </html>

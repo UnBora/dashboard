@@ -6,7 +6,6 @@
 </head>
 <body>
 <div class="content">
-
     <!-- Start Content-->
     <div class="container">
         <th:block th:replace="~{fragments/page_title}" th:remove="tag"/>
@@ -18,18 +17,19 @@
                 </div>
             </div>
         </div>
-
     </div>
     <!-- end container-fluid -->
 
     <script th:inline="javascript">
         selectedUrl = /*[[${selectedAdminAuthorityEntity.endPointUrl}]]*/ '';
         $(document).ready(function () {
+            console.log('selectedUrl', selectedUrl);
             load(currentPage);
         });
 
         function load(page) {
             const selectedStatus = $('#fStatus option:selected').map(function () {
+                console.log('selectedStatus', $(this).val());
                 return $(this).val();
             }).get();
 

@@ -1,40 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body th:fragment="finput_double">
-<style>
-
-</style>
 <section th:remove="tag">
-    <label th:for="${finputName}" th:utext="${finputText + (finputRequired==true ? '<span class=text-danger>*</span>':'')}">Label Name
-        <span class="text-danger">*</span>
+
+    <!-- Label -->
+    <label th:for="${finputName}"
+           th:utext="${finputText + (finputRequired == true ? '<span class=\'text-danger\'>*</span>' : '')}">
+        Label Name
+        <span class="text-danger" th:if="${finputRequired == true}">*</span>
     </label>
+
+    <!-- Input Field -->
     <input
-            data-v-min="0"
+            type="text"
             th:name="${finputName}"
             th:id="${finputName}"
             th:placeholder="'Enter ' + ${finputText}"
-            th:required="${finputRequired==true}"
-            class="form-control autonumber text-right"
-            type="text"
+            th:required="${finputRequired == true}"
+            th:readonly="${finputReadOnly == true}"
             th:field="*{__${finputName}__}"
-            th:readonly="${finputReadOnly==true}"
-            autocomplete="false"
+            class="form-control autonumber text-end"
+            data-v-min="0"
             data-m-dec="2"
+            autocomplete="off"
     />
+
+    <!-- Validation Errors -->
     <ul th:if="${#fields.hasErrors(finputName)}" class="parsley-errors-list filled">
         <li class="parsley-required" th:errors="*{__${finputName}__}"></li>
     </ul>
 
+    <!-- AutoNumeric Initialization -->
     <script th:inline="javascript">
         $(document).ready(function () {
-            $('#' + [[${finputName}]]).autoNumeric('init', {aSep: ''});
+            const inputId = /*[[${finputName}]]*/ '';
+            $('#' + inputId).autoNumeric('init', {
+                aSep: '', //
+                mDec: 2
+            });
 
-            $('#' + [[${finputName}]]).click(function () {
+            $('#' + inputId).on('click', function () {
                 $(this).select();
             });
         });
-
     </script>
+
 </section>
 </body>
 </html>

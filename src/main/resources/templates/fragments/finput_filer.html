@@ -1,178 +1,134 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!--(limit, maxSizeMb, acceptedFile=jpg|png|gif, addMore=true)-->
 <body th:fragment="finput_filer">
 <style>
     .jFiler-input-dragDrop {
-        width: 101% !important;
+        width: 100% !important;
     }
 </style>
+
 <section th:remove="tag">
     <input type="file" name="files" id="filer_input" multiple="multiple"/>
 
     <script th:inline="javascript">
         $(document).ready(function () {
-            var extensionsParam = [[${acceptedFile}]];
-            var extensions = extensionsParam.split("|");
-            var removeUrl = [[${removeUrl}]];
+            const extensionsParam = /*[[${acceptedFile}]]*/ 'jpg|png|gif';
+            const extensions = extensionsParam.split('|');
+            let removeUrl = /*[[${removeUrl}]]*/ '';
             if (removeUrl === '') removeUrl = null;
-            var itemTemplate = removeUrl === null ? '<li class="jFiler-item">\
-                        <div class="jFiler-item-container">\
-                            <div class="jFiler-item-inner">\
-                                <div class="jFiler-item-thumb">\
-                                    <div class="jFiler-item-status"></div>\
-                                    <div class="jFiler-item-info">\
-                                        <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
-                                        <span class="jFiler-item-others">{{fi-size2}}</span>\
-                                    </div>\
-                                    {{fi-image}}\
-                                </div>\
-                                <div class="jFiler-item-assets jFiler-row">\
-                                    <ul class="list-inline pull-left">\
-                                        <li>{{fi-progressBar}}</li>\
-                                    </ul>\
-                                </div>\
-                            </div>\
-                        </div>\
-                    </li>' : '<li class="jFiler-item">\
-                        <div class="jFiler-item-container">\
-                            <div class="jFiler-item-inner">\
-                                <div class="jFiler-item-thumb">\
-                                    <div class="jFiler-item-status"></div>\
-                                    <div class="jFiler-item-info">\
-                                        <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
-                                        <span class="jFiler-item-others">{{fi-size2}}</span>\
-                                    </div>\
-                                    {{fi-image}}\
-                                </div>\
-                                <div class="jFiler-item-assets jFiler-row">\
-                                    <ul class="list-inline pull-left">\
-                                        <li>{{fi-progressBar}}</li>\
-                                    </ul>\
-                                    <ul class="list-inline pull-right">\
-                                    </ul>\
-                                </div>\
-                            </div>\
-                        </div>\
-                    </li>';
-            var itemAppendTemplate = removeUrl === null ? '<li class="jFiler-item">\
-                            <div class="jFiler-item-container">\
-                                <div class="jFiler-item-inner">\
-                                    <div class="jFiler-item-thumb">\
-                                        <div class="jFiler-item-status"></div>\
-                                        <div class="jFiler-item-info">\
-                                            <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
-                                            <span class="jFiler-item-others">{{fi-size2}}</span>\
-                                        </div>\
-                                        {{fi-image}}\
-                                    </div>\
-                                    <div class="jFiler-item-assets jFiler-row">\
-                                        <ul class="list-inline pull-left">\
-                                            <li><span class="jFiler-item-others">{{fi-icon}}</span></li>\
-                                        </ul>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                        </li>' : '<li class="jFiler-item">\
-                            <div class="jFiler-item-container">\
-                                <div class="jFiler-item-inner">\
-                                    <div class="jFiler-item-thumb">\
-                                        <div class="jFiler-item-status"></div>\
-                                        <div class="jFiler-item-info">\
-                                            <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
-                                            <span class="jFiler-item-others">{{fi-size2}}</span>\
-                                        </div>\
-                                        {{fi-image}}\
-                                    </div>\
-                                    <div class="jFiler-item-assets jFiler-row">\
-                                        <ul class="list-inline pull-left">\
-                                            <li><span class="jFiler-item-others">{{fi-size2}}</span></li>\
-                                        </ul>\
-                                        <ul class="list-inline pull-right">\
-                                            <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
-                                        </ul>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                        </li>';
-            var removeFunction = removeUrl === null ? null : function (itemEl, file, id, listEl, boxEl, newInputEl, inputEl) {
+
+            let uploadUrl = /*[[${uploadUrl}]]*/ '';
+            if (uploadUrl === '') uploadUrl = null;
+
+            const limit = /*[[${limit}]]*/ null;
+            const maxSizeMb = /*[[${maxSizeMb}]]*/ null;
+            const addMore = /*[[${addMore == null ? false : addMore}]]*/ false;
+            const attachments = /*[[${attachments}]]*/ null;
+
+            const removeFunction = removeUrl ? function (itemEl, file, id, listEl, boxEl, newInputEl, inputEl) {
                 $.ajax({
                     type: "POST",
                     url: removeUrl,
                     dataType: "html",
                     data: file,
-                    success: function (response, textStatus, xhr) {
-                        if (toastr === undefined) {
-                            alert(response);
-                        } else {
-                            toastr.options = {
-                                "closeButton": true,
-                                "debug": false,
-                                "newestOnTop": true,
-                                "progressBar": true,
-                                "positionClass": "toast-top-right",
-                                "preventDuplicates": false,
-                                "onclick": null,
-                                "showDuration": "300",
-                                "hideDuration": "1000",
-                                "timeOut": "5000",
-                                "extendedTimeOut": "1000",
-                                "showEasing": "swing",
-                                "hideEasing": "linear",
-                                "showMethod": "fadeIn",
-                                "hideMethod": "fadeOut"
-                            };
-                            toastr["success"](response, "Success");
-                        }
+                    success: function (response) {
+                        toastr?.success(response, "Success") || alert(response);
                     },
-                    error: function (xhr, textStatus, errorThrown) {
+                    error: function (xhr) {
                         alert(xhr.responseText);
                     }
                 });
-            };
+            } : null;
 
-            var newFile = null;
-            var uploadUrl = [[${uploadUrl}]];
-            if (uploadUrl === '') uploadUrl = null;
-            var uploadFunction = uploadUrl === null ? null : {
+            const uploadFunction = uploadUrl ? {
                 url: uploadUrl,
-                data: newFile === null ? null : new FormData().append("files", newFile, newFile.name),
                 type: 'POST',
                 enctype: 'multipart/form-data',
                 processData: false,
-                beforeSend: function () {
-                },
                 success: function (data, el) {
-                    var parent = el.find(".jFiler-jProgressBar").parent();
+                    const parent = el.find(".jFiler-jProgressBar").parent();
                     el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
-                        $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");
+                        $("<div class='jFiler-item-others text-success'><i class='icon-jfi-check-circle'></i> Success</div>")
+                            .hide().appendTo(parent).fadeIn("slow");
                     });
-                    newFile = null;
                 },
                 error: function (el) {
-                    var parent = el.find(".jFiler-jProgressBar").parent();
+                    const parent = el.find(".jFiler-jProgressBar").parent();
                     el.find(".jFiler-jProgressBar").fadeOut("slow", function () {
-                        $("<div class=\"jFiler-item-others text-error\"><i class=\"icon-jfi-minus-circle\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");
+                        $("<div class='jFiler-item-others text-error'><i class='icon-jfi-minus-circle'></i> Error</div>")
+                            .hide().appendTo(parent).fadeIn("slow");
                     });
-                },
-                statusCode: null,
-                onProgress: null,
-                onComplete: null
-            };
+                }
+            } : null;
 
             $("#filer_input").filer({
-                limit: [[${limit == null ? null : limit}]],
-                maxSize: [[${maxSizeMb == null ? null : maxSizeMb}]],
+                limit: limit,
+                maxSize: maxSizeMb,
                 extensions: extensions,
-                changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>Drag & Drop files here</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn btn btn-custom waves-effect waves-light">Browse Files</a></div></div>',
+                changeInput: `
+                    <div class="jFiler-input-dragDrop">
+                        <div class="jFiler-input-inner text-center">
+                            <div class="jFiler-input-icon">
+                                <i class="icon-jfi-cloud-up-o fs-3"></i>
+                            </div>
+                            <div class="jFiler-input-text">
+                                <h5 class="my-2">Drag & Drop files here</h5>
+                                <span class="d-block my-2">or</span>
+                            </div>
+                            <a class="btn btn-primary">Browse Files</a>
+                        </div>
+                    </div>
+                `,
                 showThumbs: true,
                 theme: "dragdropbox",
                 templates: {
                     box: '<ul class="jFiler-items-list jFiler-items-grid"></ul>',
-                    item: itemTemplate,
-                    itemAppend: itemAppendTemplate,
+                    item: `
+                        <li class="jFiler-item">
+                            <div class="jFiler-item-container">
+                                <div class="jFiler-item-inner">
+                                    <div class="jFiler-item-thumb">
+                                        <div class="jFiler-item-status"></div>
+                                        <div class="jFiler-item-info">
+                                            <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name}}</b></span>
+                                            <span class="jFiler-item-others">{{fi-size2}}</span>
+                                        </div>
+                                        {{fi-image}}
+                                    </div>
+                                    <div class="jFiler-item-assets jFiler-row">
+                                        <ul class="list-inline float-start">
+                                            <li>{{fi-progressBar}}</li>
+                                        </ul>
+                                        <ul class="list-inline float-end">
+                                            <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    `,
+                    itemAppend: `
+                        <li class="jFiler-item">
+                            <div class="jFiler-item-container">
+                                <div class="jFiler-item-inner">
+                                    <div class="jFiler-item-thumb">
+                                        <div class="jFiler-item-status"></div>
+                                        <div class="jFiler-item-info">
+                                            <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name}}</b></span>
+                                            <span class="jFiler-item-others">{{fi-size2}}</span>
+                                        </div>
+                                        {{fi-image}}
+                                    </div>
+                                    <div class="jFiler-item-assets jFiler-row">
+                                        <ul class="list-inline float-end">
+                                            <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    `,
                     progressBar: '<div class="bar"></div>',
-                    itemAppendToEnd: false,
                     removeConfirmation: true,
                     _selectors: {
                         list: '.jFiler-items-list',
@@ -184,39 +140,28 @@
                 dragDrop: {
                     dragEnter: null,
                     dragLeave: null,
-                    drop: null,
+                    drop: null
                 },
                 uploadFile: uploadFunction,
-                addMore: [[${addMore == null ? false : addMore}]],
-                clipBoardPaste: true,
-                excludeName: null,
-                beforeRender: null,
-                afterRender: null,
-                beforeShow: null,
-                beforeSelect: null,
-                onSelect: function (file, el) {
-                    el.find(".jFiler-jProgressBar").fadeOut("slow");
-                    newFile = file;
-                },
-                afterShow: null,
                 onRemove: removeFunction,
-                onEmpty: null,
-                options: null,
-                files: [[${attachments == null ? null : attachments}]],
+                addMore: addMore,
+                clipBoardPaste: true,
+                files: attachments,
                 captions: {
                     button: "Choose Files",
-                    feedback: "Choose files To Upload",
-                    feedback2: "files were chosen",
-                    drop: "Drop file here to Upload",
+                    feedback: "Choose files to upload",
+                    feedback2: "files selected",
+                    drop: "Drop files here",
                     removeConfirmation: "Are you sure you want to remove this file?",
                     errors: {
-                        filesLimit: "Only {{fi-limit}} files are allowed to be uploaded.",
-                        filesType: "Only Images are allowed to be uploaded.",
-                        filesSize: "{{fi-name}} is too large! Please upload file up to {{fi-maxSize}} MB.",
-                        filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
+                        filesLimit: "Only {{fi-limit}} files allowed.",
+                        filesType: "Only supported image files are allowed.",
+                        filesSize: "{{fi-name}} is too large. Max size: {{fi-maxSize}} MB.",
+                        filesSizeAll: "Some files are too large. Max total size: {{fi-maxSize}} MB."
                     }
                 }
             });
+
             $('#filer_input').attr('name', 'files');
         });
     </script>

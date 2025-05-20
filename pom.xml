@@ -119,8 +119,10 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.6.0</version>
+            <version>3.7.1</version>
         </dependency>
+
+
 
         <!-- jQuery Migrate -->
         <dependency>
@@ -129,17 +131,14 @@
             <version>3.3.2</version>
         </dependency>
 
+
         <!-- Bootstrap -->
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.webjars.npm</groupId>
-            <artifactId>fortawesome__fontawesome-free</artifactId>
-            <version>6.1.0</version>
+            <artifactId>bootstrap</artifactId>
+            <version>5.3.6</version>
         </dependency>
+
         <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>

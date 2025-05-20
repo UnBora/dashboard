@@ -1,2 +1,5 @@
-<div xmlns:th="http://www.thymeleaf.org" th:if="${message != ''}" th:utext="${message}" th:remove="tag">
+<div xmlns:th="http://www.thymeleaf.org"
+     th:if="${message != null and message != ''}"
+     th:utext="${message}"
+     th:remove="tag">
 </div>

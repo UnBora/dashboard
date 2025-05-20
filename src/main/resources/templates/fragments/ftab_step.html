@@ -2,126 +2,127 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body th:fragment="ftab_step(fstepTextInfo, fstepTextAttach, fstepTextPreview)">
 <style>
-    .wizard > .steps {
-        position: relative;
-        display: block;
-        width: 100%
-    }
-
-    .wizard > .steps > ul > li {
-        width: 33.3%
-    }
-
-    .wizard > .steps a {
-        font-size: 16px;
-        text-align: center;
-        margin-bottom: 0.5em;
-    }
-
-    .wizard > .steps .number {
-        font-size: 40px;
-        line-height: 70px;
-        position: absolute;
-        left: 16px;
-        top: -14px;
-        opacity: .1
-    }
-
-    .wizard > .steps a, .wizard > .steps a:active, .wizard > .steps a:hover {
-        display: block;
-        width: auto;
-        padding: 1em 1em;
-        text-decoration: none;
-        border-radius: 2px
-    }
-
-    .wizard > .steps .disabled a {
-        background: #e6e6e6;
-        /*border: 1px solid #f3f3f3;*/
-        border: none;
-        color: #575a65;
-        cursor: default;
-        margin: 2px;
-    }
-
-    .wizard > .steps .disabled a:active, .wizard > .steps .disabled a:hover {
-        background: #e6e6e6;
-        /*border: 1px solid #f3f3f3;*/
-        border: none;
-        margin: 2px;
-    }
-
-    .wizard > .steps .current a, .wizard > .steps .current a:active, .wizard > .steps .current a:hover {
-        background: #188ae2;
-        color: #fff !important;
-        cursor: default
-    }
-
-    .wizard > .steps .current a .number, .wizard > .steps .current a:active .number, .wizard > .steps .current a:hover .number {
-        color: #fff;
-        opacity: .4
-    }
-
-    .wizard > .steps .done a, .wizard > .steps .done a:active, .wizard > .steps .done a:hover {
-        background: #f3f3f3;
-        color: #575a65
-    }
-
-    .wizard > .steps .error a, .wizard > .steps .error a:active, .wizard > .steps .error a:hover {
-        background: #fab8bd;
-        color: #fff;
-        border-color: #f5707a
-    }
-
-    .wizard > .actions > ul > li, .wizard > .steps > ul > li {
-        float: left;
-        position: relative
-    }
+    /* Base wizard container */
     .wizard {
-        display: block;
         width: 100%;
+        margin-bottom: 1.5rem;
         overflow: hidden;
-        margin-bottom: 20px;
-    }
-
-    .wizard a {
-        outline: 0
-    }
-
-    .wizard ul {
-        list-style: none!important;
+        display: flex;
+        justify-content: space-between; /* space steps evenly */
+        list-style: none;
         padding: 0;
-        margin: 0
     }
 
-    .wizard ul>li {
+    /* Steps container */
+    .wizard .steps {
+        display: flex;
+        flex-grow: 1;
+        gap: 0.5rem;
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+    /* Each step */
+    .wizard .steps > li {
+        flex: 1 1 0;
+        text-align: center;
+        position: relative;
+    }
+
+    /* Step link */
+    .wizard .steps > li > a {
         display: block;
-        padding: 0
+        padding: 1rem;
+        font-size: 1rem;
+        text-decoration: none;
+        border-radius: 0.375rem; /* Bootstrap 5 rounded */
+        transition: background-color 0.3s ease, color 0.3s ease;
+        cursor: pointer;
+        user-select: none;
+        color: #575a65;
+        background-color: #e9ecef; /* light gray */
+        border: 1px solid transparent;
     }
 
-    .wizard>.steps .current-info {
-        position: absolute;
-        left: -999em
+    /* Disabled step */
+    .wizard .steps > li.disabled > a {
+        background-color: #e6e6e6;
+        color: #6c757d; /* Bootstrap disabled text color */
+        cursor: not-allowed;
+        pointer-events: none;
     }
 
+    /* Current (active) step */
+    .wizard .steps > li.current > a {
+        background-color: #0d6efd; /* Bootstrap primary */
+        color: #fff;
+        cursor: default;
+    }
 
+    /* Done step */
+    .wizard .steps > li.done > a {
+        background-color: #f8f9fa; /* Bootstrap light */
+        color: #495057;
+        cursor: pointer;
+    }
+
+    /* Error step */
+    .wizard .steps > li.error > a {
+        background-color: #dc3545; /* Bootstrap danger */
+        color: #fff;
+    }
+
+    /* Optional: Step number badge */
+    .wizard .steps > li > a .number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: block;
+        margin-bottom: 0.25rem;
+        opacity: 0.4;
+        color: inherit;
+    }
+
+    /* Responsive - full width steps on small screens */
     @media (max-width: 767.98px) {
-        .wizard.vertical>.steps,.wizard>.steps>ul>li {
-            width:100%
+        .wizard {
+            flex-direction: column;
+        }
+        .wizard .steps > li {
+            width: 100%;
+            margin-bottom: 0.5rem;
         }
     }
-
 </style>
+
 <section th:remove="tag">
-    <div class="wizard clearfix" role="application" >
-        <div class="steps clearfix">
-            <ul role="tablist">
-                <li id="tabInfo" role="tab" class="disabled current" aria-disabled="false" aria-selected="true"><a th:text="${fstepTextInfo}">Information</a></li>
-                <li id="tabAttach" role="tab" class="disabled" aria-disabled="true"><a th:text="${fstepTextAttach}" > Attachment</a></li>
-                <li id="tabPreview" role="tab" class="disabled" aria-disabled="true"><a th:text="${fstepTextPreview}" > Preview</a></li>
-            </ul>
-        </div>
-    </div>
+    <nav class="wizard" role="application" aria-label="Wizard Steps">
+        <ul class="steps" role="tablist">
+            <li id="tabInfo" role="tab"
+                class="disabled current"
+                aria-disabled="false"
+                aria-selected="true">
+                <a href="#" tabindex="0" th:text="${fstepTextInfo}">
+                    <span class="number">1</span> Information
+                </a>
+            </li>
+            <li id="tabAttach" role="tab"
+                class="disabled"
+                aria-disabled="true"
+                aria-selected="false">
+                <a href="#" tabindex="-1" th:text="${fstepTextAttach}">
+                    <span class="number">2</span> Attachment
+                </a>
+            </li>
+            <li id="tabPreview" role="tab"
+                class="disabled"
+                aria-disabled="true"
+                aria-selected="false">
+                <a href="#" tabindex="-1" th:text="${fstepTextPreview}">
+                    <span class="number">3</span> Preview
+                </a>
+            </li>
+        </ul>
+    </nav>
 </section>
 </body>
 </html>

@@ -1,0 +1,12 @@
+<form
+        th:action="${URL}"
+        th:object="${entity}"
+        method="post"
+        id="main-form"
+        th:onsubmit="'return save(this);'"
+        xmlns:th="http://www.thymeleaf.org">
+
+        <p th:if="${entity.status.ordinal()==1}">Would you like to change status from "Enabled" to "Disabled"?</p>
+        <p th:if="${entity.status.ordinal()==0}">Would you like to change status from "Disabled" to "Enabled"?</p>
+
+</form>

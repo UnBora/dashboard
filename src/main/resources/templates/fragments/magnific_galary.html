@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<body th:fragment="magnificGalary">
+<body th:fragment="magnificGallery">
 <style>
     div.mfp-bg.mfp-with-zoom.mfp-img-mobile.mfp-ready {
         z-index: 1051 !important;
@@ -14,18 +14,32 @@
         margin-right: 10px;
         margin-top: 15px;
         margin-bottom: 30px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: transform 0.3s ease;
+    }
+
+    .eachimg:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 </style>
+
 <section th:remove="tag">
     <label th:text="#{label.attachment}"></label>
     <div class="zoom-gallery">
-        <a th:each="att, iter : ${attachmentEntities}" th:target="_blank"
+        <a th:each="att : ${attachmentEntities}"
            th:href="${att.fileUrl}"
-           th:data-source="${att.fileUrl}" th:title="${att.originalFileName}" style="height:125px;">
-            <img class="eachimg" th:src="${att.fileUrl}" height="125">
+           th:title="${att.originalFileName}"
+           target="_blank"
+           th:attr="data-source=${att.fileUrl}"
+           style="display: inline-block; height: 125px;">
+            <img class="eachimg" th:src="${att.fileUrl}" alt="" height="125" />
         </a>
     </div>
+
     <script th:inline="javascript">
+        /* <![CDATA[ */
         $(document).ready(function () {
             $('.zoom-gallery').magnificPopup({
                 delegate: 'a',
@@ -36,7 +50,10 @@
                 image: {
                     verticalFit: true,
                     titleSrc: function (item) {
-                        return item.el.attr('title') + ' &middot; <a class="image-source-link" href="' + item.el.attr('data-source') + '" target="_blank">image source</a>';
+                        return item.el.attr('title') +
+                            ' &middot; <a class="image-source-link" href="' +
+                            item.el.attr('data-source') +
+                            '" target="_blank">image source</a>';
                     }
                 },
                 gallery: {
@@ -51,7 +68,9 @@
                 }
             });
         });
+        /* ]]> */
     </script>
 </section>
+
 </body>
 </html>

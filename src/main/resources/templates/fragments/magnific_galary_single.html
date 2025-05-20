@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<body th:fragment="magnificGalarySingle">
+<body th:fragment="magnificGallerySingle">
 <style>
     div.mfp-bg.mfp-with-zoom.mfp-img-mobile.mfp-ready {
         z-index: 1051 !important;
     }
-
     div.mfp-wrap.mfp-gallery.mfp-auto-cursor.mfp-with-zoom.mfp-img-mobile.mfp-ready {
         z-index: 1052 !important;
     }
 </style>
+
 <section th:remove="tag">
     <div class="zoom-gallery">
-        <a
-           th:href="${imageUrl}">
-            <img th:src="${imageUrl}" th:height="${height == null ? '50' : height}" >
+        <a th:href="${imageUrl}">
+            <img th:src="${imageUrl}" th:attr="height=${height != null ? height : 50}" alt="Image" style="cursor:pointer;" />
         </a>
     </div>
+
     <script th:inline="javascript">
+        /* <![CDATA[ */
         $(document).ready(function () {
             $('.zoom-gallery').magnificPopup({
                 delegate: 'a',
@@ -26,13 +27,14 @@
                 closeBtnInside: false,
                 mainClass: 'mfp-with-zoom mfp-img-mobile',
                 image: {
-                    verticalFit: true,
-/*                    titleSrc: function (item) {
-                        return item.el.attr('title') + ' &middot; <a class="image-source-link" href="' + item.el.attr('data-source') + '" target="_blank">image source</a>';
+                    verticalFit: true
+                    // Title source disabled for single image, uncomment if needed
+                    /*titleSrc: function (item) {
+                        return item.el.attr('title') + ' &middot; <a class="image-source-link" href="' + item.el.attr('href') + '" target="_blank">image source</a>';
                     }*/
                 },
                 gallery: {
-                    enabled: true
+                    enabled: true // You can disable this if you have only a single image and don't want gallery nav
                 },
                 zoom: {
                     enabled: true,
@@ -43,7 +45,9 @@
                 }
             });
         });
+        /* ]]> */
     </script>
 </section>
+
 </body>
 </html>

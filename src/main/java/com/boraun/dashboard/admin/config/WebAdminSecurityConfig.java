@@ -77,11 +77,13 @@ public class WebAdminSecurityConfig {
                             "/fonts/**",
                             "/js/**",
                             "/images/**",
-                            "/favicon.ico", "/.well-known/**"
+                            "/favicon.ico",
+                            "/.well-known/**"
                     ).permitAll();
 
                     // 2. Authenticated paths that do not require specific roles
-                    authReq.requestMatchers("/admin", "/permit/**", "/resources/attachment/**").authenticated();
+                    authReq.requestMatchers("/admin", "/permit/**", "/resources/attachment/**",
+                            "/assets/libs/**" ).authenticated();
 
                     // 3. Paths requiring specific authorities
                     authorityEntities.forEach(authorityEntity -> {

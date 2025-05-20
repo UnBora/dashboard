@@ -1,52 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body th:fragment="finput_textarea">
-<style>
 
-</style>
-<section th:remove="tag">
-    <label th:if="${finputType} != 'hidden'" th:for="${finputName}" th:utext="${finputText + (finputRequired==true ? '<span class=text-danger>*</span>':'')}">Label Name
-        <span class="text-danger">*</span>
-    </label>
+<section th:remove="tag" class="mb-3">
+    <label th:if="${finputType} != 'hidden'" th:for="${finputName}" th:utext="${finputText + (finputRequired == true ? '<span class=\"text-danger\">*</span>' : '')}">Label Name</label>
+
     <div class="input-group" th:if="${finputIcon != null}">
-        <span class="input-group-addon"><i th:class="${finputIcon}"></i></span>
+        <span class="input-group-text"><i th:class="${finputIcon}"></i></span>
         <textarea
                 th:name="${finputName}"
                 th:id="${finputId != null ? finputId : finputName}"
                 th:placeholder="'Enter ' + ${finputText}"
-                th:required="${finputRequired==true}"
-                th:class="'form-control'+${(finputClass==null?'':' '+finputClass)}"
-                th:type="${finputType}"
+                th:required="${finputRequired == true}"
+                th:class="'form-control' + (${finputClass} != null ? ' ' + finputClass : '')"
                 th:field="*{__${finputName}__}"
-                th:readonly="${finputReadOnly==true}"
-                th:maxlength="${maxLength == null ? '255' : maxLength}"
-                th:rows="${finputRow == null ? '3' : finputRow}"
+                th:readonly="${finputReadOnly == true}"
+                th:maxlength="${maxLength != null ? maxLength : 255}"
+                th:rows="${finputRow != null ? finputRow : 3}"
                 autocomplete="off"
-        />
+        ></textarea>
     </div>
+
     <textarea th:if="${finputIcon == null}"
-           th:name="${finputName}"
-           th:id="${finputId != null ? finputId : finputName}"
-           th:placeholder="'Enter ' + ${finputText}"
-           th:required="${finputRequired==true}"
-           th:class="'form-control'+${(finputClass==null?'':' '+finputClass)}"
-           th:type="${finputType}"
-           th:field="*{__${finputName}__}"
-           th:readonly="${finputReadOnly==true}"
-           th:maxlength="${maxLength == null ? '255' : maxLength}"
-           th:rows="${finputRow == null ? '3' : finputRow}"
-           autocomplete="off"
-    />
+              th:name="${finputName}"
+              th:id="${finputId != null ? finputId : finputName}"
+              th:placeholder="'Enter ' + ${finputText}"
+              th:required="${finputRequired == true}"
+              th:class="'form-control' + (${finputClass} != null ? ' ' + finputClass : '')"
+              th:field="*{__${finputName}__}"
+              th:readonly="${finputReadOnly == true}"
+              th:maxlength="${maxLength != null ? maxLength : 255}"
+              th:rows="${finputRow != null ? finputRow : 3}"
+              autocomplete="off"
+    ></textarea>
+
     <ul th:if="${#fields.hasErrors(finputName)}" class="parsley-errors-list filled">
         <li class="parsley-required" th:errors="*{__${finputName}__}"></li>
     </ul>
-    <script th:inline="javascript" th:if="${finputReadOnly==false}">
+
+    <script th:inline="javascript" th:if="${finputReadOnly == false}">
+        /* <![CDATA[ */
         $(document).ready(function () {
-            let inputId = [[${finputName}]];
-            $('input#' + inputId).maxlength();
+            let inputId = /*[[${finputId != null ? finputId : finputName}]]*/ 'defaultId';
+            $('#' + inputId).maxlength();
         });
+        /* ]]> */
     </script>
 </section>
+
 </body>
 </html>
-

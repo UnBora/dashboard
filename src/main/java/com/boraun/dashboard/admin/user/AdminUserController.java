@@ -96,7 +96,7 @@ public class AdminUserController extends WebAdminBaseController<AdminUserEntity,
             if (!Utils.isAjaxRequest(httpServletRequest)) {
                 return new ModelAndView("redirect:" + rootURL);
             } else {
-                modelAndView.setViewName("web/admin/user/profile-update");
+                modelAndView.setViewName("admin/user/profile-update");
                 AdminUserEntity entity = adminUserService.findActiveByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
                 modelAndView.addObject("URL", rootURL + "/profile/update");
                 modelAndView.addObject("entity", entity);

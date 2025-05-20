@@ -1,0 +1,105 @@
+<form
+        th:action="${URL}"
+        th:object="${entity}"
+        method="post"
+        id="main-form"
+        th:onsubmit="'return save(this);'"
+        xmlns:th="http://www.thymeleaf.org">
+
+    <div class="row">
+        <div class="form-group col-sm-12">
+            <th:block
+                    th:replace="~{fragments/finput :: finput(finputText= #{label.role.name}, finputName='roleName', finputRequired=true, finputType='text')}"
+                    th:remove="tag"/>
+        </div>
+        <div class="form-group col-sm-12 m-5 ">
+            <ul class="nav nav-tabs">
+                <li th:each="nav, iter :${adminAuthEntities}"
+                    th:if="${nav.parent == null}"
+                    th:class="${iter.index == 0?'active':''}">
+                    <a th:href="${'#' + nav.id }" data-toggle="tab" aria-expanded="true"
+                       th:aria-expanded="${iter.index==0?'true':'false'}">
+                        <span class="visible-xs"><i class="fa fa fa-home"></i></span>
+                        <span class="hidden-xs" th:text="${nav.authorityName}"></span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content" style="overflow-y : auto; height:400px ;overflow-x : hidden;">
+                <div th:each="nav, iter :${adminAuthEntities}"
+                     th:if="${nav.parent == null}"
+                     th:class="${iter.index==0?'tab-pane active':'tab-pane'}"
+                     th:id="${nav.id}">
+                    <div th:if="${nav.hasSub}"
+                         class="row">
+
+                        <div th:each="subNav, rowSubNav : ${adminAuthEntities}"
+                             th:if="${subNav.parent != null && subNav.parent.id == nav.id}"
+                             class="col-md-12">
+
+                            <a href="javascript:void(0);" th:onclick="'javascript:navToggle(\''+ ${subNav.id} +'\');'">
+                                <h4 class="m-t-0 header-title"><span th:text="${subNav.authorityName}"></span> <i
+                                        class="fa fa-caret-down m-l-10"></i></h4>
+                            </a>
+                            <div class="row m-l-15" th:id="'subNav' + ${subNav.id}">
+                                <div class="col-md-6 role-container">
+                                    <div class="checkbox checkbox-primary">
+                                        <input th:id="${subNav.authorityKey}" name="selectedAdminAuthorityId" type="checkbox"
+                                               th:checked="${subNav.check == true}" th:value="${subNav.id}"/>
+                                        <label th:for="${subNav.authorityKey}" th:text="${subNav.authorityName}"
+                                               style="margin-bottom: 5px;"></label>
+                                    </div>
+                                    <div th:each="child, iterChild : ${adminAuthEntities}"
+                                         th:if="${child.parent !=null && child.parent.id == subNav.id && iterChild.odd}"
+                                         class="checkbox checkbox-primary">
+                                        <input th:id="${child.authorityKey}" name="selectedAdminAuthorityId" type="checkbox"
+                                               th:checked="${child.check}" th:value="${child.id}"/>
+                                        <label th:for="${child.authorityKey}" th:text="${child.authorityName}"
+                                               style="margin-bottom: 5px;"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 role-container">
+                                    <div th:each="child, iterChild : ${adminAuthEntities}"
+                                         th:if="${child.parent != null && child.parent.id == subNav.id && iterChild.even}"
+                                         class="checkbox checkbox-primary">
+                                        <input th:id="${child.authorityKey}" name="selectedAdminAuthorityId" type="checkbox"
+                                               th:checked="${child.check}" th:value="${child.id}"/>
+                                        <label th:for="${child.authorityKey}" th:text="${child.authorityName}"
+                                               style="margin-bottom: 5px;"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${nav.hasSub == false}"
+                         class="row">
+                        <div class="col-md-6 role-container">
+                            <div th:each="child, iterChild : ${adminAuthEntities}"
+                                 th:if="${child.id == nav.id}"
+                                 class="checkbox">
+                                <input th:id="${child.authorityKey}" type="checkbox" th:checked="${child.check}"
+                                       name="selectedAdminAuthorityId" th:value="${child.id}"/>
+                                <label th:for="${child.authorityKey}" th:text="${child.authorityName}"
+                                       style="margin-bottom: 5px;"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group text-right m-b-0">
+        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()"
+                th:text="#{button.cancel}">
+            Cancel
+        </button>
+        <button class="btn btn-primary waves-effect waves-light" type="submit" th:text="#{button.submit}">
+            Submit
+        </button>
+    </div>
+    <script>
+        function navToggle(divId) {
+            $("#subNav" + divId).toggle();
+        }
+    </script>
+</form>

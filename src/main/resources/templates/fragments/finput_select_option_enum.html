@@ -1,23 +1,42 @@
 <div th:remove="tag" xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="finput_select_option_enum">
-
         <section th:remove="tag">
-            <label th:if="${finputType} != 'hidden'" th:for="${finputName}"
-                   th:utext="${finputText + (finputRequired==true ? '<span class=text-danger>*</span>':'')}">Label Name
-                <span class="text-danger">*</span>
+            <!-- Label -->
+            <label th:if="${finputType} != 'hidden'"
+                   th:for="${finputName}"
+                   th:utext="${finputText + (finputRequired == true ? '<span class=\'text-danger\'>*</span>' : '')}">
+                Label Name
+                <span class="text-danger" th:if="${finputRequired == true}">*</span>
             </label>
-            <select th:id="${finputName}" th:name="${finputName}" th:field="*{__${finputName}__}" class="selectpicker show-tick" th:data-live-search="${fSearchOpt == true}">
-                <option th:if="${fOptionHint == true}" th:selected="${fselected == '' }" th:value="${fselected}"
-                        th:text="${finputLabelOption}"></option>
-                <option th:each="d, row: ${foptionData}" th:selected="${fselected == d.name() }" th:value="${d.name()}"
-                        th:text="${d.name()}"></option>
+
+            <!-- Select Dropdown -->
+            <select th:id="${finputName}"
+                    th:name="${finputName}"
+                    th:field="*{__${finputName}__}"
+                    class="form-select selectpicker"
+                    th:data-live-search="${fSearchOpt == true}">
+
+                <!-- Optional Hint -->
+                <option th:if="${fOptionHint == true}"
+                        th:selected="${#strings.isEmpty(fselected)}"
+                        th:value="${fselected}"
+                        th:text="${finputLabelOption}">
+                </option>
+
+                <!-- Enum Options -->
+                <option th:each="d : ${foptionData}"
+                        th:value="${d.name()}"
+                        th:selected="${fselected == d.name()}"
+                        th:text="${d.name()}">
+                </option>
             </select>
         </section>
+
+        <!-- Bootstrap-Select Initialization -->
         <script type="text/javascript">
             $(document).ready(() => {
-                $('.selectpicker').selectpicker({showIcon: false});
-            })
+                $('.selectpicker').selectpicker({ showIcon: false });
+            });
         </script>
     </th:block>
 </div>
-

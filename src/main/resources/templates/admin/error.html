@@ -5,6 +5,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Error Page</title>
+
+    <!-- Bootstrap 5.3 -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet"/>
+
+    <!-- Bootstrap-select 1.13.14 -->
+    <link th:href="@{/assets/libs/bootstrap-select/css/bootstrap-select.min.css}" rel="stylesheet"/>
+
+    <!-- DataTables 2.3.1 -->
+    <link th:href="@{/assets/libs/datatables/datatables.min.css}" rel="stylesheet"/>
+
+    <!-- Daterangepicker 3.1 -->
+    <link th:href="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet"/>
+
+    <!-- jQuery UI 1.14.1 -->
+    <link th:href="@{/assets/libs/jquery-ui/jquery-ui.min.css}" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link th:href="@{/assets/css/custom.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="content" layout:fragment="content">
@@ -15,13 +33,6 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
-<!--                    <div class="page-title-right">-->
-<!--                        <ol class="breadcrumb m-0">-->
-<!--                            <li class="breadcrumb-item"><a href="javascript: void(0);">Zircos</a></li>-->
-<!--                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>-->
-<!--                            <li class="breadcrumb-item active">Error</li>-->
-<!--                        </ol>-->
-<!--                    </div>-->
                     <h4 class="page-title">Error</h4>
                 </div>
             </div>
@@ -30,20 +41,40 @@
 
         <div class="row justify-content-center">
             <div class="col-sm-6 text-center">
-
                 <div class="wrapper-page">
-                    <img src="assets/images/animat-search-color.gif" alt="" height="120">
+                    <img th:src="@{/assets/images/animat-search-color.gif}" alt="Error Icon" height="120">
                     <h2 class="text-uppercase text-danger">Something Went Wrong</h2>
                     <p class="text-muted mb-2">There was an unexpected server error. Please contact technical support.</p>
-
-                    <a class="btn btn-success waves-effect waves-light m-t-20" th:href="@{/admin}"> Return Home</a>
+                    <a class="btn btn-success mt-3" th:href="@{/admin}">Return Home</a>
                 </div>
-
             </div>
         </div>
 
     </div>
     <!-- end container-fluid -->
 </div>
+
+<!-- Scripts -->
+<!-- jQuery -->
+<script th:src="@{/assets/libs/jquery/jquery-3.7.1.min.js}"></script>
+
+<!-- Bootstrap 5 Bundle -->
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Bootstrap-select -->
+<script th:src="@{/assets/libs/bootstrap-select/js/bootstrap-select.min.js}"></script>
+
+<!-- DataTables -->
+<script th:src="@{/assets/libs/datatables/datatables.min.js}"></script>
+
+<!-- Daterangepicker -->
+<script th:src="@{/assets/libs/moment/moment.min.js}"></script>
+<script th:src="@{/assets/libs/bootstrap-daterangepicker/daterangepicker.js}"></script>
+
+<!-- jQuery UI -->
+<script th:src="@{/assets/libs/jquery-ui/jquery-ui.min.js}"></script>
+
+<!-- Custom Scripts -->
+<script th:src="@{/assets/js/custom.js}"></script>
 </body>
 </html>

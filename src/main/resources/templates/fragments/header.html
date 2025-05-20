@@ -1,237 +1,183 @@
 <section th:remove="tag" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<!-- Navigation Bar-->
-<header id="topnav" th:fragment="header">
-    <div class="topbar-main">
-        <div class="container">
-            <!-- Logo container-->
-            <div class="logo m-r-10">
-                <!-- Text Logo -->
-                <a th:href="@{${configuration.homeUrl}}" class="logo">
-                   <!-- <span th:text="${appName}"></span>-->
+    <!-- Navigation Bar-->
+    <header id="topnav" th:fragment="header">
+        <!-- Top Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand" th:href="@{${configuration.homeUrl}}">
                     <!-- Handle case where 'TRUST' is present -->
-                    <span th:if="${appName.contains('Bora')}"
-                          th:utext="${#strings.replace(appName, 'Bora', '<span style=&quot;color: var(--accent-color);&quot;>Trust</span>')}"></span>
-
+                    <span th:if="${appName.contains('Trust')}"
+                          th:utext="${#strings.replace(appName, 'Trust', '<span class=&quot;text-warning&quot;>Trust</span>')}">
+                </span>
                     <!-- Handle case where 'TRUST' is not present -->
-                    <span th:unless="${appName.contains('BORA')}" th:text="${appName}">
-                    </span>
+                    <span th:unless="${appName.contains('Trust')}" th:text="${appName}">
+                </span>
                 </a>
-                <!-- Image Logo -->
-<!--                <a th:href="@{/admin#dashboard}" class="logo">-->
-<!--                    <img th:src="@{/assets/images/logo.png}" alt="Logo" height="30">-->
-<!--                </a>-->
-            </div>
-            <!-- End Logo container-->
-            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
-                <li class="d-none d-sm-block">
-                    <form role="search" class="navbar-left app-search pull-left hidden-xs" onsubmit="return searchAuthorityName();">
-                        <input type="text" id="search-bar" th:placeholder="#{input.search} + '...'" class="form-control">
-                        <a href="javascript:void(0)" onclick="searchAuthorityName()" ><i class="fa fa-search"></i></a>
+
+                <!-- Search Form (visible on larger screens) -->
+                <div class="d-none d-lg-block me-auto">
+                    <form class="d-flex" role="search" onsubmit="return searchAuthorityName();">
+                        <input class="form-control me-2" type="search" id="search-bar" th:placeholder="#{input.search} + '...'" aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit" onclick="searchAuthorityName()">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </form>
-                    <script th:inline="javascript" th:if="${session.authorityEntities != null}">
-                        var menus = [[${session.authorityEntities}]];
-                        $(function () {
-                            var subMenus = [];
-                            var index = subMenus.length - 1;
-                            menus.forEach(menu => {
-                                if (menu.parent !== null && menu.menu === true) {
-                                    subMenus[++index] = menu.authorityName;
-                                }
-                            });
-                            $("#search-bar").autocomplete({
-                                source: subMenus
-                            });
-                        });
-                        function searchAuthorityName() {
-                            var searchValue = $("#search-bar").val();
-                            var menu = menus.filter(x => x.authorityName === searchValue)[0];
-                            if (menu !== undefined) {
-                                window.location.href = menu.endPointUrl.replace('/web/admin/', "#");
-                            }
-                            return false;
-                        }
-                    </script>
+                </div>
 
-                </li>
-            </ul>
-            <div class="menu-extras">
-                <ul class="nav navbar-nav navbar-right pull-right">
+                <!-- Hamburger toggle button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarToggler" aria-controls="navbarToggler"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                    <li class="dropdown navbar-c-items">
-                        <a href="" class="dropdown-toggle waves-effect waves-light profile" data-toggle="dropdown" aria-expanded="true">
-                            <img th:src="${@environment.getRequiredProperty('profile.url') + 'Bo+Raa'}" alt="user-img" class="img-circle">
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
-                            <li class="text-center">
-                                <h5>Hi, <span text="Bora Un">Bob</span></h5>
-                            </li>
-                            <li>
-                                <a th:href="@{#user/profile}" onclick="return loadPage(this);"><i class="fa fa-user-alt m-r-5"></i> <span th:text="#{label.profile}"></span></a>
-                            </li>
-                            <li>
-                                <a th:href="@{/admin/authentication/logout}"><i class="ti-power-off m-r-5"></i> <span th:text="#{label.logout}"></span></a>
-                            </li>
-                        </ul>
+                <!-- User menu -->
+                <div class="collapse navbar-collapse" id="navbarToggler">
+                    <!-- Search form (visible on mobile) -->
+                    <form class="d-flex d-lg-none mt-3 mb-3" role="search" onsubmit="return searchAuthorityName();">
+                        <input class="form-control me-2" type="search" id="search-bar-mobile" th:placeholder="#{input.search} + '...'" aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit" onclick="searchAuthorityName()">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </form>
 
-                    </li>
-                </ul>
-                <div class="menu-item">
-                    <!-- Mobile menu toggle-->
-                    <a class="navbar-toggle">
-                        <div class="lines">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                    </a>
-                    <!-- End mobile menu toggle-->
+                    <!-- User dropdown on the right -->
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown"
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img th:src="${@environment.getRequiredProperty('profile.url') + username}"
+                                     alt="user-img" class="rounded-circle me-2" width="32" height="32">
+                                <span th:text="${username}">Username</span>
+
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li class="dropdown-header">
+                                    <h6 class="mb-0">Hi, <span>Bora</span></h6>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{#user/profile}" onclick="return loadPage(this);">
+                                        <i class="fa fa-user-alt me-2"></i>
+                                        <span th:text="#{label.profile}">Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/web/admin/authentication/logout}">
+                                        <i class="fa fa-power-off me-2"></i>
+                                        <span th:text="#{label.logout}">Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <!-- end menu-extras -->
-        </div> <!-- end container -->
-    </div>
+        </nav>
 
-    <div class="navbar-custom">
-        <div class="container">
-            <div id="navigation">
-                <!-- Navigation Menu-->
-                <ul class="navigation-menu">
-                    <li th:each="menu, iter: ${session.authorityEntities}"
-                        th:unless="${session.authorityEntities == null}"
-                        th:if="${menu.parent == null}"
-                        th:class="${menu.hasSub == true ? 'has-submenu' : ''}" style="margin-right: -25px;">
-                        <a th:href="${menu.endPointUrl}">
-                            <i th:class="${menu.faIcon}"></i>
-                            <span th:text="${menu.authorityName}"></span>
-                        </a>
-                        <ul th:if="${menu.hasSub}" class="submenu">
-                            <li th:each="subMenu,iterSubMenu : ${session.authorityEntities}"
-                                th:if="${subMenu.parent != null && subMenu.parent.id == menu.id}" onclick="activeNavigation(this)">
-                                <a th:if="${subMenu.menu}"
-                                   th:href="${'#' + #strings.replace(#strings.toLowerCase(subMenu.authorityName),' ','-')}"
-                                   th:data-url="${subMenu.endPointUrl}"
-                                   th:text="${subMenu.authorityName}">
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div> <!-- end #navigation -->
-        </div> <!-- end container -->
-    </div> <!-- end navbar-custom -->
+        <!-- Menu Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavigation" aria-controls="mainNavigation"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-    <script>
-/*        function loadNavigation(a) {
-            loadPageWithUrl($(a).data("url"));
-        }*/
-        function activeNavigation(e) {
-            $('.active').removeClass('active');
-            var A = $(e).parents().eq(1).addClass('active');
-            $(e).addClass('active');
-        }
-    </script>
-    <style>
-        :root {
-            --main-bg: #f8fafc;
-            --secondary-bg: #9ec3fb;
-            --accent-color: #f97316; /* orange-500 */
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-        }
+                <div class="collapse navbar-collapse" id="mainNavigation">
+                    <ul class="navbar-nav">
+                        <li th:each="menu, iter: ${session.authorityEntities}"
+                            th:unless="${session.authorityEntities == null}"
+                            th:if="${menu.parent == null}"
+                            th:class="${menu.hasSub == true ? 'nav-item dropdown' : 'nav-item'}">
 
-        .topbar-main {
-            background-color: var(--main-bg);
-            padding: 10px 0;
-        }
+                            <!-- Top level menu items -->
+                            <a th:if="${!menu.hasSub}" class="nav-link" th:href="${menu.endPointUrl}">
+                                <i th:class="${menu.faIcon + ' me-1'}"></i>
+                                <span th:text="${menu.authorityName}">Menu Item</span>
+                            </a>
 
-        .logo a.logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--text-light);
-            text-transform: uppercase;
-        }
+                            <!-- Dropdown menus -->
+                            <a th:if="${menu.hasSub}" class="nav-link dropdown-toggle" href="#"
+                               id="${'dropdown-' + menu.id}" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                <i th:class="${menu.faIcon + ' me-1'}"></i>
+                                <span th:text="${menu.authorityName}">Dropdown</span>
+                            </a>
 
-        .logo a.logo span {
-            color: var(--text-light);
-        }
+                            <!-- Dropdown submenu items -->
+                            <ul th:if="${menu.hasSub}" class="dropdown-menu shadow-sm"
+                                aria-labelledby="${'dropdown-' + menu.id}">
+                                <li th:each="subMenu,iterSubMenu : ${session.authorityEntities}"
+                                    th:if="${subMenu.parent != null && subMenu.parent.id == menu.id}">
+                                    <a class="dropdown-item" th:if="${subMenu.menu}"
+                                       th:href="${'#' + #strings.replace(#strings.toLowerCase(subMenu.authorityName),' ','-')}"
+                                       th:data-url="${subMenu.endPointUrl}"
+                                       th:text="${subMenu.authorityName}"
+                                       onclick="activeNavigation(this)">
+                                        Submenu Item
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-        .logo a.logo span span {
-            color: var(--accent-color);
-        }
+        <!-- ✅ Load jQuery FIRST -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        .topnav-menu-left input.form-control {
-            background-color: var(--secondary-bg);
-            border: 1px solid #475569;
-            color: var(--text-light);
-            padding: 6px 12px;
-            border-radius: 4px;
-        }
+        <!-- ✅ Then load jQuery UI if you use autocomplete -->
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"/>
 
-        .topnav-menu-left i.fa-search {
-            color: var(--accent-color);
-            padding-left: 8px;
-        }
+        <script th:inline="javascript" th:if="${session.authorityEntities != null}">
+            var menus = [[${session.authorityEntities}]];
+            console.log('Menus:', menus);
+            $(function () {
+                var subMenus = [];
+                var index = subMenus.length - 1;
+                menus.forEach(menu => {
+                    if (menu.parent !== null && menu.menu === true) {
+                        subMenus[++index] = menu.authorityName;
+                    }
+                });
+                $("#search-bar, #search-bar-mobile").autocomplete({
+                    source: subMenus
+                });
+            });
 
-        .navbar-c-items .dropdown-toggle img {
-            border: 2px solid var(--accent-color);
-            width: 32px;
-            height: 32px;
-        }
+            function searchAuthorityName() {
+                var searchValue = $("#search-bar").val() || $("#search-bar-mobile").val();
+                var menu = menus.filter(x => x.authorityName === searchValue)[0];
+                if (menu !== undefined) {
+                    window.location.href = menu.endPointUrl.replace('/admin/', "#");
+                }
+                return false;
+            }
+        </script>
 
-        .dropdown-menu {
-            background-color: var(--secondary-bg);
-            border: none;
-            border-radius: 8px;
-        }
+        <script>
+            function activeNavigation(e) {
+                $('.active').removeClass('active');
+                $(e).addClass('active').parents('.nav-item').addClass('active');
+            }
 
-        .dropdown-menu a {
-            color: var(--text-light);
-        }
-
-        .dropdown-menu a:hover {
-            background-color: var(--main-bg);
-            color: var(--accent-color);
-        }
-
-        .navbar-custom {
-            background-color: var(--main-bg);
-            border-top: 1px solid #334155;
-        }
-
-        .navigation-menu > li > a {
-            color: var(--text-light);
-            padding: 12px 16px;
-            font-weight: 500;
-        }
-
-        .navigation-menu > li > a:hover,
-        .navigation-menu li.active > a {
-            background-color: var(--secondary-bg);
-            color: var(--accent-color);
-        }
-
-        .submenu {
-            background-color: var(--secondary-bg);
-            border-radius: 6px;
-            padding: 8px 0;
-        }
-
-        .submenu li a {
-            padding: 8px 16px;
-            display: block;
-            color: var(--text-light);
-        }
-
-        .submenu li a:hover {
-            background-color: var(--main-bg);
-            color: var(--accent-color);
-        }
-
-        .menu-item .navbar-toggle .lines span {
-            background-color: var(--text-light);
-        }
-
-    </style>
-</header>
-<!-- End Navigation Bar-->
+            document.addEventListener('DOMContentLoaded', function() {
+                const dropdownElementList = document.querySelectorAll('.dropdown')
+                const dropdownList = [...dropdownElementList].map(dropdownEl => {
+                    if (window.innerWidth >= 992) {
+                        dropdownEl.addEventListener('mouseenter', function() {
+                            this.querySelector('.dropdown-toggle').click();
+                        });
+                        dropdownEl.addEventListener('mouseleave', function() {
+                            this.querySelector('.dropdown-toggle').click();
+                        });
+                    }
+                });
+            });
+        </script>
+    </header>
 </section>

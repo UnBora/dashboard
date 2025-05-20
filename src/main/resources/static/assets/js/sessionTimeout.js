@@ -26,7 +26,7 @@ var loadDialog = function () {
                                 modal: true,
                                 buttons: {
                                     "Logout": function () {
-                                        window.location.href = "/admin/authentication/logout";
+                                        window.location.href = "/web/admin/authentication/logout";
                                     }
                                 }
                             });
@@ -39,17 +39,17 @@ var loadDialog = function () {
                             clearTimeout(sessionTimeout); //cancel the previous timer.
                             sessionTimeout = null;
                         }
-                        $.get("/admin/authentication/session-timeout", function (data, status) {
+                        $.get("/web/admin/authentication/session-timeout", function (data, status) {
                             if (data === "true" && status === "success") {
                                 $("#dialogSessionWarning").dialog("close");
                                 loadDialog();
                             } else {
-                                window.location.href = "/admin/authentication/logout";
+                                window.location.href = "/web/admin/authentication/logout";
                             }
                         });
                     },
                     "No": function () {
-                        window.location.href = "/admin/authentication/logout";
+                        window.location.href = "/web/admin/authentication/logout";
                     }
                 }
             });

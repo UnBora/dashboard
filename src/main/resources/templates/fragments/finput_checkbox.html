@@ -2,23 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <th:block th:fragment="finput_checkbox">
-    <finput_checkbox>
-        <label th:for="${finputName}" th:utext="${finputText}"><span class="text-danger">*</span></label>
-        <div class="checkbox">
-            <input
+    <div class="mb-3">
+        <label th:for="${finputName}" th:utext="${finputText}">
+            <span class="text-danger">*</span>
+        </label>
+
+        <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
                    th:name="${finputName}"
                    th:id="${finputName}"
-                   th:disabled="${finputDisable==true}"
-                   th:checked="${finputValue}"
-                   type="checkbox">
-            <label
-                    th:for="${finputName}"
-                    th:text="${finputText}"
-            >
+                   th:disabled="${finputDisable == true}"
+                   th:checked="${finputValue}">
+            <label class="form-check-label"
+                   th:for="${finputName}"
+                   th:text="${finputText}">
                 Default
             </label>
         </div>
-    </finput_checkbox>
+    </div>
 </th:block>
 </body>
 </html>

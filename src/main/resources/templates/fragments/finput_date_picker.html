@@ -6,47 +6,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body th:fragment="finput_date_picker(finputText, finputName, finputRequired, showCurrentDate, finputReadOnly)">
-<style>
-
-</style>
 <section th:remove="tag">
 
-    <label th:for="${finputName}" th:utext="${finputText + (finputRequired==true ? '<span id=datePickerSpan class=text-danger>*</span>':'')}">Label Name
-        <span class="text-danger">*</span>
+    <!-- Label -->
+    <label th:for="${finputName}"
+           th:utext="${finputText + (finputRequired == true ? '<span id=datePickerSpan class=text-danger>*</span>' : '')}">
+        Label Name
+        <span class="text-danger" th:if="${finputRequired==true}">*</span>
     </label>
-    <div>
-        <div class="input-group">
-            <input
-                    th:name="${finputName}"
-                    th:id="${finputName} +'-datepicker'"
-                    th:placeholder="'Enter ' + ${finputText}"
-                    th:required="${finputRequired==true}"
-                    th:readonly="${finputReadOnly==true}"
-                    th:class="form-control"
-                    th:type="text"
-                    th:field="*{__${finputName}__}"
-                    autocomplete="off"
-            />
-            <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
-        </div>
+
+    <!-- Date Input Group -->
+    <div class="input-group mb-3">
+        <input
+                th:name="${finputName}"
+                th:id="${finputName} + '-datepicker'"
+                th:placeholder="'Enter ' + ${finputText}"
+                th:required="${finputRequired == true}"
+                th:readonly="${finputReadOnly == true}"
+                class="form-control"
+                type="text"
+                th:field="*{__${finputName}__}"
+                autocomplete="off"/>
+
+        <span class="input-group-text bg-primary text-white">
+            <i class="mdi mdi-calendar"></i>
+        </span>
     </div>
 
+    <!-- Date Picker Script -->
     <script th:inline="javascript">
-        $(document).ready(function () {
-            let inputName = [[${finputName}]];
-            let showCurrentDate = [[${showCurrentDate}]];
-            $( '#' + inputName + '-datepicker' ).datetimepicker({
-                "allowInputToggle": true,
-                "showClose": true,
-                "showClear": true,
-                "showTodayButton": true,
-                "format": "DD/MM/YYYY"
-            });
-            if (showCurrentDate === true) {
-                $( '#' + inputName + '-datepicker' ).datetimepicker("defaultDate", new Date());
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputName = /*[[${finputName}]]*/ '';
+            const showCurrentDate = /*[[${showCurrentDate}]]*/ false;
+
+            const inputSelector = '#' + inputName + '-datepicker';
+
+            // Initialize Bootstrap DateTimePicker (or Tempus Dominus or equivalent)
+            if ($(inputSelector).length > 0) {
+                $(inputSelector).datetimepicker({
+                    allowInputToggle: true,
+                    showClose: true,
+                    showClear: true,
+                    showTodayButton: true,
+                    format: "DD/MM/YYYY"
+                });
+
+                if (showCurrentDate === true) {
+                    $(inputSelector).datetimepicker("defaultDate", new Date());
+                }
             }
         });
     </script>
+
 </section>
 </body>
 </html>

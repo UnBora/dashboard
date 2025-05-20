@@ -1,23 +1,31 @@
 <div th:remove="tag" xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="finput_select_option_field_value">
 
-        <section th:remove="tag">
-            <label th:if="${finputType} != 'hidden'" th:for="${finputName}"
-                   th:utext="${finputText + (finputRequired==true ? '<span class=text-danger>*</span>':'')}">Label Name
-                <span class="text-danger">*</span>
+        <section th:remove="tag" class="mb-3">
+            <label th:if="${finputType} != 'hidden'" th:for="${finputName}" th:utext="${finputText + (finputRequired == true ? '<span class=text-danger>*</span>' : '')}">
+                Label Name
             </label>
-            <select th:field="*{__${finputName}__}" th:id="${finputName}" th:name="${finputName}" class="selectpicker show-tick" th:data-live-search="${fSearchOpt == true}">
-                <option th:if="${fOptionHint == true}" th:selected="${fselected == '' }" th:value="${fselected}"
-                        th:text="${finputLabelOption}"></option>
-                <option th:each="d, row: ${foptionData}" th:selected="${fselected == d.getEnglish()}"
-                        th:value="${d.getEnglish()}" th:text="${d.getEnglish()}"></option>
+            <select
+                    th:field="*{__${finputName}__}"
+                    th:id="${finputName}"
+                    th:name="${finputName}"
+                    class="selectpicker form-select"
+                    th:data-live-search="${fSearchOpt == true ? 'true' : 'false'}"
+                    data-style="btn-outline-secondary"
+            >
+                <option th:if="${fOptionHint == true}" th:selected="${fselected == ''}" th:value="${fselected}" th:text="${finputLabelOption}"></option>
+                <option th:each="d : ${foptionData}" th:selected="${fselected == d.getEnglish()}" th:value="${d.getEnglish()}" th:text="${d.getEnglish()}"></option>
             </select>
         </section>
+
         <script type="text/javascript">
             $(document).ready(() => {
-                $('.selectpicker').selectpicker({showIcon: false});
-            })
+                $('.selectpicker').selectpicker({
+                    showIcon: false,
+                    tickIcon: 'bi-check'  // Bootstrap Icons checkmark (optional if you include Bootstrap Icons)
+                });
+            });
         </script>
+
     </th:block>
 </div>
-

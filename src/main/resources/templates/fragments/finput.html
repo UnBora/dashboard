@@ -2,14 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body th:fragment="finput">
 <style>
-
+    /* Bootstrap 5 compatible styles can be added here */
 </style>
 <section th:remove="tag">
-    <label th:if="${finputType} != 'hidden'" th:for="${finputName}" th:utext="${finputText + (finputRequired==true ? '<span class=text-danger>*</span>':'')}">Label Name
+    <label th:if="${finputType} != 'hidden'"
+           th:for="${finputName}"
+           class="form-label"
+           th:utext="${finputText + (finputRequired==true ? '<span class=text-danger>*</span>':'')}">Label Name
         <span class="text-danger">*</span>
     </label>
     <div class="input-group" th:if="${finputIcon != null}">
-        <span class="input-group-addon"><i th:class="${finputIcon}"></i></span>
+        <span class="input-group-text"><i th:class="${finputIcon}"></i></span>
         <input
                 th:name="${finputName}"
                 th:id="${finputId != null ? finputId : finputName}"
@@ -35,9 +38,9 @@
            th:maxlength="${maxLength == null ? '255' : maxLength}"
            autocomplete="off"
     />
-    <ul th:if="${#fields.hasErrors(finputName)}" class="parsley-errors-list filled">
-        <li class="parsley-required" th:errors="*{__${finputName}__}"></li>
-    </ul>
+    <div th:if="${#fields.hasErrors(finputName)}" class="invalid-feedback d-block">
+        <p th:errors="*{__${finputName}__}"></p>
+    </div>
     <script th:inline="javascript" th:if="${finputReadOnly==false}">
         $(document).ready(function () {
             let inputId = [[${finputName}]];
@@ -47,4 +50,3 @@
 </section>
 </body>
 </html>
-

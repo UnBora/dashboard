@@ -1,4 +1,4 @@
-<div th:remove="tag" xmlns:th="http://www.thymeleaf.org">
+<div xmlns:th="http://www.thymeleaf.org" th:remove="tag">
     <th:block th:fragment="page_title">
         <!-- Page-Title -->
         <div class="row">
@@ -7,7 +7,7 @@
                     <div class="btn-group pull-right">
                         <ol class="breadcrumb hide-phone p-0 m-0">
                             <li>
-                                <a href="javascript: void(0);" th:text="${selectedAdminAuthorityEntity.parent.authorityName}"></a>
+                                <a href="javascript:void(0);" th:text="${selectedAdminAuthorityEntity.parent.authorityName}"></a>
                             </li>
                             <li class="active" th:text="${selectedAdminAuthorityEntity.authorityName}"></li>
                         </ol>
