@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- (limit, maxSizeMb, acceptedFile='jpg|png|gif', addMore=true) -->
+<body th:fragment="finput_filer">
+  <style>
+    .jFiler-input-dragDrop {
+      width: 100% !important;
+    }
+    .jFiler-items-grid .jFiler-item {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+
+  <section th:remove="tag">
+    <input type="file" name="files" id="filer_input" multiple />
+
+    <script th:inline="javascript">
+      $(function () {
+        const extensions = [[${acceptedFile}]].split('|');
+        const uploadUrl = [[${uploadUrl}]];
+        const removeUrl = [[${removeUrl}]];
+        const addMore = [[${addMore == null ? false : addMore}]];
+        const limit = [[${limit == null ? null : limit}]];
+        const maxSize = [[${maxSizeMb == null ? null : maxSizeMb}]];
+        const attachments = [[${attachments == null ? null : attachments}]];
+
+        let newFile = null;
+
+        const removeFunction = removeUrl ? function (itemEl, file, id, listEl, boxEl, newInputEl, inputEl) {
+          $.post(removeUrl, file)
+            .done(response => {
+              if (typeof toastr !== 'undefined') {
+                toastr.success(response, "Success");
+              } else {
+                alert(response);
+              }
+            })
+            .fail(xhr => alert(xhr.responseText));
+        } : null;
+
+        const uploadFunction = uploadUrl ? {
+          url: uploadUrl,
+          type: 'POST',
+          enctype: 'multipart/form-data',
+          processData: false,
+          contentType: false,
+          beforeSend: () => {},
+          success: (data, el) => {
+            const parent = el.find(".jFiler-jProgressBar").parent();
+            el.find(".jFiler-jProgressBar").fadeOut("slow", () => {
+              $('<div class="jFiler-item-others text-success"><i class="icon-jfi-check-circle"></i> Uploaded</div>').appendTo(parent).fadeIn("slow");
+            });
+            newFile = null;
+          },
+          error: (el) => {
+            const parent = el.find(".jFiler-jProgressBar").parent();
+            el.find(".jFiler-jProgressBar").fadeOut("slow", () => {
+              $('<div class="jFiler-item-others text-danger"><i class="icon-jfi-minus-circle"></i> Failed</div>').appendTo(parent).fadeIn("slow");
+            });
+          }
+        } : null;
+
+        $("#filer_input").filer({
+          limit: limit,
+          maxSize: maxSize,
+          extensions: extensions,
+          addMore: addMore,
+          showThumbs: true,
+          changeInput: `<div class="jFiler-input-dragDrop">
+                          <div class="jFiler-input-inner">
+                            <div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div>
+                            <div class="jFiler-input-text">
+                              <h3>Drag & Drop files here</h3>
+                              <span>or</span>
+                            </div>
+                            <a class="jFiler-input-choose-btn btn btn-custom">Browse Files</a>
+                          </div>
+                        </div>`,
+          theme: "dragdropbox",
+          templates: {
+            box: '<ul class="jFiler-items-list jFiler-items-grid"></ul>',
+            item: '<li class="jFiler-item">\
+                     <div class="jFiler-item-container">\
+                       <div class="jFiler-item-inner">\
+                         <div class="jFiler-item-thumb">\
+                           <div class="jFiler-item-status"></div>\
+                           <div class="jFiler-item-info">\
+                             <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                             <span class="jFiler-item-others">{{fi-size2}}</span>\
+                           </div>\
+                           {{fi-image}}\
+                         </div>\
+                         <div class="jFiler-item-assets jFiler-row">\
+                           <ul class="list-inline pull-left">\
+                             <li>{{fi-progressBar}}</li>\
+                           </ul>\
+                           <ul class="list-inline pull-right">\
+                             <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                           </ul>\
+                         </div>\
+                       </div>\
+                     </div>\
+                   </li>',
+            progressBar: '<div class="bar"></div>',
+            removeConfirmation: true,
+            _selectors: {
+              list: '.jFiler-items-list',
+              item: '.jFiler-item',
+              progressBar: '.bar',
+              remove: '.jFiler-item-trash-action'
+            }
+          },
+          uploadFile: uploadFunction,
+          clipBoardPaste: true,
+          beforeSelect: null,
+          onSelect: function (file, el) {
+            el.find(".jFiler-jProgressBar").fadeOut("slow");
+            newFile = file;
+          },
+          onRemove: removeFunction,
+          files: attachments,
+          captions: {
+            button: "Choose Files",
+            feedback: "Choose files to upload",
+            feedback2: "files selected",
+            drop: "Drop files here to upload",
+            removeConfirmation: "Are you sure to remove this file?",
+            errors: {
+              filesLimit: "You can only upload {{fi-limit}} files.",
+              filesType: "Only these file types are allowed: {{fi-extensions}}",
+              filesSize: "{{fi-name}} is too large. Max: {{fi-maxSize}} MB.",
+              filesSizeAll: "Total size too large. Max allowed: {{fi-maxSize}} MB."
+            }
+          }
+        });
+
+        $('#filer_input').attr('name', 'files');
+      });
+    </script>
+  </section>
+</body>
+</html>
