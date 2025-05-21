@@ -8,10 +8,10 @@
                     <th th:text="#{label.no}">No</th>
                     <th th:text="#{label.firstname}"></th>
                     <th th:text="#{label.lastname}"></th>
-                    <th th:text="#{label.description}"></th>
                     <th th:text="#{label.phone}"></th>
                     <th th:text="#{label.email}"></th>
                     <th th:text="#{label.project.size}"></th>
+                    <th th:text="#{label.description}"></th>
                     <th th:text="#{label.created.date}">Created Date</th>
                     <th th:text="#{label.status}">Status</th>
                     <th th:text="#{label.action}">Action</th>
@@ -24,10 +24,10 @@
                     <td th:text="${iter.index + 1}"></td>
                     <td th:text="${d.firstname}"></td>
                     <td th:text="${d.lastname}"></td>
-                    <td th:text="${d.description}"></td>
                     <td th:text="${d.phoneNumber}"></td>
                     <td th:text="${d.email}"></td>
                     <td th:text="${d.projects.size()}"></td>
+                    <td th:text="${#strings.abbreviate(d.description, 30)}"></td>
                     <td th:text="${d.createdAtAsString}"></td>
                     <th:block th:replace="~{fragments/ftable_data :: status}" th:remove="tag"/>
                     <th:block th:replace="~{fragments/ftable_data :: action(id=${d.id}, size='W', index=${iter.index})}" th:remove="tag"/>
