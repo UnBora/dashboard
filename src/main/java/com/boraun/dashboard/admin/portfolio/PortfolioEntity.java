@@ -7,6 +7,7 @@ import com.boraun.dashboard.admin.portfolioHistory.PortfolioHistoryEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,10 @@ public class PortfolioEntity extends BaseEntity {
     private String description;
     private String phoneNumber;
     private String address;
+    @Transient
+    private MultipartFile file;
+    @Transient
+    private String profileUrl;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;

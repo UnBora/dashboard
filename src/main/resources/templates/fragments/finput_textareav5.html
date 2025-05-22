@@ -207,7 +207,6 @@
       const textarea = document.getElementById(textareaId);
 
       if (textarea) {
-        // Get parent wrapper to find counter
         const wrapper = textarea.closest('.position-relative') ||
                 textarea.closest('.form-floating') ||
                 textarea.closest('.input-icon-wrapper');
@@ -218,36 +217,34 @@
             const currentCount = counterWrapper.querySelector('.current-count');
             const maxCount = parseInt(counterWrapper.querySelector('.max-count').textContent);
 
-            // Update initial count
             currentCount.textContent = textarea.value.length;
 
-            // Update count on input
+
             textarea.addEventListener('input', function() {
               currentCount.textContent = this.value.length;
 
-              // Color warning when approaching limit
+
               if (this.value.length > maxCount * 0.8) {
-                counterWrapper.style.color = '#fd7e14'; // Warning orange
+                counterWrapper.style.color = '#fd7e14';
               } else {
-                counterWrapper.style.color = '#6c757d'; // Default gray
+                counterWrapper.style.color = '#6c757d';
               }
 
-              // Color danger when at limit
+
               if (this.value.length >= maxCount) {
-                counterWrapper.style.color = '#dc3545'; // Danger red
+                counterWrapper.style.color = '#dc3545';
               }
             });
 
-            // Auto-resize functionality
+
             const setAutoHeight = function() {
               textarea.style.height = 'auto';
               textarea.style.height = (textarea.scrollHeight) + 'px';
             }
 
-            // If auto-resize is enabled
+
             if ([[${autoResize == true}]]) {
               textarea.addEventListener('input', setAutoHeight);
-              // Initial height adjustment
               setAutoHeight();
             }
           }

@@ -1,147 +1,220 @@
 package com.boraun.dashboard.admin.attachment;
 
 
-import com.boraun.dashboard.admin.auditlog.AuditLogConstants;
-import com.boraun.dashboard.admin.auditlog.AuditLogService;
-import com.boraun.dashboard.admin.configuration.ConfigurationService;
-import com.boraun.dashboard.common.CoreConstants;
-import com.boraun.dashboard.common.Utils;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
-@Transactional
-@Slf4j
 public class AttachmentService {
-    private final AttachmentRepository repository;
+    private static final Logger logger = LoggerFactory.getLogger(AttachmentService.class);
 
-    private final ConfigurationService configurationService;
+    private final AttachmentRepository attachmentRepository;
 
-//    private final MinioService minioService;
+    // Add file storage properties
+    @Value("${file.upload-dir:./uploads}")
+    private String uploadDir;
 
-    @Autowired
-    private AuditLogService auditLogService;
-
-    public AttachmentService(AttachmentRepository repository, ConfigurationService configurationService) {
-        this.repository = repository;
-        this.configurationService = configurationService;
-
+    public AttachmentService(AttachmentRepository attachmentRepository) {
+        this.attachmentRepository = attachmentRepository;
     }
 
-    public void addAttachments(MultipartFile[] files, Class<?> resource, Long referenceId, String[] remarks) {
+    public AttachmentEntity saveAttachment(MultipartFile file, String referenceResource, Long referenceId, String remark){
         try {
-            if (files != null && remarks != null) {
-                if (remarks.length == files.length) {
-                    for (int i = 0; i < files.length; i++) {
-                        if (!files[i].isEmpty()) {
-                            log.info("File Size: " + files[i].getSize());
-                            String extension = Utils.getExtensionFilename(files[i]);
-                            AttachmentEntity entity = new AttachmentEntity();
-                            entity.setReferenceResource(getReferenceResource(resource));
-                            entity.setReferenceId(referenceId);
-                            entity.setExtension(extension);
-                            entity.setOriginalFileName(files[i].getOriginalFilename());
-                            byte[] contentData = files[i].getBytes();
-                            if (configurationService.isAllowedFileExtension(extension)) {
-                                if(!StringUtils.equals(extension, "pdf")){
-                                    contentData = Utils.compressFileImage(files[i]);
-                                }
-                            }
-                            entity.setContent(contentData);
-                            entity.setRemark(remarks[i]);
-                            repository.saveAndFlush(entity);
-//                            this.moveToMinIO(entity);
-                            //Save Log attachment one by one after add
-                            auditLogService.save(entity, String.valueOf(entity.getId()), AuditLogConstants.AuditLogType.SAVED);
-                        }
-                    }
-                }
+            if (file == null || file.isEmpty()) {
+                throw new IllegalArgumentException("File cannot be null or empty");
             }
 
-        } catch (IOException e) {
-            log.error("Handle addAttachment ", e);
-        }
-    }
+            logger.info("File Size: " + file.getSize());
 
-    public void addSingleAttachment(MultipartFile files, Class<?> resource, Long referenceId, String remarks) {
-        try {
-            if (files != null && remarks != null) {
-                if (!files.isEmpty()) {
-                    log.info("File Size: " + files.getSize());
-                    String extension = Utils.getExtensionFilename(files);
-                    AttachmentEntity entity = new AttachmentEntity();
-                    entity.setReferenceResource(getReferenceResource(resource));
-                    entity.setReferenceId(referenceId);
-                    entity.setExtension(extension);
-                    entity.setOriginalFileName(files.getOriginalFilename());
-                    byte[] contentData = files.getBytes();
-                    if (configurationService.isAllowedFileExtension(extension)) {
-                        if (!StringUtils.equals(extension, "pdf")) {
-                            contentData = Utils.compressFileImage(files);
-                        }
-                    }
-                    entity.setContent(contentData);
-                    entity.setRemark(remarks);
-                    repository.saveAndFlush(entity);
-//                    this.moveToMinIO(entity);
-                    // Save log attachment one by one after update
-                    auditLogService.save(entity, String.valueOf(entity.getId()), AuditLogConstants.AuditLogType.SAVED);
+            String originalFilename = file.getOriginalFilename();
+            String extension = getFileExtension(originalFilename);
+            String directoryPath = uploadDir + "/" + referenceResource;
 
-                }
+            File directory = new File(directoryPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
             }
 
+            String fileName = UUID.randomUUID().toString() + "." + extension;
+            String filePath = directoryPath + "/" + fileName;
+
+            Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+            AttachmentEntity attachment = new AttachmentEntity();
+            attachment.setOriginalFileName(originalFilename);
+            attachment.setExtension(extension);
+            attachment.setReferenceResource(referenceResource);
+            attachment.setReferenceId(referenceId);
+            attachment.setRemark(remark);
+            attachment.setFilePath(filePath);
+
+            return attachmentRepository.save(attachment);
         } catch (IOException e) {
-            log.error("Handle addAttachment ", e);
+            throw new RuntimeException("Failed to save attachment", e);
         }
     }
-    private String getReferenceResource(Class<?> resource) {
-        String referenceResource = Utils.getLastPackageName(resource).toLowerCase();
-        if (resource.isAnnotationPresent(AttachmentResource.class)) {
-            final AttachmentResource attachmentResource = resource.getAnnotation(AttachmentResource.class);
-            referenceResource = attachmentResource.name();
+
+    private String getFileExtension(String filename) {
+        if (filename == null) {
+            return "";
         }
-        return referenceResource;
+        int lastDotIndex = filename.lastIndexOf('.');
+        if (lastDotIndex > 0) {
+            return filename.substring(lastDotIndex + 1).toLowerCase();
+        }
+        return "";
     }
 
+    // Method to get file content
+    public byte[] getAttachmentContent(AttachmentEntity attachment) throws IOException {
+        if (attachment == null || attachment.getFilePath() == null) {
+            throw new IllegalArgumentException("Invalid attachment or file path");
+        }
 
-    public List<AttachmentEntity> getAttachmentList(Class<?> resource, Long referenceId) {
-        log.info("Query attachment by referenceId = {}", referenceId);
-        List<AttachmentEntity> entities = repository.findAllByReferenceResourceAndReferenceIdAndStatus(getReferenceResource(resource), referenceId, CoreConstants.Status.Enabled);
-        entities.forEach(x -> x.setFullUrl(configurationService.getSystemBaseUrl() + x.getResourceAttachmentUrl()));
-        return entities;
+        Path path = Paths.get(attachment.getFilePath());
+        return Files.readAllBytes(path);
     }
-
-    public AttachmentEntity findByReferenceResourceAndAttachmentId(String referenceResource, Long attachmentId) {
-        return repository.findFirstByReferenceResourceAndId(referenceResource, attachmentId).orElse(null);
-    }
-
-    public void changeAttachmentStatus(long attachmentId, CoreConstants.Status status) {
-        repository.findById(attachmentId).ifPresent(attachmentEntity -> attachmentEntity.setStatus(status));
-        AttachmentEntity val = repository.findById(attachmentId)
-                .map(entity -> {
-                    entity.setStatus(status);
-                    return repository.save(entity);
-                }).orElse(null);
-        // Save log attachment one by one after update (remove attachment)
-        auditLogService.save(val, String.valueOf(attachmentId), AuditLogConstants.AuditLogType.CHANGE_STATUS);
-    }
-
-//    public byte[] moveToMinIO(AttachmentEntity attachmentEntity) {
-//        if (attachmentEntity == null) return null;
-//        if(Utils.nonNull(attachmentEntity.getReferenceResource())){
-//            byte[] data = minioService.getFile(attachmentEntity);
-//            attachmentEntity.setContent(null);
-//            repository.saveAndFlush(attachmentEntity);
-//            return data;
-//        }
-//        return attachmentEntity.getContent();
-//    }
-
 }
+
+//@Service
+//@Transactional
+//@Slf4j
+//public class AttachmentService {
+//    private final AttachmentRepository repository;
+//
+//    private final ConfigurationService configurationService;
+//
+////    private final MinioService minioService;
+//
+//    @Autowired
+//    private AuditLogService auditLogService;
+//
+//    public AttachmentService(AttachmentRepository repository, ConfigurationService configurationService) {
+//        this.repository = repository;
+//        this.configurationService = configurationService;
+//
+//    }
+//
+//    public void addAttachments(MultipartFile[] files, Class<?> resource, Long referenceId, String[] remarks) {
+//        try {
+//            if (files != null && remarks != null) {
+//                if (remarks.length == files.length) {
+//                    for (int i = 0; i < files.length; i++) {
+//                        if (!files[i].isEmpty()) {
+//                            log.info("File Size: " + files[i].getSize());
+//                            String extension = Utils.getExtensionFilename(files[i]);
+//                            AttachmentEntity entity = new AttachmentEntity();
+//                            entity.setReferenceResource(getReferenceResource(resource));
+//                            entity.setReferenceId(referenceId);
+//                            entity.setExtension(extension);
+//                            entity.setOriginalFileName(files[i].getOriginalFilename());
+//                            byte[] contentData = files[i].getBytes();
+//                            if (configurationService.isAllowedFileExtension(extension)) {
+//                                if(!StringUtils.equals(extension, "pdf")){
+//                                    contentData = Utils.compressFileImage(files[i]);
+//                                }
+//                            }
+//                            entity.setContent(contentData);
+//                            entity.setRemark(remarks[i]);
+//                            repository.saveAndFlush(entity);
+////                            this.moveToMinIO(entity);
+//                            //Save Log attachment one by one after add
+//                            auditLogService.save(entity, String.valueOf(entity.getId()), AuditLogConstants.AuditLogType.SAVED);
+//                        }
+//                    }
+//                }
+//            }
+//
+//        } catch (IOException e) {
+//            log.error("Handle addAttachment ", e);
+//        }
+//    }
+//
+//    public void addSingleAttachment(MultipartFile files, Class<?> resource, Long referenceId, String remarks) {
+//        try {
+//            if (files != null && remarks != null) {
+//                if (!files.isEmpty()) {
+//                    log.info("File Size: " + files.getSize());
+//                    String extension = Utils.getExtensionFilename(files);
+//                    AttachmentEntity entity = new AttachmentEntity();
+//                    entity.setReferenceResource(getReferenceResource(resource));
+//                    entity.setReferenceId(referenceId);
+//                    entity.setExtension(extension);
+//                    entity.setOriginalFileName(files.getOriginalFilename());
+//                    byte[] contentData = files.getBytes();
+//                    if (configurationService.isAllowedFileExtension(extension)) {
+//                        if (!StringUtils.equals(extension, "pdf")) {
+//                            contentData = Utils.compressFileImage(files);
+//                        }
+//                    }
+//                    entity.setContent(contentData);
+//                    entity.setRemark(remarks);
+//                    repository.saveAndFlush(entity);
+////                    this.moveToMinIO(entity);
+//                    // Save log attachment one by one after update
+//                    auditLogService.save(entity, String.valueOf(entity.getId()), AuditLogConstants.AuditLogType.SAVED);
+//
+//                }
+//            }
+//
+//        } catch (IOException e) {
+//            log.error("Handle addAttachment ", e);
+//        }
+//    }
+//    private String getReferenceResource(Class<?> resource) {
+//        String referenceResource = Utils.getLastPackageName(resource).toLowerCase();
+//        if (resource.isAnnotationPresent(AttachmentResource.class)) {
+//            final AttachmentResource attachmentResource = resource.getAnnotation(AttachmentResource.class);
+//            referenceResource = attachmentResource.name();
+//        }
+//        return referenceResource;
+//    }
+//
+//
+//    public List<AttachmentEntity> getAttachmentList(Class<?> resource, Long referenceId) {
+//        log.info("Query attachment by referenceId = {}", referenceId);
+//        List<AttachmentEntity> entities = repository.findAllByReferenceResourceAndReferenceIdAndStatus(getReferenceResource(resource), referenceId, CoreConstants.Status.Enabled);
+//        entities.forEach(x -> x.setFullUrl(configurationService.getSystemBaseUrl() + x.getResourceAttachmentUrl()));
+//        return entities;
+//    }
+//
+//    public AttachmentEntity findByReferenceResourceAndAttachmentId(String referenceResource, Long attachmentId) {
+//        return repository.findFirstByReferenceResourceAndId(referenceResource, attachmentId).orElse(null);
+//    }
+//
+//    public void changeAttachmentStatus(long attachmentId, CoreConstants.Status status) {
+//        repository.findById(attachmentId).ifPresent(attachmentEntity -> attachmentEntity.setStatus(status));
+//        AttachmentEntity val = repository.findById(attachmentId)
+//                .map(entity -> {
+//                    entity.setStatus(status);
+//                    return repository.save(entity);
+//                }).orElse(null);
+//        // Save log attachment one by one after update (remove attachment)
+//        auditLogService.save(val, String.valueOf(attachmentId), AuditLogConstants.AuditLogType.CHANGE_STATUS);
+//    }
+//
+////    public byte[] moveToMinIO(AttachmentEntity attachmentEntity) {
+////        if (attachmentEntity == null) return null;
+////        if(Utils.nonNull(attachmentEntity.getReferenceResource())){
+////            byte[] data = minioService.getFile(attachmentEntity);
+////            attachmentEntity.setContent(null);
+////            repository.saveAndFlush(attachmentEntity);
+////            return data;
+////        }
+////        return attachmentEntity.getContent();
+////    }
+//
+//}

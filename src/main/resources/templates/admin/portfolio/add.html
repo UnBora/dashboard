@@ -1,56 +1,261 @@
-<form
-        th:action="${URL}"
-        th:object="${entity}"
-        method="post"
-        id="main-form"
-        th:onsubmit="'return save(this);'"
-        xmlns:th="http://www.thymeleaf.org">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="row">
-                <div class="form-group col-sm-6">
-                    <th:block
-                            th:replace="~{fragments/finputv5 :: finput(finputText= #{label.firstname}, finputName='firstname', finputRequired=true, finputType='text')}"
-                            th:remove="tag"/>
-                </div>
-                <div class="form-group col-sm-6">
-                    <th:block
-                            th:replace="~{fragments/finput :: finput(finputText= #{label.lastname}, finputName='lastname', finputRequired=true, finputType='text')}"
-                            th:remove="tag"/>
-                </div>
-                <div class="form-group col-sm-6">
-                    <th:block
-                            th:replace="~{fragments/finput :: finput(finputText= #{label.email}, finputName='email', finputRequired=true, finputType='text')}"
-                            th:remove="tag"/>
-                </div>
-                <div class="form-group col-sm-6">
-                    <th:block
-                            th:replace="~{fragments/finput :: finput(finputText= #{label.phone.number}, finputName='phoneNumber', finputRequired=true, finputType='text')}"
-                            th:remove="tag"/>
-                </div>
-                <div class="form-group col-sm-12">
-                    <th:block
-                            th:replace="~{fragments/finput :: finput(finputText= #{label.address}, finputName='address', finputRequired=true, finputType='text')}"
-                            th:remove="tag"/>
-                </div>
-                <div class="form-group col-sm-12">
-                    <th:block
-                            th:replace="~{fragments/finput_textareav5 :: finput_textarea(finputText= #{label.description}, finputName='description', finputRequired=true, finputType='text')}"
-                            th:remove="tag"/>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Management</title>
+    <!-- Include necessary CSS files -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/jquery.filer/css/jquery.filer.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}">
+    <!-- Additional CSS -->
+    <style>
+        .jFiler-input-dragDrop {
+            width: 100% !important;
+        }
+        .jFiler-items-grid .jFiler-item {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .required-field::after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3 th:text="#{portfolio.form.title}">Portfolio Information</h3>
+        </div>
+        <div class="card-body">
+            <!-- Form with proper enctype for file upload -->
+            <form th:action="${URL}"
+                  th:object="${entity}"
+                  method="post"
+                  id="main-form"
+                  enctype="multipart/form-data"
+                  th:onsubmit="'return save(this);'"
+                  xmlns:th="http://www.thymeleaf.org">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <!-- First Name Field -->
+                            <div class="form-group col-sm-6">
+                                <label for="firstname" class="required-field" th:text="#{label.firstname}">First Name</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="firstname"
+                                       name="firstname"
+                                       th:field="*{firstname}"
+                                       required>
+                            </div>
+
+                            <!-- Last Name Field -->
+                            <div class="form-group col-sm-6">
+                                <label for="lastname" class="required-field" th:text="#{label.lastname}">Last Name</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="lastname"
+                                       name="lastname"
+                                       th:field="*{lastname}"
+                                       required>
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="form-group col-sm-6">
+                                <label for="email" class="required-field" th:text="#{label.email}">Email</label>
+                                <input type="email"
+                                       class="form-control"
+                                       id="email"
+                                       name="email"
+                                       th:field="*{email}"
+                                       required>
+                            </div>
+
+                            <!-- Phone Number Field -->
+                            <div class="form-group col-sm-6">
+                                <label for="phoneNumber" class="required-field" th:text="#{label.phone.number}">Phone Number</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="phoneNumber"
+                                       name="phoneNumber"
+                                       th:field="*{phoneNumber}"
+                                       required>
+                            </div>
+
+                            <!-- Address Field -->
+                            <div class="form-group col-sm-12">
+                                <label for="address" class="required-field" th:text="#{label.address}">Address</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="address"
+                                       name="address"
+                                       th:field="*{address}"
+                                       required>
+                            </div>
+
+                            <!-- Description Field -->
+                            <div class="form-group col-sm-12">
+                                <label for="description" class="required-field" th:text="#{label.description}">Description</label>
+                                <textarea class="form-control"
+                                          id="description"
+                                          name="description"
+                                          th:field="*{description}"
+                                          rows="4"
+                                          required></textarea>
+                            </div>
+
+                            <!-- File Upload Field - Using proper name 'file' to match entity field -->
+                            <div class="form-group col-sm-12">
+                                <label for="file" class="required-field" th:text="#{label.profile.image}">Profile Image</label>
+                                <input type="file" name="file" id="filer_input">
+
+                                <!-- Display existing profile image if available -->
+                                <div th:if="${entity != null && entity.profileUrl != null}" class="mt-2">
+                                    <img th:src="${entity.profileUrl}" alt="Current Profile" style="max-width: 150px; max-height: 150px;">
+                                    <p class="text-muted">Current profile image</p>
+                                </div>
+                            </div>
+
+                            <!-- Category dropdown if needed -->
+                            <div class="form-group col-sm-12" th:if="${categories != null}">
+                                <label for="category" class="required-field" th:text="#{label.category}">Category</label>
+                                <select class="form-control" id="category" name="category.id" th:field="*{category.id}" required>
+                                    <option value="">-- Select Category --</option>
+                                    <option th:each="cat : ${categories}"
+                                            th:value="${cat.id}"
+                                            th:text="${cat.name}">Category Name</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-            </div>
+                <!-- Form Buttons -->
+                <div class="form-group text-right m-b-0 mt-3">
+                    <button type="reset" class="btn btn-secondary m-l-5" onclick="closeDialog()" th:text="#{button.cancel}">Cancel</button>
+                    <button class="btn btn-primary" type="submit" th:text="#{button.submit}">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
-    <div class="form-group text-right m-b-0">
-        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()"
-                th:text="#{button.cancel}">
-            Cancel
-        </button>
-        <button class="btn btn-primary waves-effect waves-light" type="submit" th:text="#{button.submit}">
-            Submit
-        </button>
-    </div>
+<!-- Include necessary JavaScript files -->
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
 
-</form>
+<!-- File Upload Configuration -->
+<script th:inline="javascript">
+    $(function () {
+
+        $("#filer_input").filer({
+            limit: 1,
+            maxSize: 5,
+            extensions: ['jpg', 'jpeg', 'png', 'gif'],
+            addMore: false,
+            showThumbs: true,
+            changeInput: '<div class="jFiler-input-dragDrop">' +
+                '<div class="jFiler-input-inner">' +
+                '<div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div>' +
+                '<div class="jFiler-input-text">' +
+                '<h3>Drag & Drop files here</h3>' +
+                '<span>or</span>' +
+                '</div>' +
+                '<a class="jFiler-input-choose-btn btn btn-primary">Browse Files</a>' +
+                '</div>' +
+                '</div>',
+            theme: "dragdropbox",
+            templates: {
+                box: '<ul class="jFiler-items-list jFiler-items-grid"></ul>',
+                item: '<li class="jFiler-item">\
+                             <div class="jFiler-item-container">\
+                               <div class="jFiler-item-inner">\
+                                 <div class="jFiler-item-thumb">\
+                                   <div class="jFiler-item-status"></div>\
+                                   <div class="jFiler-item-info">\
+                                     <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                                     <span class="jFiler-item-others">{{fi-size2}}</span>\
+                                   </div>\
+                                   {{fi-image}}\
+                                 </div>\
+                                 <div class="jFiler-item-assets jFiler-row">\
+                                   <ul class="list-inline pull-left">\
+                                     <li>{{fi-progressBar}}</li>\
+                                   </ul>\
+                                   <ul class="list-inline pull-right">\
+                                     <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                                   </ul>\
+                                 </div>\
+                               </div>\
+                             </div>\
+                           </li>',
+                progressBar: '<div class="bar"></div>',
+                removeConfirmation: true
+            },
+            clipBoardPaste: true,
+            captions: {
+                button: "Choose Files",
+                feedback: "Choose files to upload",
+                feedback2: "files selected",
+                drop: "Drop files here to upload",
+                removeConfirmation: "Are you sure to remove this file?",
+                errors: {
+                    filesLimit: "Only {{fi-limit}} file is allowed to be uploaded.",
+                    filesType: "Only these file types are allowed: {{fi-extensions}}",
+                    filesSize: "{{fi-name}} is too large. Max: {{fi-maxSize}} MB.",
+                    filesSizeAll: "Total size too large. Max allowed: {{fi-maxSize}} MB."
+                }
+            }
+        });
+
+        $('#filer_input').attr('name', 'file');
+    });
+
+    function save(form) {
+        const formData = new FormData(form);
+
+        $.ajax({
+            url: $(form).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (typeof toastr !== 'undefined') {
+                    toastr.success("Portfolio saved successfully", "Success");
+                } else {
+                    alert("Portfolio saved successfully");
+                }
+
+                if(typeof closeDialog === 'function') {
+                    closeDialog();
+                }
+
+            },
+            error: function(xhr) {
+                if (typeof toastr !== 'undefined') {
+                    toastr.error(xhr.responseText || "Failed to save portfolio", "Error");
+                } else {
+                    alert("Failed to save portfolio: " + (xhr.responseText || "Unknown error"));
+                }
+            }
+        });
+
+        return false;
+    }
+
+    function closeDialog() {
+        $('.modal').modal('hide');
+    }
+</script>
+</body>
+</html>

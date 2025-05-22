@@ -160,35 +160,29 @@
             const input = document.getElementById(inputId);
 
             if (input) {
-                // Character counter functionality
                 const counterWrapper = input.parentElement.querySelector('.character-counter');
                 if (counterWrapper) {
                     const currentCount = counterWrapper.querySelector('.current-count');
                     const maxCount = parseInt(counterWrapper.querySelector('.max-count').textContent);
 
-                    // Update initial count
                     currentCount.textContent = input.value.length;
 
-                    // Update count on input
                     input.addEventListener('input', function() {
                         currentCount.textContent = this.value.length;
 
-                        // Color warning when approaching limit
                         if (this.value.length > maxCount * 0.8) {
-                            counterWrapper.style.color = '#fd7e14'; // Warning orange
+                            counterWrapper.style.color = '#fd7e14';
                         } else {
-                            counterWrapper.style.color = '#6c757d'; // Default gray
+                            counterWrapper.style.color = '#6c757d';
                         }
 
-                        // Color danger when at limit
                         if (this.value.length >= maxCount) {
-                            counterWrapper.style.color = '#dc3545'; // Danger red
+                            counterWrapper.style.color = '#dc3545';
                         }
                     });
                 }
             }
 
-            // Check if Bootstrap 5 Maxlength plugin is available
             if (typeof $.fn.maxlength === 'function') {
                 $('#' + inputId).maxlength({
                     alwaysShow: true,
