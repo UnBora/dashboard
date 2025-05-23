@@ -1,49 +1,286 @@
-<form
-        th:action="${URL}"
-        th:object="${entity}"
-        method="post"
-        id="main-form"
-        th:onsubmit="'return save(this);'"
-        xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{portfolio.update.title}">Update Portfolio</title>
+    <!-- Include your CSS files -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/jquery.filer/css/jquery.filer.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}">
+    <style>
+        .jFiler-input-dragDrop {
+            width: 100% !important;
+        }
+        .jFiler-items-grid .jFiler-item {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .required-field::after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+        .current-image-container {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px dashed #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .current-image-container img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 4px;
+        }
+        .remove-image-btn {
+            margin-top: 10px;
+            cursor: pointer;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3 th:text="#{portfolio.update.title}">Update Portfolio</h3>
+        </div>
+        <div class="card-body">
+            <form th:action="${URL}"
+                  th:object="${entity}"
+                  method="post"
+                  id="main-form"
+                  enctype="multipart/form-data"
+                  th:onsubmit="'return save(this);'"
+                  xmlns:th="http://www.thymeleaf.org">
 
-    <div class="row">
-        <div class="form-group col-sm-6">
-            <th:block
-                    th:replace="~{fragments/finputv5 :: finput(finputText= #{label.firstname}, finputName='firstname', finputRequired=true, finputType='text')}"
-                    th:remove="tag"/>
-        </div>
-        <div class="form-group col-sm-6">
-            <th:block
-                    th:replace="~{fragments/finput :: finput(finputText= #{label.lastname}, finputName='lastname', finputRequired=true, finputType='text')}"
-                    th:remove="tag"/>
-        </div>
-        <div class="form-group col-sm-6">
-            <th:block
-                    th:replace="~{fragments/finput :: finput(finputText= #{label.email}, finputName='email', finputRequired=true, finputType='text')}"
-                    th:remove="tag"/>
-        </div>
-        <div class="form-group col-sm-6">
-            <th:block
-                    th:replace="~{fragments/finput :: finput(finputText= #{label.phone.number}, finputName='phoneNumber', finputRequired=true, finputType='text')}"
-                    th:remove="tag"/>
-        </div>
-        <div class="form-group col-sm-12">
-            <th:block
-                    th:replace="~{fragments/finput :: finput(finputText= #{label.address}, finputName='address', finputRequired=true, finputType='text')}"
-                    th:remove="tag"/>
-        </div>
-        <div class="form-group col-sm-12">
-            <th:block
-                    th:replace="~{fragments/finput_textareav5 :: finput_textarea(finputText= #{label.description}, finputName='description', finputRequired=true, finputType='text')}"
-                    th:remove="tag"/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <!-- First Name -->
+                            <div class="form-group col-sm-6">
+                                <label class="required-field" th:text="#{label.firstname}">First Name</label>
+                                <input type="text"
+                                       class="form-control"
+                                       th:field="*{firstname}"
+                                       required>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="form-group col-sm-6">
+                                <label class="required-field" th:text="#{label.lastname}">Last Name</label>
+                                <input type="text"
+                                       class="form-control"
+                                       th:field="*{lastname}"
+                                       required>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group col-sm-6">
+                                <label class="required-field" th:text="#{label.email}">Email</label>
+                                <input type="email"
+                                       class="form-control"
+                                       th:field="*{email}"
+                                       required>
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div class="form-group col-sm-6">
+                                <label class="required-field" th:text="#{label.phone.number}">Phone Number</label>
+                                <input type="text"
+                                       class="form-control"
+                                       th:field="*{phoneNumber}"
+                                       required>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="form-group col-sm-12">
+                                <label class="required-field" th:text="#{label.address}">Address</label>
+                                <input type="text"
+                                       class="form-control"
+                                       th:field="*{address}"
+                                       required>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="form-group col-sm-12">
+                                <label class="required-field" th:text="#{label.description}">Description</label>
+                                <textarea class="form-control"
+                                          th:field="*{description}"
+                                          rows="4"
+                                          required></textarea>
+                            </div>
+
+                            <!-- Profile Image Upload -->
+                            <div class="form-group col-sm-12">
+                                <label th:text="#{label.profile.image}">Profile Image</label>
+
+                                <!-- Current Image Display -->
+                                <div th:if="${entity.profileUrl != null}" class="current-image-container">
+                                    <img th:src="${entity.profileUrl}"
+                                         alt="Current Profile Image"
+                                         class="img-fluid">
+                                    <div class="remove-image-btn" onclick="removeImage()">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span th:text="#{button.remove.image}">Remove Image</span>
+                                    </div>
+                                    <input type="hidden" name="currentProfileUrl" th:value="${entity.profileUrl}">
+                                </div>
+
+                                <!-- File Upload with jFiler -->
+                                <input type="file" name="file" id="filer_input">
+                                <input type="hidden" id="removeImageFlag" name="removeImage" value="false">
+                            </div>
+
+                            <!-- Category Selection -->
+                            <div class="form-group col-sm-12">
+                                <label class="required-field" th:text="#{label.category}">Category</label>
+                                <select class="form-control" th:field="*{category.id}">
+                                    <option value="">-- Select Category --</option>
+                                    <option th:each="cat : ${categories}"
+                                            th:value="${cat.id}"
+                                            th:text="${cat.name}">Category Name</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Buttons -->
+                <div class="form-group text-right m-b-0 mt-3">
+                    <button type="reset" class="btn btn-secondary m-l-5" onclick="closeDialog()" th:text="#{button.cancel}">Cancel</button>
+                    <button class="btn btn-primary" type="submit" th:text="#{button.submit}">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="form-group text-right m-b-0">
-        <button type="reset" class="btn btn-default waves-effect m-l-5" onclick="closeDialog()" th:text="#{button.cancel}">
-            Cancel
-        </button>
-        <button class="btn btn-primary waves-effect waves-light" type="submit" th:text="#{button.submit}">
-            Submit
-        </button>
-    </div>
-</form>
+</div>
+
+<!-- JavaScript Libraries -->
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+<script th:src="@{/assets/plugins/fontawesome/js/all.min.js}"></script>
+
+<script th:inline="javascript">
+    $(document).ready(function() {
+        $("#filer_input").filer({
+            limit: 1,
+            maxSize: 5,
+            extensions: ['jpg', 'jpeg', 'png', 'gif'],
+            addMore: false,
+            showThumbs: true,
+            changeInput: '<div class="jFiler-input-dragDrop">' +
+                '<div class="jFiler-input-inner">' +
+                '<div class="jFiler-input-icon"><i class="fas fa-cloud-upload-alt"></i></div>' +
+                '<div class="jFiler-input-text">' +
+                '<h3 th:text="#{file.upload.dragdrop}">Drag & Drop files here</h3>' +
+                '<span th:text="#{file.upload.or}">or</span>' +
+                '</div>' +
+                '<a class="jFiler-input-choose-btn btn btn-primary" th:text="#{file.upload.browse}">Browse Files</a>' +
+                '</div>' +
+                '</div>',
+            theme: "dragdropbox",
+            templates: {
+                box: '<ul class="jFiler-items-list jFiler-items-grid"></ul>',
+                item: '<li class="jFiler-item">\
+                        <div class="jFiler-item-container">\
+                            <div class="jFiler-item-inner">\
+                                <div class="jFiler-item-thumb">\
+                                    <div class="jFiler-item-status"></div>\
+                                    <div class="jFiler-item-info">\
+                                        <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                                        <span class="jFiler-item-others">{{fi-size2}}</span>\
+                                    </div>\
+                                    {{fi-image}}\
+                                </div>\
+                                <div class="jFiler-item-assets jFiler-row">\
+                                    <ul class="list-inline pull-left">\
+                                        <li>{{fi-progressBar}}</li>\
+                                    </ul>\
+                                    <ul class="list-inline pull-right">\
+                                        <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                                    </ul>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </li>',
+                progressBar: '<div class="bar"></div>',
+                removeConfirmation: true
+            },
+            captions: {
+                button: "Choose Files",
+                feedback: "Choose files to upload",
+                feedback2: "files selected",
+                drop: "Drop files here to upload",
+                removeConfirmation: "Are you sure to remove this file?",
+                errors: {
+                    filesLimit: "Only {{fi-limit}} file is allowed to be uploaded.",
+                    filesType: "Only these file types are allowed: {{fi-extensions}}",
+                    filesSize: "{{fi-name}} is too large. Max: {{fi-maxSize}} MB.",
+                    filesSizeAll: "Total size too large. Max allowed: {{fi-maxSize}} MB."
+                }
+            }
+        });
+    });
+
+    function removeImage() {
+        if (confirm('Are you sure you want to remove the current profile image?')) {
+            $('#removeImageFlag').val('true');
+            $('.current-image-container').hide();
+        }
+    }
+
+    function save(form) {
+        const formData = new FormData(form);
+
+        $.ajax({
+            url: $(form).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (typeof toastr !== 'undefined') {
+                    toastr.success("Portfolio updated successfully", "Success");
+                } else {
+                    alert("Portfolio updated successfully");
+                }
+
+                if (typeof closeDialog === 'function') {
+                    closeDialog();
+                } else if (window.opener) {
+                    window.opener.location.reload();
+                    window.close();
+                } else {
+                    window.location.href = /*[[@{/portfolios}]]*/ '/portfolios';
+                }
+            },
+            error: function(xhr) {
+                if (typeof toastr !== 'undefined') {
+                    toastr.error(xhr.responseText || "Failed to update portfolio", "Error");
+                } else {
+                    alert("Failed to update portfolio: " + (xhr.responseText || "Unknown error"));
+                }
+            }
+        });
+
+        return false;
+    }
+
+    function closeDialog() {
+        if (typeof parent.closeModal === 'function') {
+            parent.closeModal();
+        } else if (typeof $.fn.modal === 'function') {
+            $('.modal').modal('hide');
+        } else {
+            window.history.back();
+        }
+    }
+</script>
+</body>
+</html>

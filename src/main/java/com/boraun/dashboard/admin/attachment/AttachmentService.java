@@ -1,6 +1,7 @@
 package com.boraun.dashboard.admin.attachment;
 
 
+import com.boraun.dashboard.common.CoreConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,11 +12,6 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 @Service
 public class AttachmentService {
@@ -23,15 +19,11 @@ public class AttachmentService {
 
     private final AttachmentRepository attachmentRepository;
 
-    // Add file storage properties
-    @Value("${file.upload-dir:./uploads}")
-    private String uploadDir;
-
     public AttachmentService(AttachmentRepository attachmentRepository) {
         this.attachmentRepository = attachmentRepository;
     }
 
-    public AttachmentEntity saveAttachment(MultipartFile file, String referenceResource, Long referenceId, String remark){
+    public AttachmentEntity saveAttachment(MultipartFile file, String referenceResource, Long referenceId, String remark) {
         try {
             if (file == null || file.isEmpty()) {
                 throw new IllegalArgumentException("File cannot be null or empty");
@@ -41,17 +33,9 @@ public class AttachmentService {
 
             String originalFilename = file.getOriginalFilename();
             String extension = getFileExtension(originalFilename);
-            String directoryPath = uploadDir + "/" + referenceResource;
 
-            File directory = new File(directoryPath);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            String fileName = UUID.randomUUID().toString() + "." + extension;
-            String filePath = directoryPath + "/" + fileName;
-
-            Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+            // Read file content into byte array
+            byte[] fileContent = file.getBytes();
 
             AttachmentEntity attachment = new AttachmentEntity();
             attachment.setOriginalFileName(originalFilename);
@@ -59,8 +43,8 @@ public class AttachmentService {
             attachment.setReferenceResource(referenceResource);
             attachment.setReferenceId(referenceId);
             attachment.setRemark(remark);
-            attachment.setFilePath(filePath);
-
+            attachment.setFileContent(fileContent);
+            attachment.setFileSize(file.getSize());
             return attachmentRepository.save(attachment);
         } catch (IOException e) {
             throw new RuntimeException("Failed to save attachment", e);
@@ -78,14 +62,25 @@ public class AttachmentService {
         return "";
     }
 
-    // Method to get file content
-    public byte[] getAttachmentContent(AttachmentEntity attachment) throws IOException {
-        if (attachment == null || attachment.getFilePath() == null) {
-            throw new IllegalArgumentException("Invalid attachment or file path");
+    // Method to get file content - now simply returns the stored bytes
+    public byte[] getAttachmentContent(AttachmentEntity attachment) {
+        if (attachment == null || attachment.getFileContent() == null) {
+            throw new IllegalArgumentException("Invalid attachment or no file content");
         }
+        return attachment.getFileContent();
+    }
 
-        Path path = Paths.get(attachment.getFilePath());
-        return Files.readAllBytes(path);
+    // Optional:
+    public byte[] getAttachmentContentByReferenceId(Long id) {
+        AttachmentEntity attachment = attachmentRepository.findByReferenceIdAndStatus(id, CoreConstants.Status.Enabled)
+                .orElseThrow(() -> new RuntimeException("Attachment not found with id: " + id));
+        return getAttachmentContent(attachment);
+    }
+
+    // Optional: Method to get attachment entity by ID
+    public AttachmentEntity getAttachmentByReferenceId(Long ReferenceId) {
+        return attachmentRepository.findByReferenceIdAndStatus(ReferenceId, CoreConstants.Status.Enabled)
+                .orElseThrow(() -> new RuntimeException("Attachment not found with id: " + ReferenceId));
     }
 }
 

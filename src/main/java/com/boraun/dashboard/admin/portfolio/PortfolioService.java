@@ -1,7 +1,9 @@
 package com.boraun.dashboard.admin.portfolio;
 
+import com.boraun.dashboard.admin.attachment.AttachmentEntity;
 import com.boraun.dashboard.admin.attachment.AttachmentService;
 import com.boraun.dashboard.admin.base.WebAdminBaseService;
+import com.boraun.dashboard.admin.configuration.ConfigurationService;
 import com.boraun.dashboard.common.CoreConstants;
 import com.boraun.dashboard.common.Pager;
 import com.boraun.dashboard.common.Utils;
@@ -24,10 +26,13 @@ import java.util.Optional;
 public class PortfolioService extends WebAdminBaseService<PortfolioEntity, Long> {
     private PortfolioRepository portfolioRepository;
     private AttachmentService attachmentService;
-    protected PortfolioService(JpaRepository<PortfolioEntity, Long> repository, PortfolioRepository portfolioRepository, AttachmentService attachmentService) {
+    private ConfigurationService configurationService;
+
+    protected PortfolioService(JpaRepository<PortfolioEntity, Long> repository, PortfolioRepository portfolioRepository, AttachmentService attachmentService, ConfigurationService configurationService) {
         super(PortfolioEntity.class, repository);
         this.portfolioRepository = portfolioRepository;
         this.attachmentService = attachmentService;
+        this.configurationService = configurationService;
     }
 
     @Override
@@ -86,6 +91,19 @@ public class PortfolioService extends WebAdminBaseService<PortfolioEntity, Long>
             return savedEntity;
         }
 
+        return null;
+    }
+
+    @Override
+    public PortfolioEntity findOne(Long aLong) {
+        PortfolioEntity entity = portfolioRepository.findById(aLong).orElse(null);
+        if (entity != null) {
+            AttachmentEntity attachment = attachmentService.getAttachmentByReferenceId(entity.getId());
+            if (attachment != null) {
+                entity.setProfileUrl(configurationService.getSystemBaseUrl()+ attachment.getResourceAttachmentUrl());
+            }
+            return entity;
+        }
         return null;
     }
 }

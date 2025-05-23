@@ -4,12 +4,7 @@
         xmlns:th="http://www.thymeleaf.org">
 
     <div class="row">
-        <div class="form-group col-sm-12">
-<!--            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.message.key}, finputName='key', finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>-->
-<!--        </div>-->
-<!--        <div class="form-group col-sm-12">-->
-<!--            <th:block th:replace="~{fragments/finput :: finput(finputText= #{label.message.content}, finputName='content', finputRequired=true, finputType='text', finputReadOnly=true)}" th:remove="tag"/>-->
-        </div>
+
         <div class="row">
             <div class="form-group col-sm-6">
                 <th:block
@@ -41,7 +36,17 @@
                         th:replace="~{fragments/finput_textareav5 :: finput_textarea(finputText= #{label.description}, finputName='description', finputRequired=true, finputType='text', finputReadOnly=true)}"
                         th:remove="tag"/>
             </div>
-
+            <!-- Profile Image -->
+            <div class="form-group col-sm-12">
+                <th:block
+                        th:replace="~{fragments/fimageview :: fimageview(
+            finputText= #{label.profile.image},
+            finputName='profileUrl',
+            finputImageUrl= ${entity.profileUrl},
+            finputAltText= 'Profile Image'
+        )}"
+                        th:remove="tag"/>
+            </div>
         </div>
     </div>
 

@@ -22,10 +22,17 @@ public class AttachmentEntity extends BaseEntity {
     @Setter
     private String extension;
 
-    // File path field for storing the location rather than content
+    // Store file content as bytes instead of file path
+    @Lob
+    @Column(name = "file_content")
     @Getter
     @Setter
-    private String filePath;
+    private byte[] fileContent;
+
+    // Store file size for reference
+    @Getter
+    @Setter
+    private Long fileSize;
 
     @Getter
     @Setter

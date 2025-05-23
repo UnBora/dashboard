@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AttachmentRepository extends JpaRepository<AttachmentEntity, Long> {
     List<AttachmentEntity> findAllByReferenceResourceAndReferenceIdAndStatus(String referenceResource, Long referenceId, CoreConstants.Status status);
 
-    Optional<AttachmentEntity> findFirstByReferenceResourceAndId(String referenceResource, Long attachmentId);
+    Optional<AttachmentEntity> findByReferenceIdAndStatus(Long referenceId, CoreConstants.Status status);
 
 
 }

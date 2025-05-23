@@ -1,0 +1,16 @@
+<div th:fragment="fimageview(finputText, finputName, finputImageUrl, finputAltText)">
+  <label th:text="${finputText}">Image Label</label>
+  <div class="text-center">
+    <img th:if="${finputImageUrl != null}"
+         th:src="${finputImageUrl}"
+         th:alt="${finputAltText}"
+         class="img-thumbnail"
+         style="max-width: 200px; max-height: 200px;"/>
+
+    <div th:unless="${finputImageUrl != null}"
+         class="no-image-placeholder"
+         style="width: 200px; height: 200px; background-color: #eee; display: inline-block;">
+      <span th:text="#{label.no.image}">No Image</span>
+    </div>
+  </div>
+</div>
